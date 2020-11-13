@@ -8,3 +8,7 @@ exports.updateConsumption = function(req, res) {
         res.json(consumer);
       });
 }
+
+exports.createHousehold = function(req, res) {
+    //Todo
+}

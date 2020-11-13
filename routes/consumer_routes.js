@@ -3,5 +3,6 @@ module.exports = function(app){
 
     app.route('/consumer/consumption')
         .put(consumer.updateConsumption)
+        .post(consumer.createHousehold)
 
 }
