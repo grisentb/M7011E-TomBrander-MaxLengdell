@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var consumer = new Schema({
+var consumerSchema = new Schema({
     ID: {
         type: Number,
         required: 'Please enter your house ID'
@@ -23,4 +23,4 @@ var consumer = new Schema({
     }
 });
 
-module.exports = mongoose.model('Consumer', consumer);
+module.exports = mongoose.model('Consumer', consumerSchema);
