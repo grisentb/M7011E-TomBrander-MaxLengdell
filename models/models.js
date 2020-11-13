@@ -23,4 +23,4 @@ var consumerSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('Consumer', consumerSchema);
+module.exports = mongoose.model('consumer', consumerSchema);
