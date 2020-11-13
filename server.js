@@ -5,7 +5,7 @@ mongoose = require('mongoose'),
 Consumer = require('./models/models'),
 bodyParser = require('body-parser');
 
-mongoose.Promise = global.PermissionRequestedEvent;
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/M7011E');
 
 

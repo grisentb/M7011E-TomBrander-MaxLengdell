@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var consumer = new Schema({
     ID: {
-        type: int,
+        type: Number,
         required: 'Please enter your house ID'
     },
     Created_date:{
@@ -11,7 +11,7 @@ var consumer = new Schema({
         default: Date.now
     },
     Consumption:{
-        type:float,
+        type:Number,
         default: 0.0
     },
     status: {
