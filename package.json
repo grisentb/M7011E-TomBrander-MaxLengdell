@@ -1,8 +1,26 @@
 {
-    "scripts": {
-        "test": "jest"
-    },
-    "dependencies": {
-        "express": "^4.17.1"
-    }
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.14"
+  },
+  "name": "api",
+  "version": "1.0.0",
+  "description": "RESTful energy api",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grisentb/M7011E-TomBrander-MaxLengdell.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grisentb/M7011E-TomBrander-MaxLengdell/issues"
+  },
+  "homepage": "https://github.com/grisentb/M7011E-TomBrander-MaxLengdell#readme"
 }
