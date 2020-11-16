@@ -21,8 +21,10 @@ exports.createHousehold = function(req, res) {
     //Todo
     var new_House = new Consumer(req.body);
     new_House.save(function(err, consumer){
-      if(err)
+      if(err){
+      console.log("something broke during saving");
         res.send(err);
       res.json(consumer);
+      }
     });
 };

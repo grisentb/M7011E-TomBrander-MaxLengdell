@@ -6,7 +6,7 @@ Consumer = require('./models/models'),
 bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/M7011E');
+mongoose.connect('mongodb://localhost/M7011E/database');
 
 
 app.use(bodyParser.urlencoded({extended: true}));
