@@ -1,6 +1,3 @@
-//const uri = "mongodb+srv://simulator_admin:admin@130.240.200.39/";
-
-
 
 function dbConnectionSetup(){
     var mongoose = require('mongoose'),
