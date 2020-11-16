@@ -9,6 +9,20 @@ exports.updateConsumption = function(req, res) {
       });
 }
 
+exports.listAllClients = function(req, res) {
+    Consumer.find({}, function(err, consumer){
+      if(err)
+        res.send(err);
+      res.json(consumer);
+    });
+  }; 
+
 exports.createHousehold = function(req, res) {
     //Todo
-}
+    var new_House = new Consumer(req.body);
+    new_House.save(function(err, consumer){
+      if(err)
+        res.send(err);
+      res.json(consumer);
+    });
+};
