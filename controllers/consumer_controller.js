@@ -35,8 +35,5 @@ exports.getConsumption = function(req, res){
       console.log("could not load specified consumption");
       res.send(err);
     res.send(consumer);
-  }
-    
-    
-    ).exec();
+  });
 }
