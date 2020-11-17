@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
-    Consumer = mongoose.model('consumer');
-
-
+    Consumer = mongoose.model('consumer'),
+    Prosumer = mongoose.model('prosumer');
 
 exports.listAllClients = function(req, res) {
     Consumer.find({}, function(err, consumer){

@@ -3,7 +3,7 @@ class databaseConnection{
     constructor(){
       
         this.mongoose = require('mongoose');
-        
+        this.schemas = require('./../models/models');
         this.Consumer = this.mongoose.model('consumer');
         this.Prosumer = this.mongoose.model('prosumer');
     }
@@ -15,23 +15,26 @@ class databaseConnection{
       });
     }
     getList(){
-      this.Consumer.find({}, function(err, consumer){
+      console.log("printing");
+      this.Consumer.find({}, function(err, data){
+        console.log("test")
+
         if(err){
-          console.log(err);
+          console.log("faulty ", err);
           return err;
         }else{
-          console.log(consumer)
-          return json(consumer);
+          console.log("Everything from the db: ", data)
+          return data;
         }
       });
-    }; 
+    }    
+    test(){
+      console.log("running");
+      this.getList();
+    }
+    print(){
+      console.log("****** HALLÅÅÅ******");
+    }
 }
+module.exports = new databaseConnection();
 
-function test(){
-  console.log("running");
-  var db = new databaseConnection();
-  console.log(db.getList());
-}
-module.export = new databaseConnection();
-
-test();

@@ -42,4 +42,5 @@ var prosumerSchema = new Schema({
         default: 0.0
     }
 });
+module.exports = mongoose.model('consumer', consumerSchema);
 module.exports = mongoose.model('prosumer', prosumerSchema);
