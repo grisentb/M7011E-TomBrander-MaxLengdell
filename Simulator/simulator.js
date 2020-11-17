@@ -25,7 +25,6 @@ class simulator
             //this.consumer.findByIdAndUpdate(con._id);
         }
     } 
-
     
     gaussian(mean, stdev) {
         var y2;
@@ -54,10 +53,6 @@ class simulator
             return retval;
         return -retval;
     }
-
-
-
-
     calcPrice(wind, currentConsumption)
     {
         let price = 1.5;
@@ -68,7 +63,7 @@ class simulator
     {
 
     }
-
-
-
 }
+
+let sim = new simulator();
+sim.runSim();
