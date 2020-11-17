@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Consumer = mongoose.model('consumer');
 
 exports.updateConsumption = function(req, res) {
-    console.log("put parameters: " + req.params);
+    console.log("put parameters: ", String(req.params['id']));
     Consumer.findOneAndUpdate({_id: req.params.ID}, req.body, {new: true}, function(err, consumer) {
         if (err)
           res.send(err);
@@ -29,3 +29,14 @@ exports.createHousehold = function(req, res) {
       }
     });
 };
+exports.getConsumption = function(req, res){
+  Consumer.find({ID: '1337'},function(err, consumer){
+    if(err)
+      console.log("could not load specified consumption");
+      res.send(err);
+    res.send(consumer);
+  }
+    
+    
+    ).exec();
+}
