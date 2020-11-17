@@ -1,31 +1,28 @@
 
-class simulator
-{
+class simulator{
     constructor()
     {
-        this.mongoose = require('mongoose');
-        this.consumer = mongoose.model('consumer');
+        this.connection = require('./Simulator/databaseConnection');
     }
-    
     runSim()
     {
-        let consumers = this.consumer.find()
-        let windFunc = gaussian(3.6, 1);
-        let consumptionFunc = gaussian(70, 1); //Gaussian functions to predict next values of wind and consumptions
+        let wind = this.gaussian(3.6,1);
+        let consumption = this.gaussian(70,1);
+        //prosumtion = ...
+        price = -1;
 
-        let wind = 3.6;
-        let consumption = 70;
-        let price = -1;
-        for(con in consumers)
+        let consumerCollection = [];//this.connectoin.getCollection();
+
+        for(var consumer in consumerCollection)
         {
-            console.log(con._id);
-            wind = windFunc(wind);
-            consumption = consumptionFunc(consumption);
-            
-            //this.consumer.findByIdAndUpdate(con._id);
+            wind = this.gaussian(3.6,1);
+            consumption = this.gaussian(70,1);
+
+            price = this.calcPrice(wind, consumption);
+
+            this.connection();//.updateCollection(wind, consumption);
         }
-    } 
-    
+    }
     gaussian(mean, stdev) {
         var y2;
         var use_last = false;
@@ -58,12 +55,6 @@ class simulator
         let price = 1.5;
         return price;
     }
-
-    pushWindToDB()
-    {
-
-    }
 }
 
-let sim = new simulator();
-sim.runSim();
+module.exports = new simulator();
