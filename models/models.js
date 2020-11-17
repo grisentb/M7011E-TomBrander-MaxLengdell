@@ -4,7 +4,8 @@ var Schema = mongoose.Schema;
 var consumerSchema = new Schema({
     ID: {
         type: Number,
-        required: 'Please enter your house ID'
+        required: 'Please enter your house ID',
+        unique: true
     },
     Created_date:{
         type:Date,
@@ -14,12 +15,16 @@ var consumerSchema = new Schema({
         type:Number,
         default: 0.0
     },
-    status: {
+    Role: {
         type: [{
             type: String,
-            enum: ['running','idle']
+            enum: ['maintainer','prosumer','consumer']
         }],
-        default: ['running']
+        default: ['consumer']
+    },
+    Production: {
+        type: Number,
+        default: 0.0
     }
 });
 
