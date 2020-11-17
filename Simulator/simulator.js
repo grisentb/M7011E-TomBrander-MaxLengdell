@@ -4,7 +4,7 @@ class simulator
     constructor()
     {
         this.mongoose = require('mongoose');
-        this.consumer = require('consumer');
+        this.consumer = mongoose.model('consumer');
     }
     
     runSim()
