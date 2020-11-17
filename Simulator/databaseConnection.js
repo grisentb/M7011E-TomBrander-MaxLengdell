@@ -28,13 +28,6 @@ class databaseConnection{
       });
       console.log(ret);
     }    
-    test(){
-      console.log("running");
-      this.getList();
-    }
-    print(){
-      console.log("****** HALLÅÅÅ******");
-    }
 }
 module.exports = new databaseConnection();
 
