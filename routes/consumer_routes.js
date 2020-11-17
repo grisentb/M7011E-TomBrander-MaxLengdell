@@ -4,7 +4,7 @@ module.exports = function(app){
     app.route('/consumer/consumption')
         .get(consumer.listAllClients)
         .post(consumer.createHousehold)
-    app.route('/consumer/consumption/id')
+    app.route('/consumer/consumption/:house_id')
         .put(consumer.updateConsumption)
         .get(consumer.getConsumption)
 }
