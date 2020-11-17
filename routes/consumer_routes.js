@@ -4,7 +4,8 @@ module.exports = function(app){
     app.route('/consumer/consumption')
         .get(consumer.listAllClients)
         .post(consumer.createHousehold)
-    app.route('/consumer/consumption/id')
-        .put(consumer.updateConsumption)
+    app.route('/consumer/consumption/:house_id')
         .get(consumer.getConsumption)
+    app.route('/consumer/consumption/:house_id/:consumption')
+        .put(consumer.updateConsumption)
 }
