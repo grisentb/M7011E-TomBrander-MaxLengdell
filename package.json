@@ -3,6 +3,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/jest": "^26.0.15",
     "express": "^4.17.1",
     "mongoose": "^5.10.14"
   },
