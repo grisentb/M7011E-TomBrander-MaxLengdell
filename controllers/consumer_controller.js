@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
     Consumer = mongoose.model('consumer');
 
 exports.updateConsumption = function(req, res) {
+    console.log("put parameters: " + req.params);
     Consumer.findOneAndUpdate({_id: req.params.ID}, req.body, {new: true}, function(err, consumer) {
         if (err)
           res.send(err);
