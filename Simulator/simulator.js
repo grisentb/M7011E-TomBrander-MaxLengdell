@@ -2,17 +2,17 @@
 class simulator{
     constructor()
     {
-        this.connection = require('./Simulator/databaseConnection');
+        this.connection = require('./databaseConnection');
     }
     runSim()
     {
         let wind = this.gaussian(3.6,1);
         let consumption = this.gaussian(70,1);
         //prosumtion = ...
-        price = -1;
+        let price = -1;
 
-        let consumerCollection = [];//this.connectoin.getCollection();
-
+        let consumerCollection = this.connection.getCollection();
+        
         for(var consumer in consumerCollection)
         {
             wind = this.gaussian(3.6,1);
@@ -20,7 +20,7 @@ class simulator{
 
             price = this.calcPrice(wind, consumption);
 
-            this.connection();//.updateCollection(wind, consumption);
+            //this.connection();//.updateCollection(wind, consumption);
         }
     }
     gaussian(mean, stdev) {

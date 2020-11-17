@@ -14,19 +14,19 @@ class databaseConnection{
         res.json(consumer);
       });
     }
-    getList(){
-      console.log("printing");
+    getCollection(){
+      var ret;
       this.Consumer.find({}, function(err, data){
-        console.log("test")
-
         if(err){
           console.log("faulty ", err);
           return err;
         }else{
-          console.log("Everything from the db: ", data)
+          ret = data
+          //console.log(ret);
           return data;
         }
       });
+      console.log(ret);
     }    
     test(){
       console.log("running");

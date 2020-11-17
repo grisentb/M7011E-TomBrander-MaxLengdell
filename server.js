@@ -16,8 +16,8 @@ var routes = require('./routes/consumer_routes');
 routes(app);
 
 
-var simDBConnection = require('./Simulator/databaseConnection');
-simDBConnection.test();
+var simulator = require('./Simulator/simulator');
+simulator.runSim();
 
 
 app.listen(port);
