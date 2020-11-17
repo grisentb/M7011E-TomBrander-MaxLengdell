@@ -1,20 +1,40 @@
 
 class databaseConnection{ 
     constructor(){
+      
         this.mongoose = require('mongoose');
-        this.Consumer = mongoose.model('consumer');
-        //Prosumer = mongoose.model('prosumer');
+        this.schemas = require('./../models/models');
+        this.Consumer = this.mongoose.model('consumer');
+        this.Prosumer = this.mongoose.model('prosumer');
     }
-    writePrice(price, id){
-        exports.updateConsumption = function(req, res) {
-        this.Consumer.findOneAndUpdate({_id: req.params.ID}, req.body, {new: true}, function(err, consumer) {
-            if (err)
-              res.send(err);
-            res.json(consumer);
-          });
+    updatePrice(price, id){
+      Consumer.findOneAndUpdate({ID: req.params.house_id}, {Consumption: req.params.consumption}, {new: true}, function(err, consumer) {
+        if (err)
+          res.send(err);
+        res.json(consumer);
+      });
     }
+    getList(){
+      console.log("printing");
+      this.Consumer.find({}, function(err, data){
+        console.log("test")
+
+        if(err){
+          console.log("faulty ", err);
+          return err;
+        }else{
+          console.log("Everything from the db: ", data)
+          return data;
+        }
+      });
+    }    
+    test(){
+      console.log("running");
+      this.getList();
     }
-    writeProduction(production){
-    
+    print(){
+      console.log("****** HALLÅÅÅ******");
     }
 }
+module.exports = new databaseConnection();
+

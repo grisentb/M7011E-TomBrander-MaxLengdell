@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
-    Consumer = mongoose.model('consumer');
-
-
+    Consumer = mongoose.model('consumer'),
+    Prosumer = mongoose.model('prosumer');
 
 exports.listAllClients = function(req, res) {
     Consumer.find({}, function(err, consumer){
@@ -23,7 +22,7 @@ exports.createHousehold = function(req, res) {
     });
 };
 exports.getConsumption = function(req, res){
-  console.log("Requested parameter: ", req.params.house_id, "consumption: ", req.params.consumption);
+  //console.log("Requested parameter: ", req.params.house_id, "consumption: ", req.params.consumption);
   Consumer.find({ID: req.params.house_id}, function(err, consumer){
    if(err){
     console.log("someting broke during getConsumption");
@@ -33,7 +32,7 @@ exports.getConsumption = function(req, res){
   });
 };
 exports.updateConsumption = function(req, res) {
-  console.log("Requested parameter: ", req.params.house_id, "consumption: ", req.params.consumption);
+  //console.log("Requested parameter: ", req.params.house_id, "consumption: ", req.params.consumption);
     Consumer.findOneAndUpdate({ID: req.params.house_id}, {Consumption: req.params.consumption}, {new: true}, function(err, consumer) {
         if (err)
           res.send(err);
