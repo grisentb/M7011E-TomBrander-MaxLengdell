@@ -2,7 +2,7 @@ var express = require('express'),
 app = express(), 
 port = process.env.PORT || 3000,
 mongoose = require('mongoose'),
-Consumer = require('./models/models'),
+schemas = require('./models/models'),
 bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
