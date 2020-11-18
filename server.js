@@ -1,7 +1,7 @@
 var express = require('express'), 
 app = express(), 
 port = process.env.PORT || 3000,
-bodyParser = require('body-parser');
+bodyParser = require('body-parser'),
 schemas = require('./models/models');
 var mongoose;
 connectDatabase();
