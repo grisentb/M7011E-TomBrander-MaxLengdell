@@ -8,4 +8,5 @@ module.exports = function(app){
         .get(consumer.getConsumption)
     app.route('/consumer/consumption/:house_id/:consumption')
         .put(consumer.updateConsumption)
+
 }

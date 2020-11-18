@@ -10,8 +10,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 var routes = require('./routes/consumer_routes');
-routes(app);
+var routes_prosumer = require('./routes/prosumer_routes');
 
+routes(app);
+routes_prosumer(app);
 
 var simulator = require('./Simulator/simulator');
 tick = 1000;
