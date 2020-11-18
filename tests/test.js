@@ -14,3 +14,6 @@ test("Verifying gaussian is truly random", () => {
 test("Wind and consumption affect on price", () => {
     expect(1).toEqual(1);
 });
+
+//npm run test
+// to run the test
