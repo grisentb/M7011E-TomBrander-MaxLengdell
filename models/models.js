@@ -42,5 +42,24 @@ var prosumerSchema = new Schema({
         default: 0.0
     }
 });
+var userSchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    }, 
+    password: {
+        type: String,
+        required: true
+    },
+    data: {
+        type: Date,
+        default: Date.now
+    }
+});
 module.exports = mongoose.model('consumer', consumerSchema);
 module.exports = mongoose.model('prosumer', prosumerSchema);
+module.exports = mongoose.model('users', userSchema);

@@ -15,7 +15,7 @@ exports.createHousehold = function(req, res) {
     var new_House = new Consumer(req.body);
     new_House.save(function(err, consumer){
       if(err){
-      console.log("something broke during saving");
+        console.log("something broke during saving");
         res.send(err);
       res.json(consumer);
       }
