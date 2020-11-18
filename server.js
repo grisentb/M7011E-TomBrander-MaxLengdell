@@ -13,13 +13,6 @@ var routes = require('./routes/consumer_routes');
 routes(app);
 
 
-var simulator = require('./Simulator/simulator');
-tick = 1000;
-setInterval(() => {
-    simulator.runSim();
-}, tick);
-
-
 app.listen(port);
 
 console.log('restful api server started on: ' + port);
