@@ -14,6 +14,10 @@ test("Verifying gaussian is truly random", () => {
 test("Wind and consumption affect on price", () => {
     expect(1).toEqual(1);
 });
+test("Blackout determination", () =>{
+    var blackout_bool =sim.calcBlackout(100,30,80);
+    expect(blackout_bool).toEqual(true);
+})
 
 //npm run test
 // to run the test
