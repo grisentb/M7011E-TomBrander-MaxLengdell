@@ -29,18 +29,23 @@ class simulator{
 			if(err){
 				console.log(err);
 			} else {
-				console.log(gaussianFunction(median,deviation).toString());
+				//console.log(gaussianFunction(median,deviation).toString());
 				var stringify_res = JSON.stringify(res);
 				var parsed_res = JSON.parse(stringify_res);
 				let i = 0;
 				while(i<parsed_res.length)
 				{
+<<<<<<< Updated upstream
 					console.log(parsed_res[i].Consumption);
 					Collection.findByIdAndUpdate(parsed_res[i]._id, {variableToChange: gaussianFunction(median, deviation)}, function(err,docs){
+=======
+					//console.log(parsed_res[i].Consumption);
+					Collection.findByIdAndUpdate(parsed_res[i]._id, {Consumption: gaussianFunction(median, deviation)}, function(err,docs){
+>>>>>>> Stashed changes
 						if(err){console.log(err)}
 						else{}//console.log("Updated consumer : ", docs);}
 					});
-					console.log("******************************");
+					//console.log("******************************");
 					i++;
 				}
 
