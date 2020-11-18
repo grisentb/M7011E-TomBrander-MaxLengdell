@@ -6,11 +6,11 @@ const validateRegisterInput = require('../Frontend/validation/register'),
     jwtStrategy = require('passport-jwt').Strategy,
     extractJwt = require('passport-jwt').ExtractJwt,
     keys = require('../config/keys'),
-    jwt = require('jsonwebtoken');
-
-
+    jwt = require('jsonwebtoken'),
+    path = require('path');
 exports.loginPage = function(req, res){
-    res.sendFile(path.join(__dirname + '../Frontend/consumer.html'));
+    console.log("sending file");
+    res.sendFile(path.join(__dirname + '/../Frontend/consumer.html'));
 }
 
 exports.login = function (req, res) {
