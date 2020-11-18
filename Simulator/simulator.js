@@ -35,13 +35,8 @@ class simulator{
 				let i = 0;
 				while(i<parsed_res.length)
 				{
-<<<<<<< Updated upstream
-					console.log(parsed_res[i].Consumption);
-					Collection.findByIdAndUpdate(parsed_res[i]._id, {variableToChange: gaussianFunction(median, deviation)}, function(err,docs){
-=======
 					//console.log(parsed_res[i].Consumption);
 					Collection.findByIdAndUpdate(parsed_res[i]._id, {Consumption: gaussianFunction(median, deviation)}, function(err,docs){
->>>>>>> Stashed changes
 						if(err){console.log(err)}
 						else{}//console.log("Updated consumer : ", docs);}
 					});
