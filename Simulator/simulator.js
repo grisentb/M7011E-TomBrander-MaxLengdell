@@ -5,7 +5,6 @@ class simulator{
         this.consumerCollection = this.mongoose.model('consumer');
         this.prosumerCollection = this.mongoose.model('prosumer');
         //this.connection = require('./databaseConnection');
-        this.connection = require('./databaseConnection');
         this.avgWind = 3.6;
         this.avgPrice = 1.5;
     }
@@ -17,7 +16,10 @@ class simulator{
         //prosumtion = ...
 		let price = -1;
 		//console.log("1");
+
+		//Simulating consumption for every consumer in database
 		this.updateCollection(this.consumerCollection, this.gaussian, 70, 1, 'Consumption');
+		//Simulating prosumption for every prosumer in database
     }
 
     updateCollection(Collection, gaussianFunction,median, deviation, variableToChange)
@@ -34,7 +36,7 @@ class simulator{
 				while(i<parsed_res.length)
 				{
 					console.log(parsed_res[i].Consumption);
-					Collection.findByIdAndUpdate(parsed_res[i]._id, {Consumption: gaussianFunction(median, deviation)}, function(err,docs){
+					Collection.findByIdAndUpdate(parsed_res[i]._id, {variableToChange: gaussianFunction(median, deviation)}, function(err,docs){
 						if(err){console.log(err)}
 						else{}//console.log("Updated consumer : ", docs);}
 					});

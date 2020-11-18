@@ -15,13 +15,6 @@ var routes_prosumer = require('./routes/prosumer_routes');
 routes(app);
 routes_prosumer(app);
 
-var simulator = require('./Simulator/simulator');
-tick = 1000;
-setInterval(() => {
-    simulator.runSim();
-}, tick);
-
-
 app.listen(port);
 
 console.log('restful api server started on: ' + port);
