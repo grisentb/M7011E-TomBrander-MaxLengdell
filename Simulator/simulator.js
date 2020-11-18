@@ -1,28 +1,35 @@
-
 class simulator{
     constructor()
     {
-        this.connection = require('./databaseConnection');
+        this.mongoose = require('mongoose');
+        this.consumerCollection = this.mongoose.model('consumer');
+        this.prosumerCollection = this.mongoose.model('prosumer');
+        //this.connection = require('./databaseConnection');
     }
     runSim()
     {
+        let tick = 1000; // 1 second
         let wind = this.gaussian(3.6,1);
         let consumption = this.gaussian(70,1);
         //prosumtion = ...
-        let price = -1;
-
-        let consumerCollection = this.connection.getCollection();
-        
-        for(var consumer in consumerCollection)
-        {
-            wind = this.gaussian(3.6,1);
-            consumption = this.gaussian(70,1);
-
-            price = this.calcPrice(wind, consumption);
-
-            //this.connection();//.updateCollection(wind, consumption);
-        }
+		let price = -1;
+		//console.log("1");
+		this.updateCollection(this.consumerCollection, consumption);
     }
+
+    updateCollection(Collection, updateData)
+    {
+		//console.log(updateData);
+		Collection.find({}, function (err, res) {
+			if(err){
+				console.log(err);
+			} else {
+				console.log(res.toString());
+
+			}
+		});
+		//setInterval(this.test(Collection, updateData), tick);
+	}
     gaussian(mean, stdev) {
         var y2;
         var use_last = false;

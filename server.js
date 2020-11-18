@@ -14,7 +14,10 @@ routes(app);
 
 
 var simulator = require('./Simulator/simulator');
-simulator.runSim();
+tick = 1000;
+setInterval(() => {
+    simulator.runSim();
+}, tick);
 
 
 app.listen(port);
@@ -22,8 +25,10 @@ app.listen(port);
 console.log('restful api server started on: ' + port);
 
 function connectDatabase(){
+    console.log("Trying to connect");
     mongoose = require('mongoose');
     mongoose.Promise = global.Promise;
     mongoose.connect('mongodb://localhost/M7011E');
+    console.log("Connected");
 }
 module.exports = connectDatabase;
