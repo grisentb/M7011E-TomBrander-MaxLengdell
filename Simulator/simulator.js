@@ -14,17 +14,30 @@ class simulator{
         //prosumtion = ...
 		let price = -1;
 		//console.log("1");
-		this.updateCollection(this.consumerCollection, consumption);
+		this.updateCollection(this.consumerCollection, this.gaussian, 70, 1, 'Consumption');
     }
 
-    updateCollection(Collection, updateData)
+    updateCollection(Collection, gaussianFunction,median, deviation, variableToChange)
     {
 		//console.log(updateData);
-		Collection.find({}, function (err, res) {
+		Collection.find().lean().exec(function (err, res) {
 			if(err){
 				console.log(err);
 			} else {
-				console.log(res.toString());
+				console.log(gaussianFunction(median,deviation).toString());
+				var stringify_res = JSON.stringify(res);
+				var parsed_res = JSON.parse(stringify_res);
+				let i = 0;
+				while(i<parsed_res.length)
+				{
+					console.log(parsed_res[i].Consumption);
+					Collection.findByIdAndUpdate(parsed_res[i]._id, {Consumption: gaussianFunction(median, deviation)}, function(err,docs){
+						if(err){console.log(err)}
+						else{}//console.log("Updated consumer : ", docs);}
+					});
+					console.log("******************************");
+					i++;
+				}
 
 			}
 		});
