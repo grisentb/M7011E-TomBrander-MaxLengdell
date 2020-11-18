@@ -9,7 +9,9 @@ const validateRegisterInput = require('../Frontend/validation/register'),
     jwt = require('jsonwebtoken');
 
 
-
+exports.loginPage = function(req, res){
+    res.sendFile(path.join(__dirname + '../Frontend/consumer.html'));
+}
 
 exports.login = function (req, res) {
     const { errors, isValid } = validateLoginInput(req.body);
