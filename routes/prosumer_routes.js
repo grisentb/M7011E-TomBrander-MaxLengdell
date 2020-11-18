@@ -1,4 +1,7 @@
 module.exports = function(app){
-    var prosumerRoute = require('../controllers/prosumer_controller');
-
+    var prosumer = require('../controllers/prosumer_controller');
+    app.route('/home')
+        .get(prosumer.home)
+    app.route('/home/secret')
+        .get(prosumer.home_secret)
 }
