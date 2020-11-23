@@ -1,3 +1,5 @@
+const { Collection } = require('mongoose');
+
 class simulator{
     constructor()
     {
@@ -10,44 +12,76 @@ class simulator{
     }
     runSim()
     {
-        let tick = 1000; // 1 second
-        let wind = this.gaussian(3.6,1);
-        let consumption = this.gaussian(70,1);
-        //prosumtion = ...
 		let price = -1;
-		//console.log("1");
-
 		//Simulating consumption for every consumer in database
-		this.updateCollection(this.consumerCollection, this.gaussian, 70, 1, 'Consumption');
+        this.updateConsumption(this.consumerCollection, 70, 10);
+
+        //Updating wind and production for the prosumers
+        this.updateWind(this.prosumerCollection, 3.6, 0.5);
+        this.updateProduction(this.prosumerCollection);
+        
+        
 		//Simulating prosumption for every prosumer in database
     }
 
-    updateCollection(Collection, gaussianFunction,median, deviation, variableToChange)
+    async updateConsumption(Collection, mean, deviation)
     {
-		//console.log(updateData);
-		Collection.find().lean().exec(function (err, res) {
-			if(err){
-				console.log(err);
-			} else {
-				//console.log(gaussianFunction(median,deviation).toString());
-				var stringify_res = JSON.stringify(res);
-				var parsed_res = JSON.parse(stringify_res);
-				let i = 0;
-				while(i<parsed_res.length)
-				{
-					//console.log(parsed_res[i].Consumption);
-					Collection.findByIdAndUpdate(parsed_res[i]._id, {Consumption: gaussianFunction(median, deviation)}, function(err,docs){
-						if(err){console.log(err)}
-						else{}//console.log("Updated consumer : ", docs);}
-					});
-					//console.log("******************************");
-					i++;
-				}
+        let content = await Collection.find();
+        content = this.collectionContentToArray(content);
+        let i = 0;
+        while(i < content.length)
+        {
+            //console.log(content[i].Consumption);
+            let newConsumption = this.gaussian(mean, deviation);
+            Collection.findByIdAndUpdate(content[i]._id, {Consumption: newConsumption}, function(err,docs){
+                if(err){console.log(err)}
+                else{}//console.log("Updated consumer : ", docs);}
+            });
+            i++;
+        }
+    }
 
-			}
-		});
-		//setInterval(this.test(Collection, updateData), tick);
-	}
+    async updateWind(Collection, mean, deviation)
+    {
+        let content = await Collection.find();
+        content = this.collectionContentToArray(content);
+        let i = 0;
+        while(i < content.length)
+        {
+            console.log(content[i].Wind);
+            let newWind = this.gaussian(mean, deviation);
+            Collection.findByIdAndUpdate(content[i]._id, {Wind: newWind}, function(err,docs){
+                if(err){console.log(err)}
+                else{}//console.log("Updated consumer : ", docs);}
+            });
+            i++;
+        }
+    }
+
+    async updateProduction(Collection)
+    {
+        let content = await Collection.find();
+        content = this.collectionContentToArray(content);
+        let i = 0;
+        while(i<content.length)
+        {
+            let wind = content[i].Wind;
+            let capacity = content[i].capacity;
+            let production = this.calculateProduction(wind, capacity);
+            Collection.findByIdAndUpdate(content[i]._id, {Production: production},  function(err,docs){
+                if(err){console.log(err)}
+                else{}//console.log("Updated consumer : ", docs);}
+            });
+
+            i++;
+        }
+    }
+
+    //Helper methods
+    calculateProduction(wind, prosumerCapacity)
+    {
+        return wind*prosumerCapacity;
+    }
     calcBlackout(totalConsumption, currentConsumption, production){
         /**
          * Should enable blackout for individual house holds. 
@@ -94,6 +128,12 @@ class simulator{
             price = price*1.30;
 
         return price;
+    }
+    collectionContentToArray(content)
+    {
+        content = JSON.stringify(content);
+        content = JSON.parse(content);
+        return content;
     }
     gaussian(mean, stdev) {
         var y2;
