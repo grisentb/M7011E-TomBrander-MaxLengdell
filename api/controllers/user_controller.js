@@ -14,6 +14,10 @@ exports.loginPage = function(req, res){
 }
 
 exports.login = function (req, res) {
+    console.log("create household and user");
+    console.log(req.body);
+}
+exports.login_user = function (req, res) {
     const { errors, isValid } = validateLoginInput(req.body);
 
     //Validate
@@ -41,7 +45,7 @@ exports.login = function (req, res) {
                     payload,
                     keys.secretOrKey,
                     {
-                        expiresIn: 30000000
+                        expiresIn: 86400
                     },
                     (err, token) => {
                         res.json({

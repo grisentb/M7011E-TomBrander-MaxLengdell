@@ -2,14 +2,18 @@ var express = require('express'),
 session = require('express-session'),
 uuid = require('uuid'),
 app = express(), 
-port = process.env.PORT || 3000,
+cors = require('cors'),
+port = process.env.PORT || 4000,
 schemas = require('./models/models');
 var mongoose = require('mongoose');
 
+
+app.use(cors());
 connectDatabase();
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
 
 var routes = require('./routes/consumer_routes');
 var routes_prosumer = require('./routes/prosumer_routes');
