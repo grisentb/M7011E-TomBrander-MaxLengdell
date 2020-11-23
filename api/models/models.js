@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
-uuid = require('uuid'),
-UUID = mongoose.Types.UUID;
+uuid = require('uuid-v4'),
+UUID = mongoose.Types.uuid;
 
 var Schema = mongoose.Schema;
 
@@ -21,8 +21,8 @@ var consumerSchema = new Schema({
 });
 var prosumerSchema = new Schema({
     _id: {
-        type: UUID,
-        default: uuid
+        type: String,
+        default: uuid()
     },
     created_date:{
         type:Date,

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('users');
-const validateRegisterInput = require('../Frontend/validation/register'),
-    validateLoginInput = require('../Frontend/validation/login'),
+const validateRegisterInput = require('../../Webserver/Frontend/validation/register'),
+    validateLoginInput = require('../../Webserver/Frontend/validation/login'),
     bcrypt = require('bcryptjs'),
     jwtStrategy = require('passport-jwt').Strategy,
     extractJwt = require('passport-jwt').ExtractJwt,
@@ -10,7 +10,7 @@ const validateRegisterInput = require('../Frontend/validation/register'),
     path = require('path');
 exports.loginPage = function(req, res){
     console.log("sending file");
-    res.sendFile(path.join(__dirname + '/../Frontend/html/react.html'));
+    res.sendFile(path.join(__dirname + '/../../Webserver/Frontend/html/react.html'));
 }
 
 exports.login = function (req, res) {

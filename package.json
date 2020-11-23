@@ -13,7 +13,7 @@
     "mongoose": "^5.10.14",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "uuid": "^8.3.1",
+    "uuid-v4": "^0.1.0",
     "validator": "^13.1.17"
   },
   "name": "api",
