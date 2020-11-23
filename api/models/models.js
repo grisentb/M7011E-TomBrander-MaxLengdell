@@ -1,4 +1,7 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+uuid = require('uuid'),
+UUID = mongoose.Types.UUID;
+
 var Schema = mongoose.Schema;
 
 var consumerSchema = new Schema({
@@ -17,35 +20,51 @@ var consumerSchema = new Schema({
     }
 });
 var prosumerSchema = new Schema({
-    ID: {
-        type: Number,
-        required: 'Please enter your house ID',
-        unique: true
+    _id: {
+        type: UUID,
+        default: uuid
     },
-    Created_date:{
+    created_date:{
         type:Date,
         default: Date.now
     },
-    Consumption:{
+    consumption:{
         type:Number,
         default: 0.0
     },
-    Role: {
+    role: {
         type: [{
             type: String,
             enum: ['maintainer','prosumer']
         }],
         default: ['prosumer']
     },
-    Production: {
+    production: {
+        type: Number,
+        default: 0.0
+    },
+    production_capacity: {
+        type: Number,
+        default: 0.0
+    },
+    wind: {
+        type: Number,
+        default: 0.0
+    },
+    buffer: {
         type: Number,
         default: 0.0
     }
-});
+},{id: false});
 var userSchema = new Schema({
     name: {
         type: String,
         required: true
+    },
+    house_id: {
+        type: Number,
+        required: true,
+        unique: true
     },
     email: {
         type: String,
@@ -55,7 +74,7 @@ var userSchema = new Schema({
         type: String,
         required: true
     },
-    data: {
+    date: {
         type: Date,
         default: Date.now
     }

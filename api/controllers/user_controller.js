@@ -10,7 +10,7 @@ const validateRegisterInput = require('../Frontend/validation/register'),
     path = require('path');
 exports.loginPage = function(req, res){
     console.log("sending file");
-    res.sendFile(path.join(__dirname + '/../Frontend/consumer.html'));
+    res.sendFile(path.join(__dirname + '/../Frontend/html/react.html'));
 }
 
 exports.login = function (req, res) {
