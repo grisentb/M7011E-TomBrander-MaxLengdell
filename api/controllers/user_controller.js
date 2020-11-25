@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('users');
-//const validateRegisterInput = require('../../Webserver/Frontend/validation/register'),
-//    validateLoginInput = require('../../Webserver/Frontend/validation/login'),
+
 const bcrypt = require('bcryptjs'),
     jwtStrategy = require('passport-jwt').Strategy,
     extractJwt = require('passport-jwt').ExtractJwt,
@@ -14,14 +13,12 @@ exports.login_test = function (req, res) {
 
 }
 exports.login = function (req, res) {
-    console.log(req.body)
 
     const email = req.body.email;
     const password = req.body.password;
 
     User.findOne({ email }).then(user => {
         //Check if user exists
-        console.log("user:", user);
         if (user == null) {
             console.log("user not found");
             res.send(res.status(404).json({ emailnotfound: "Email not found" }));
@@ -79,6 +76,7 @@ exports.register = function (req, res) {
             res.send(res.status(400).json({ email: "Email already exists" }));
         }
         else {
+            //Register household and then user
             const newUser = new User({
                 name: req.body.name,
                 email: req.body.email,
@@ -100,7 +98,7 @@ exports.register = function (req, res) {
     });
 };
 
-exports.getDashboard = function (req, res) {
 
+function registerHouse(consumption, production, wind, buffer){
+    const newHouse = new prosumer
 }
-
