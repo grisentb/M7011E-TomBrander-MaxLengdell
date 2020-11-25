@@ -6,12 +6,9 @@ const bcrypt = require('bcryptjs'),
     extractJwt = require('passport-jwt').ExtractJwt,
     keys = require('../config/keys'),
     jwt = require('jsonwebtoken'),
-    path = require('path');
+    path = require('path'),
+    prosumer_controller = require('./prosumer_controller');
 
-exports.login_test = function (req, res) {
-    console.log(req.body);
-
-}
 exports.login = function (req, res) {
 
     const email = req.body.email;
@@ -69,36 +66,51 @@ exports.getRegistered = function (req, res) {
 
 
 exports.register = function (req, res) {
+    /**
+     * Check if user exists, if he does -> return
+     * else:
+     *      create a house and attach that house_id to the user we're about to create
+     * If creation of either house or user failed, they should be deleted
+     */
 
     User.findOne({ email: req.body.email }).then(user => {
         if (user) {
             console.log("Email already exists");
             res.send(res.status(400).json({ email: "Email already exists" }));
-        }
-        else {
-            //Register household and then user
-            const newUser = new User({
-                name: req.body.name,
-                email: req.body.email,
-                house_id: req.body.house_id,
-                password: req.body.password
-            });
-            console.log("saving");
-            //Hashing password
-            bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(newUser.password, salt, (err, hash) => {
-                    if (err) throw err;
-                    newUser.password = hash;
-                    newUser.save()
-                        .then(user => res.json(user))
-                        .catch(err => console.log(err));
-                });
-            });
+        } else {
+            //Register a house
+            prosumer_controller.registerProsumer().then(house_id =>{
+                console.log("House_ID: ", house_id);
+                console.log("ID type: " + typeof(house_id));
+                registerUser(req.body.name, req.body.email, house_id, req.body.password);
+            })
+            
         }
     });
-};
+}
 
 
-function registerHouse(consumption, production, wind, buffer){
-    const newHouse = new prosumer
+ function registerUser(name, email, house_id, password) {
+
+    //Register household and then user
+    var ret_user;
+    const newUser = new User({
+        name: name,
+        email: email,
+        house_id: house_id,
+        password: password
+    });
+    console.log("saving");
+    //Hashing password
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) =>  {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser.save()
+                .then(user => {ret_user = user})
+                .catch(err => console.log(err));
+        });
+    });
+    return ret_user;
+
 }
