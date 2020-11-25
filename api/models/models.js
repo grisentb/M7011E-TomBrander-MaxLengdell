@@ -22,7 +22,8 @@ var consumerSchema = new Schema({
 var prosumerSchema = new Schema({
     _id: {
         type: String,
-        default: uuid()
+        default: uuid(),
+        unique: true
     },
     created_date:{
         type:Date,

@@ -4,4 +4,5 @@ module.exports = function(app){
         .get(prosumer.home)
     app.route('/home/secret')
         .get(prosumer.home_secret)
+
 }
