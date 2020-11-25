@@ -80,8 +80,6 @@ exports.register = function (req, res) {
         } else {
             //Register a house
             prosumer_controller.registerProsumer().then(house_id =>{
-                console.log("House_ID: ", house_id);
-                console.log("ID type: " + typeof(house_id));
                 registerUser(req.body.name, req.body.email, house_id, req.body.password);
             })
             

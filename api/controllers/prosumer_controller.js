@@ -16,12 +16,8 @@ exports.registerProsumer = async function () {
     .then(house => {
       //console.log(house);
       ID = JSON.stringify(house._id)
-      console.log("House : " + ID );
-      console.log("TYPE: ", typeof(ID));
     })
     .catch(err => console.log("ERROR CREATING PROSUMER: ", err));
 
-
-  console.log("house " + ID + " created");
   return ID;
 }
