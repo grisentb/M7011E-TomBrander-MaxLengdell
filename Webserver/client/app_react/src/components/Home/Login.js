@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from './../../Utils/Common';
 
+const validateRegisterInput = require('../../validation/register_validation'),
+    validateLoginInput = require('../../validation/login_validation');
+
 function Login(props) {
   const [loading, setLoading] = useState(false);
-  const username = useFormInput('');
   const password = useFormInput('');
   const email = useFormInput('');
   const [error, setError] = useState(null);
@@ -13,24 +15,35 @@ function Login(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
-    axios.post('http://localhost:4000/login', { username: username.value, email: email.value, password: password.value }).then(response => {
+
+    //Validate login values. 
+
+    const { errors, isValid } = validateLoginInput(email, password);
+
+    if(!isValid){
       setLoading(false);
+      //setError(errors);
+
+    }
+
+    else {
+      axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
+      setLoading(false);
+
+      console.log("response: ", response.data);
       setUserSession(response.data.token, response.data.user);
       props.history.push('/dashboard');
-    }).catch(error => {
+      }).catch(error => {
       setLoading(false);
       if (error.response.status === 401) setError(error.response.data.message);
       else setError("Something went wrong. Please try again later.");
     });
   }
+}
 
   return (
     <div>
       Login<br /><br />
-      <div>
-        Username<br />
-        <input type="text" {...username} autoComplete="new-password" />
-      </div>
       <div>
         Email<br />
         <input type="text" {...email} autoComplete="new-password" />
