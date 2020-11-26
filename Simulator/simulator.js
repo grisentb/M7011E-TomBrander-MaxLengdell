@@ -50,7 +50,7 @@ class simulator{
         {
             console.log(content[i].Wind);
             let newWind = this.gaussian(mean, deviation);
-            Collection.findByIdAndUpdate(content[i]._id, {Wind: newWind}, function(err,docs){
+            Collection.findByIdAndUpdate(content[i]._id, {wind: newWind}, function(err,docs){
                 if(err){console.log(err)}
                 else{}//console.log("Updated consumer : ", docs);}
             });
@@ -65,10 +65,10 @@ class simulator{
         let i = 0;
         while(i<content.length)
         {
-            let wind = content[i].Wind;
+            let wind = content[i].wind;
             let capacity = content[i].capacity;
             let production = this.calculateProduction(wind, capacity);
-            Collection.findByIdAndUpdate(content[i]._id, {Production: production},  function(err,docs){
+            Collection.findByIdAndUpdate(content[i]._id, {production: production},  function(err,docs){
                 if(err){console.log(err)}
                 else{}//console.log("Updated consumer : ", docs);}
             });
