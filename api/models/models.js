@@ -20,10 +20,6 @@ var consumerSchema = new Schema({
     }
 });
 var prosumerSchema = new Schema({
-    _id: {
-        type: String,
-        default: uuid()
-    },
     created_date:{
         type:Date,
         default: Date.now
@@ -62,7 +58,7 @@ var userSchema = new Schema({
         required: true
     },
     house_id: {
-        type: Number,
+        type: String,
         required: true,
         unique: true
     },

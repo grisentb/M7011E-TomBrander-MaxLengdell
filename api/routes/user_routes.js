@@ -3,8 +3,8 @@ module.exports = function(app){
 
     app.route('/login')
         .post(user.login)
-        .get(user.loginPage)
     app.route('/register')
         .post(user.register)
         .get(user.getRegistered)
+    //app.route('/verify:') verifying token with email...
 }

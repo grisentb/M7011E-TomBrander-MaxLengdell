@@ -1,3 +1,4 @@
-Week 45
-Week 46
-Week 47
+Week 45 10 hours
+Week 46 23 hours
+Week 47 19 hours
+Week 48 9
