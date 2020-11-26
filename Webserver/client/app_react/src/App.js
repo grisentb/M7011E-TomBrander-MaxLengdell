@@ -5,6 +5,7 @@ import axios from 'axios';
 import Login from './components/Home/Login';
 import Dashboard from './components/Home/Dashboard';
 import Home from './components/Home/Home';
+import Register from './components/Home/Register';
 
 import PrivateRoute from './Utils/Routes/PrivateRoute';
 import PublicRoute from './Utils/Routes/PublicRoute';
@@ -40,12 +41,14 @@ function App() {
             <NavLink exact activeClassName="active" to="/">Home</NavLink>
             <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
             <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink><small>(Access with token only)</small>
+            <NavLink activeClassName="active" to="/register">Register</NavLink><small>(Register user and household!</small>
           </div>
           <div className="content">
             <Switch>
               <Route exact path="/" component={Home} />
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PublicRoute path="/register" component={Register} />
             </Switch>
           </div>
         </div>
