@@ -9,6 +9,38 @@ const bcrypt = require('bcryptjs'),
     path = require('path'),
     prosumer_controller = require('./prosumer_controller');
 
+exports.verifyToken = function (req, res) {
+    var token = req.query.token;
+    if(!token){
+        return res.status(400).json({
+            error: true,
+            message: "Token is required."
+        });
+    }else {
+        //Verify token. If it returns expired or 
+        //incorrect it will cast a error and return 401
+        jwt.verify(token, keys.secretOrKey, function (err, user) {
+            if(err){
+                res.status(401).json({
+                    error: true,
+                    message: "Incorrect token"
+                });
+            }else {
+                return res.json({token: token, user: user})
+            }            
+            // if(user.email !== req.body.email){
+            //     console.log("not the same user");
+            //     res.status(401).json({
+            //         error: true,
+            //         message: "Incorrect user"
+            //     });
+            // }
+            
+        });
+
+    }
+}
+
 exports.login = function (req, res) {
 
     const email = req.body.email;
@@ -28,8 +60,7 @@ exports.login = function (req, res) {
                     //Correct pwd. Create tokens & all that
                     console.log("correct password");
                     const payload = {
-                        id: user.id,
-                        name: user.name
+                        email: email
                     };
 
                     //Signing token
@@ -37,13 +68,13 @@ exports.login = function (req, res) {
                         payload,
                         keys.secretOrKey,
                         {
-                            expiresIn: 20
+                            expiresIn: 1800 //30 minutes
                         },
                         (err, token) => {
                             res.json({
                                 success: true,
-                                token: "Bearer" + token,
-                                user: email
+                                token: token,
+                                email: email
                             });
                         }
                     );

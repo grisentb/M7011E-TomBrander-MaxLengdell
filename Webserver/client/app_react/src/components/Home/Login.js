@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from './../../Utils/Common';
 
-const validateRegisterInput = require('../../validation/register_validation'),
-    validateLoginInput = require('../../validation/login_validation');
+const validateLoginInput = require('../../validation/login_validation');
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
@@ -22,7 +21,7 @@ function Login(props) {
 
     if(!isValid){
       setLoading(false);
-      //setError(errors);
+      setError(errors);
 
     }
 
@@ -30,8 +29,7 @@ function Login(props) {
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
       setLoading(false);
 
-      console.log("response: ", response.data);
-      setUserSession(response.data.token, response.data.user);
+      setUserSession(response.data.token, response.data.email);
       props.history.push('/dashboard');
       }).catch(error => {
       setLoading(false);
