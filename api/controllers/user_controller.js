@@ -50,7 +50,9 @@ exports.login = function (req, res) {
         //Check if user exists
         if (user == null) {
             console.log("user not found");
-            res.send(res.status(404).json({ emailnotfound: "Email not found" }));
+            //console.log(res.status(404).json({ emailnotfound: "Email not found" }));
+            //res.send(res.status(404).json({ emailnotfound: "Email not found" }));
+            res.status(404).send({incorrectemail: "incorrect email"});
         }
         else {
             console.log("user found!");
@@ -80,7 +82,7 @@ exports.login = function (req, res) {
                     );
                 } else {
                     console.log("password did not match");
-                    return res.status(400).json({ passwordincorrect: "Password incorrect" });
+                    res.status(404).send({incorrectpassword: "incorrect password"});
                 }
             });
         }
