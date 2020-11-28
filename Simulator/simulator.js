@@ -14,8 +14,8 @@ class simulator{
     {
 		let price = -1;
 		//Simulating consumption for every consumer in database
-        this.updateConsumption(this.consumerCollection, 70, 10);
-
+        //this.updateConsumption(this.consumerCollection, 70, 10);
+        this.updateConsumption(this.prosumerCollection, 70, 10);
         //Updating wind and production for the prosumers
         this.updateWind(this.prosumerCollection, 3.6, 0.5);
         this.updateProduction(this.prosumerCollection);
@@ -24,57 +24,97 @@ class simulator{
 		//Simulating prosumption for every prosumer in database
     }
 
-    async updateConsumption(Collection, mean, deviation)
-    {
-        let content = await Collection.find();
-        content = this.collectionContentToArray(content);
-        let i = 0;
-        while(i < content.length)
-        {
-            //console.log(content[i].Consumption);
-            let newConsumption = this.gaussian(mean, deviation);
-            Collection.findByIdAndUpdate(content[i]._id, {Consumption: newConsumption}, function(err,docs){
-                if(err){console.log(err)}
-                else{}//console.log("Updated consumer : ", docs);}
+    // async updateConsumption(Collection, mean, deviation)
+    // {
+    //     let content = await Collection.find();
+    //     content = this.collectionContentToArray(content);
+    //     let i = 0;
+    //     while(i < content.length)
+    //     {
+    //         //console.log(content[i].Consumption);
+    //         let newConsumption = this.gaussian(mean, deviation);
+    //         Collection.findByIdAndUpdate(content[i]._id, {Consumption: newConsumption}, function(err,docs){
+    //             if(err){console.log(err)}
+    //             else{}//console.log("Updated consumer : ", docs);}
+    //         });
+    //         i++;
+    //     }
+    // }
+    async updateConsumption(Collection, mean, deviation){
+        var gauss = this.gaussian;
+        Collection.find().stream()
+            .on('data', function(doc){
+                let newConsumption = gauss(mean, deviation);
+
+                Collection.findByIdAndUpdate(doc._id, {consumption: newConsumption}, function(err, result){
+                    if(err){
+                        console.log("Error in update: ",err);
+                    }
+                })
+
             });
-            i++;
-        }
     }
 
     async updateWind(Collection, mean, deviation)
     {
-        let content = await Collection.find();
-        content = this.collectionContentToArray(content);
-        let i = 0;
-        while(i < content.length)
-        {
-            console.log(content[i].Wind);
-            let newWind = this.gaussian(mean, deviation);
-            Collection.findByIdAndUpdate(content[i]._id, {wind: newWind}, function(err,docs){
-                if(err){console.log(err)}
-                else{}//console.log("Updated consumer : ", docs);}
+        // let content = await Collection.find();
+        // content = this.collectionContentToArray(content);
+        // let i = 0;
+        // while(i < content.length)
+        // {
+        //     console.log(content[i].Wind);
+        //     let newWind = this.gaussian(mean, deviation);
+        //     Collection.findByIdAndUpdate(content[i]._id, {wind: newWind}, function(err,docs){
+        //         if(err){console.log(err)}
+        //         else{}//console.log("Updated consumer : ", docs);}
+        //     });
+        //     i++;
+        // }
+        var gauss = this.gaussian;
+        Collection.find().stream()
+            .on('data', function(doc){
+                let newWind = gauss(mean, deviation);
+
+                Collection.findByIdAndUpdate(doc._id, {wind: newWind}, function(err, result){
+                    if(err){
+                        console.log("Error in update: ",err);
+                    }
+                })
+
             });
-            i++;
-        }
     }
 
     async updateProduction(Collection)
     {
-        let content = await Collection.find();
-        content = this.collectionContentToArray(content);
-        let i = 0;
-        while(i<content.length)
-        {
-            let wind = content[i].wind;
-            let capacity = content[i].capacity;
-            let production = this.calculateProduction(wind, capacity);
-            Collection.findByIdAndUpdate(content[i]._id, {production: production},  function(err,docs){
-                if(err){console.log(err)}
-                else{}//console.log("Updated consumer : ", docs);}
-            });
+        // let content = await Collection.find();
+        // content = this.collectionContentToArray(content);
+        // let i = 0;
+        // while(i<content.length)
+        // {
+        //     let wind = content[i].wind;
+        //     let capacity = content[i].capacity;
+        //     let production = this.calculateProduction(wind, capacity);
+        //     Collection.findByIdAndUpdate(content[i]._id, {production: production},  function(err,docs){
+        //         if(err){console.log(err)}
+        //         else{}//console.log("Updated consumer : ", docs);}
+        //     });
 
-            i++;
-        }
+        //     i++;
+        // }
+        var productionFunc = this.calculateProduction;
+        Collection.find().stream()
+            .on('data', function(doc){
+                let wind = doc.wind;
+                let capacity = doc.production_capacity;
+                let production = productionFunc(wind, capacity);
+
+                Collection.findByIdAndUpdate(doc._id, {production: production}, function(err, result){
+                    if(err){
+                        console.log("Error in update: ",err);
+                    }
+                })
+
+            });
     }
 
     //Helper methods

@@ -24,16 +24,16 @@ var prosumerSchema = new Schema({
         type:Date,
         default: Date.now
     },
-    consumption:{
-        type:Number,
-        default: 0.0
-    },
     role: {
         type: [{
             type: String,
             enum: ['maintainer','prosumer']
         }],
         default: ['prosumer']
+    },
+    consumption:{
+        type:Number,
+        default: 0.0
     },
     production: {
         type: Number,

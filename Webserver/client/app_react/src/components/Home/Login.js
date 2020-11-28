@@ -19,7 +19,7 @@ function Login(props) {
 
     const { errors, isValid } = validateLoginInput(email, password);
 
-    if(!isValid){
+    if (!isValid) {
       setLoading(false);
       setError(errors);
 
@@ -27,17 +27,15 @@ function Login(props) {
 
     else {
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
-      setLoading(false);
-
-      setUserSession(response.data.token, response.data.email);
-      props.history.push('/dashboard');
+        setLoading(false);
+        setUserSession(response.data.token, response.data.email);
+        props.history.push('/dashboard');
       }).catch(error => {
-      setLoading(false);
-      if (error.response.status === 401) setError(error.response.data.message);
-      else setError("Something went wrong. Please try again later.");
-    });
+        setLoading(false);
+        setError(error.response.data.error);
+      });
+    }
   }
-}
 
   return (
     <div>

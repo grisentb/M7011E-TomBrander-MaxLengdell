@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
-    User = mongoose.model('users');
-
-const bcrypt = require('bcryptjs'),
+    User = mongoose.model('users'),
+    bcrypt = require('bcryptjs'),
     jwtStrategy = require('passport-jwt').Strategy,
     extractJwt = require('passport-jwt').ExtractJwt,
     keys = require('../config/keys'),
@@ -52,7 +51,7 @@ exports.login = function (req, res) {
             console.log("user not found");
             //console.log(res.status(404).json({ emailnotfound: "Email not found" }));
             //res.send(res.status(404).json({ emailnotfound: "Email not found" }));
-            res.status(404).send({incorrectemail: "incorrect email"});
+            res.status(404).send({error: "incorrect email"});
         }
         else {
             console.log("user found!");
@@ -82,21 +81,13 @@ exports.login = function (req, res) {
                     );
                 } else {
                     console.log("password did not match");
-                    res.status(404).send({incorrectpassword: "incorrect password"});
+                    res.status(404).send({error: "incorrect password"});
                 }
             });
         }
     });
 
 }
-exports.getRegistered = function (req, res) {
-    User.find({}, function (err, consumer) {
-        if (err)
-            res.send(err);
-        res.json(consumer);
-    });
-};
-
 
 exports.register = function (req, res) {
     /**

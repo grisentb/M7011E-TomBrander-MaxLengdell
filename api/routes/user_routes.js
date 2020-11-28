@@ -5,7 +5,6 @@ module.exports = function(app){
         .post(user.login)
     app.route('/register')
         .post(user.register)
-        .get(user.getRegistered)
     app.route('/login/verifyToken?')
         .get(user.verifyToken)
 }
