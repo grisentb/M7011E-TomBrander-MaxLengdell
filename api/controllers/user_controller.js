@@ -100,7 +100,7 @@ exports.register = function (req, res) {
     User.findOne({ email: req.body.email }).then(user => {
         if (user) {
             console.log("Email already exists");
-            res.send(res.status(400).json({ email: "Email already exists" }));
+            res.status(400).send({ email: "Email already exists" });
         } else {
             //Register a house
             prosumer_controller.registerProsumer().then(house_id =>{

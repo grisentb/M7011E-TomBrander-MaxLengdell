@@ -21,7 +21,7 @@ function Register(props) {
 
         if (!isValid) {
             setLoading(false);
-            //Set error{errors};
+            setError(errors);
         }
         else {
             axios.post('http://localhost:4000/register', { name: name.value, email: email.value, password: password.value, password2: password2.value })
