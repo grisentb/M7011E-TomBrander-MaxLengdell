@@ -110,7 +110,9 @@ exports.register = function (req, res) {
         }
     });
 }
-
+exports.updatePassword = function (req, res) {
+    console.log(req.query);
+}
 
  function registerUser(name, email, house_id, password) {
 

@@ -7,4 +7,6 @@ module.exports = function(app){
         .post(user.register)
     app.route('/login/verifyToken?')
         .get(user.verifyToken)
+    app.route('user/newpwd')
+        .push(user.updatePassword)
 }

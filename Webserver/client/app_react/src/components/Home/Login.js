@@ -29,6 +29,7 @@ function Login(props) {
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
         setLoading(false);
         setUserSession(response.data.token, response.data.email);
+        //Check if manager or not
         props.history.push('/dashboard');
       }).catch(error => {
         setLoading(false);
