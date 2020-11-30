@@ -4,5 +4,7 @@ module.exports = function(app){
         .get(prosumer.home)
     app.route('/home/secret')
         .get(prosumer.home_secret)
+    app.route('/home/capacity')
+        .post(prosumer.updateCapacity)
 
 }
