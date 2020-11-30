@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
   Users = mongoose.model('users');
 
 exports.home = async function (req, res) {
-  let user = await Users.findOne({email: "tom@123.se"});
+  const user_email = req.query.email;
+  let user = await Users.findOne({email: user_email});
   let houseID = user.house_id.substring(1, user.house_id.length - 1);
   let correspondingProsumer = await Prosumer.findOne({_id: houseID});
   res.send(correspondingProsumer);

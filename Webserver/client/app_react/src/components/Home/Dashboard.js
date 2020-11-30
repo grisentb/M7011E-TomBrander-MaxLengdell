@@ -14,7 +14,7 @@ function Dashboard(props) {
   
   //let prosumer = axios.get('http://localhost:4000/home', {params: {email: user.email}});
   //console.log(prosumer.data);
-  axios.get('http://localhost:4000/home', {params: {email: user.email}}).then(resp =>
+  axios.get('http://localhost:4000/home', {params: {email: user}}).then(resp =>
   {
     setProsumer(resp.data);
     let newProd = prosumer.production;
