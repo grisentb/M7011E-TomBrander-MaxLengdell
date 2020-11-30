@@ -22,7 +22,6 @@ function Login(props) {
     if (!isValid) {
       setLoading(false);
       setError(errors);
-
     }
 
     else {
@@ -30,7 +29,7 @@ function Login(props) {
         setLoading(false);
         setUserSession(response.data.token, response.data.email);
         //Check if manager or not
-        props.history.push('/dashboard');
+        props.history.push('/dashboard');//props.history.push('/profile');
       }).catch(error => {
         setLoading(false);
         setError(error.response.data.error);

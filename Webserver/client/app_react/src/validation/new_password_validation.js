@@ -5,7 +5,7 @@ module.exports = function validateNewPasswordInput(oldPassword, newPassword) {
     // Convert empty fields to an empty string so we can use validator functions
 
     oldPassword = oldPassword.value
-    newPassword = password.value;
+    newPassword = newPassword.value;
 
     oldPassword = !isEmpty(oldPassword) ? oldPassword : "";
     newPassword = !isEmpty(newPassword) ? newPassword : "";

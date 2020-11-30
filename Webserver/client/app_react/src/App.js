@@ -6,6 +6,7 @@ import Login from './components/Home/Login';
 import Dashboard from './components/Home/Dashboard';
 import Home from './components/Home/Home';
 import Register from './components/Home/Register';
+import Profile from './components/Home/Profile';
 
 import PrivateRoute from './Utils/Routes/PrivateRoute';
 import PublicRoute from './Utils/Routes/PublicRoute';
@@ -42,6 +43,7 @@ function App() {
             <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
             <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink><small>(Access with token only)</small>
             <NavLink activeClassName="active" to="/register">Register</NavLink><small>(Register user and household!</small>
+            <NavLink activeClassName="active" to="/profile">Profile</NavLink><small>Profile page</small>
           </div>
           <div className="content">
             <Switch>
@@ -49,6 +51,7 @@ function App() {
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <PublicRoute path="/register" component={Register} />
+              <PrivateRoute path="/profile" component={Profile} />
             </Switch>
           </div>
         </div>
