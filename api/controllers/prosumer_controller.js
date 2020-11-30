@@ -3,10 +3,13 @@ var mongoose = require('mongoose'),
   Users = mongoose.model('users');
 
 exports.home = async function (req, res) {
-  const user_email = req.query.email;
-  let user = await Users.findOne({email: user_email});
-  let houseID = user.house_id.substring(1, user.house_id.length - 1);
+  let email = req.query.email;
+  let user = await Users.findOne({email: email});
+  let houseID = user.house_id;
+  houseID = houseID.substring(1,houseID.length - 1);
+  //console.log(houseID);
   let correspondingProsumer = await Prosumer.findOne({_id: houseID});
+  //console.log(correspondingProsumer);
   res.send(correspondingProsumer);
 }
 exports.home_secret = function (req, res) {

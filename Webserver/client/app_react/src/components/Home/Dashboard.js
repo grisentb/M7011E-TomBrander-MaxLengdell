@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getUser, removeUserSession } from './../../Utils/Common';
 
+//Rate of fetching prosumer data
+//let tickRate = 1000;
 function Dashboard(props) {
   const user = getUser();
   //Hooks for every displaying value
@@ -11,24 +13,24 @@ function Dashboard(props) {
   const [capacity, setCapacity] = useState(false);
   const [consumption, setConsumption] = useState(false);
   const [buffer, setBuffer] = useState(false);
-  
-  //let prosumer = axios.get('http://localhost:4000/home', {params: {email: user.email}});
-  //console.log(prosumer.data);
-  axios.get('http://localhost:4000/home', {params: {email: user}}).then(resp =>
-  {
-    setProsumer(resp.data);
-    let newProd = prosumer.production;
-    let newWind = prosumer.wind;
-    let newCapacity = prosumer.production_capacity;
-    let newConsumption = prosumer.consumption;
-    let newBuffer = prosumer.buffer;
 
-    setProduction(newProd);
-    setWind(newWind);
-    setCapacity(newCapacity);
-    setConsumption(newConsumption);
-    setBuffer(newBuffer);
+  useEffect(() => {
+    axios.get('http://localhost:4000/home', {params: {email: user.email}}).then(resp =>
+    {
+      setProsumer(resp.data);
+      let newProd = prosumer.production;
+      let newWind = prosumer.wind;
+      let newCapacity = prosumer.production_capacity;
+      let newConsumption = prosumer.consumption;
+      let newBuffer = prosumer.buffer;
 
+      setProduction(newProd);
+      setWind(newWind);
+      setCapacity(newCapacity);
+      setConsumption(newConsumption);
+      setBuffer(newBuffer);
+
+    });
   });
 
   // handle click event of logout button
@@ -37,18 +39,17 @@ function Dashboard(props) {
     props.history.push('/login');
   }
   const changeCapacity = async e => {
-    console.log(e.target.value);
     if(e.key === 'Enter'){
       console.log("Updating capacity");
       axios.post('http://localhost:4000/home/capacity', {_id: prosumer._id, value: e.target.value}).then(resp => {
         e.target.value = null;
+        setProsumer(false);
         console.log(resp.data);
         setCapacity(resp.data);
       });
-      //console.log(post);
-      //e.target.value = null
     }
   }
+
   return (
     <div>
       Welcome {}!<br /><br />
