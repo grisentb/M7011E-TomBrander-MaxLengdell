@@ -14,7 +14,8 @@ function Dashboard(props) {
   const [consumption, setConsumption] = useState(false);
   const [buffer, setBuffer] = useState(false);
 
-  useEffect(() => {
+  const fetchData = async e => {
+    console.log("Trying to fetch");
     axios.get('http://localhost:4000/home', {params: {email: user.email}}).then(resp =>
     {
       setProsumer(resp.data);
@@ -23,7 +24,7 @@ function Dashboard(props) {
       let newCapacity = prosumer.production_capacity;
       let newConsumption = prosumer.consumption;
       let newBuffer = prosumer.buffer;
-
+      
       setProduction(newProd);
       setWind(newWind);
       setCapacity(newCapacity);
@@ -31,8 +32,8 @@ function Dashboard(props) {
       setBuffer(newBuffer);
 
     });
-  });
-
+  }
+  
   // handle click event of logout button
   const handleLogout = () => {
     removeUserSession();
@@ -43,7 +44,6 @@ function Dashboard(props) {
       console.log("Updating capacity");
       axios.post('http://localhost:4000/home/capacity', {_id: prosumer._id, value: e.target.value}).then(resp => {
         e.target.value = null;
-        setProsumer(false);
         console.log(resp.data);
         setCapacity(resp.data);
       });
@@ -53,6 +53,7 @@ function Dashboard(props) {
   return (
     <div>
       Welcome {}!<br /><br />
+      Fetch Data <input type="button" onClick={fetchData} value="Fetch Data" /> <br/> <br/>
       Email: {user.email}<br /><br />
       Production: {production}<br /><br />
       Capacity: {capacity} <br /><br />
