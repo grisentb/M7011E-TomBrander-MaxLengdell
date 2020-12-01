@@ -29,6 +29,5 @@ exports.registerProsumer = async function () {
 exports.updateCapacity = async function (req, res) {
   console.log(req.body);
   await Prosumer.findOneAndUpdate({_id: req.body._id}, {production_capacity: req.body.value});
-  console.log("Takes this long time...");
   res.send(req.body.value);
 }
