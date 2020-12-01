@@ -12,9 +12,7 @@ exports.home = async function (req, res) {
   //console.log(correspondingProsumer);
   res.send(correspondingProsumer);
 }
-exports.home_secret = function (req, res) {
-  res.send('The password is potato');
-}
+
 exports.registerProsumer = async function () {
   var ID;
   console.log("register house");

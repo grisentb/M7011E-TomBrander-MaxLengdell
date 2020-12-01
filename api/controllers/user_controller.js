@@ -110,7 +110,28 @@ exports.register = function (req, res) {
         }
     });
 }
+exports.getUser = function (req, res) {
+    console.log(req.body);
+    //User.findOne({email: req.body.email})
+}
+exports.updatePassword = function (req, res) {
+    console.log("Body", req.body);
+}
+exports.uploadImage = function (req, res) {
+    console.log("image sent to server");
 
+    console.log("Query", req.query);
+    console.log("Body", req.body);
+    var obj = {
+        name: req.body.name,
+        img: {
+            data: req.body.picture
+        }
+    }
+
+
+
+}
 
  function registerUser(name, email, house_id, password) {
 

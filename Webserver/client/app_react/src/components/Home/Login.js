@@ -22,14 +22,14 @@ function Login(props) {
     if (!isValid) {
       setLoading(false);
       setError(errors);
-
     }
 
     else {
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
         setLoading(false);
         setUserSession(response.data.token, response.data.email);
-        props.history.push('/dashboard');
+        //Check if manager or not
+        props.history.push('/dashboard');//props.history.push('/profile');
       }).catch(error => {
         setLoading(false);
         setError(error.response.data.error);
