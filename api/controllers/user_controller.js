@@ -119,9 +119,9 @@ exports.updatePassword = function (req, res) {
 }
 exports.uploadImage = function (req, res) {
     console.log("image sent to server");
-
-    console.log("Query", req.query);
-    console.log("Body", req.body);
+    console.log(req);
+    //console.log("Query", req.query);
+    //console.log("Body", req.body);
     var obj = {
         name: req.body.name,
         img: {

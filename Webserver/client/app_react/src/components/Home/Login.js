@@ -26,10 +26,11 @@ function Login(props) {
 
     else {
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
-        setLoading(false);
+        //setLoading(false);
         setUserSession(response.data.token, response.data.email);
+        setLoading(false)
         //Check if manager or not
-        props.history.push('/dashboard');//props.history.push('/profile');
+        props.history.push('/dashboard');//, response.data.token);//props.history.push('/profile');
       }).catch(error => {
         setLoading(false);
         setError(error.response.data.error);

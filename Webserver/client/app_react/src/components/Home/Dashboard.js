@@ -8,7 +8,8 @@ let currentProsumer;
 function Dashboard(props) {
   //const [user, setUser] = useState(false);
   const user = getUser();
-  console.log("Updated Dashboard");
+  console.log(props);
+  //console.log("Updated Dashboard");
   //Hooks for every displaying value
   const [prosumer, setProsumer] = useState(false);
 
@@ -25,7 +26,6 @@ function Dashboard(props) {
 
     }
   }, tickRate);
-
   
   // handle click event of logout button
   const handleLogout = () => {
