@@ -20,11 +20,13 @@ module.exports = function (app) {
         .post(user.register)
     app.route('/login/verifyToken?')
         .get(user.verifyToken)
-    app.route('user')
-        .get(user.getUser)
+    app.route('/user?')
+        .get(user.getImage)
     app.route('/user/newpwd')
         .post(user.updatePassword)
     app.route('/user/uploadImg?')
         .post(upload.single('image'), user.uploadImage)
+    app.route('/user/profile')
+        .get(user.getProfile)
 
 }
