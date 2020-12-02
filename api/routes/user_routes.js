@@ -1,6 +1,19 @@
-module.exports = function(app){
-    var user = require('../controllers/user_controller');
 
+
+module.exports = function (app) {
+    var multer = require('multer');
+    var user = require('../controllers/user_controller');
+    // SET STORAGE
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, __dirname + './../public/images/')
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.fieldname + '-' + req.query.user+'.jpg');
+        }
+    })
+
+    var upload = multer({ storage: storage })
     app.route('/login')
         .post(user.login)
     app.route('/register')
@@ -11,6 +24,7 @@ module.exports = function(app){
         .get(user.getUser)
     app.route('/user/newpwd')
         .post(user.updatePassword)
-    app.route('/user/uploadImg')
-        .post(user.uploadImage)
+    app.route('/user/uploadImg?')
+        .post(upload.single('image'), user.uploadImage)
+
 }

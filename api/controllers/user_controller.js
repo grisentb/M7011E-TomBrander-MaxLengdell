@@ -1,3 +1,5 @@
+const { fstat } = require('fs');
+
 var mongoose = require('mongoose'),
     User = mongoose.model('users'),
     bcrypt = require('bcryptjs'),
@@ -6,27 +8,30 @@ var mongoose = require('mongoose'),
     keys = require('../config/keys'),
     jwt = require('jsonwebtoken'),
     path = require('path'),
-    prosumer_controller = require('./prosumer_controller');
+    prosumer_controller = require('./prosumer_controller'),
+    multer = require('multer'),
+    uuidv4 = require('uuid-v4'),
+    fs = require('fs');
 
 exports.verifyToken = function (req, res) {
     var token = req.query.token;
-    if(!token){
+    if (!token) {
         return res.status(400).json({
             error: true,
             message: "Token is required."
         });
-    }else {
+    } else {
         //Verify token. If it returns expired or 
         //incorrect it will cast a error and return 401
         jwt.verify(token, keys.secretOrKey, function (err, user) {
-            if(err){
+            if (err) {
                 res.status(401).json({
                     error: true,
                     message: "Incorrect token"
                 });
-            }else {
-                return res.json({token: token, user: user})
-            }            
+            } else {
+                return res.json({ token: token, user: user })
+            }
             // if(user.email !== req.body.email){
             //     console.log("not the same user");
             //     res.status(401).json({
@@ -34,7 +39,7 @@ exports.verifyToken = function (req, res) {
             //         message: "Incorrect user"
             //     });
             // }
-            
+
         });
 
     }
@@ -51,7 +56,7 @@ exports.login = function (req, res) {
             console.log("user not found");
             //console.log(res.status(404).json({ emailnotfound: "Email not found" }));
             //res.send(res.status(404).json({ emailnotfound: "Email not found" }));
-            res.status(404).send({error: "incorrect email"});
+            res.status(404).send({ error: "incorrect email" });
         }
         else {
             console.log("user found!");
@@ -81,7 +86,7 @@ exports.login = function (req, res) {
                     );
                 } else {
                     console.log("password did not match");
-                    res.status(404).send({error: "incorrect password"});
+                    res.status(404).send({ error: "incorrect password" });
                 }
             });
         }
@@ -103,10 +108,11 @@ exports.register = function (req, res) {
             res.status(400).send({ email: "Email already exists" });
         } else {
             //Register a house
-            prosumer_controller.registerProsumer().then(house_id =>{
+            prosumer_controller.registerProsumer().then(house_id => {
                 registerUser(req.body.name, req.body.email, house_id, req.body.password);
+                res.json("OK");
             })
-            
+
         }
     });
 }
@@ -118,22 +124,21 @@ exports.updatePassword = function (req, res) {
     console.log("Body", req.body);
 }
 exports.uploadImage = function (req, res) {
-    console.log("image sent to server");
-
-    console.log("Query", req.query);
-    console.log("Body", req.body);
-    var obj = {
-        name: req.body.name,
-        img: {
-            data: req.body.picture
-        }
-    }
-
-
+    //TODO:
+    var user = req.query.user;
+    const url = req.file.path;
+    console.log(req.file.path);
+    User.findOneAndUpdate({email: user},
+     {image: req.file.path}).then(res =>{
+         console.log("Response from db write image: ", res)
+         //Return ok
+     }).catch(err => {
+         console.log(err);
+     });
 
 }
 
- function registerUser(name, email, house_id, password) {
+function registerUser(name, email, house_id, password) {
 
     //Register household and then user
     var ret_user;
@@ -146,11 +151,11 @@ exports.uploadImage = function (req, res) {
     console.log("saving");
     //Hashing password
     bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) =>  {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;
             newUser.password = hash;
             newUser.save()
-                .then(user => {ret_user = user})
+                .then(user => { ret_user = user })
                 .catch(err => console.log(err));
         });
     });
