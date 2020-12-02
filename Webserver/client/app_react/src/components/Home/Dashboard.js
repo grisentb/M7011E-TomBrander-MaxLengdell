@@ -6,13 +6,17 @@ import { getUser, removeUserSession } from './../../Utils/Common';
 let tickRate = 500;
 let currentProsumer;
 function Dashboard(props) {
+  //const [user, setUser] = useState(false);
   const user = getUser();
   console.log("Updated Dashboard");
   //Hooks for every displaying value
   const [prosumer, setProsumer] = useState(false);
 
   setTimeout(() => {
-    setProsumer(axios.get('http://localhost:4000/home', {params: {email: user.email}}))
+
+    let tempUser = typeof(user)=='string' ? user : user.email;
+
+    setProsumer(axios.get('http://localhost:4000/home', {params: {email: tempUser}}));
     if(prosumer !== false)
     {
       prosumer.then(resp => {
@@ -37,6 +41,7 @@ function Dashboard(props) {
       });
     }
   }
+
   if(!currentProsumer){return <div></div>}
   return (
     <div>
