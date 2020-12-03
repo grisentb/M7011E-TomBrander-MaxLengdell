@@ -1,39 +1,33 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import ImageUploader from 'react-images-upload';
-import { getUser, removeUserSession } from './../../Utils/Common';
-import imgUploader from './imageUploader';
+
+import { getUser, removeUserSession } from '../../Utils/Common';
+import ImgUploader from './imageUploader';
 
 const validateNewPasswordInput = require('../../validation/new_password_validation');
 
 function Profile(props) {
+    /**
+     * Current profile pic
+     * Email
+     * 
+     * change pwd
+     * change pic
+     * 
+     * 
+     */
 
     const user = getUser();
     const [loading, setLoading] = useState(false);
     const oldPassword = useFormInput('');
     const newPassword = useFormInput('');
     const [error, setError] = useState(null);
-    const [picture, setPicture] = useState(false);
-    //Get image
 
-
-    //Handle image upload
-    const handleImageUpload = (pictureFile) => {
-        setPicture({
-            picture: picture
-        });
-
-        console.log(picture);
-        axios.post('http://localhost:4000/user/uploadImg', picture).then(response => {
-            setLoading(false);
-        }).catch(error => {
-            setLoading(false);
-            setError(error.response.data.error);
-
-        });
-    }
-
-
+    let tempUser = typeof(user)=='string' ? user : user.email;
+    console.log(tempUser);
+    axios.get('http://localhost:4000/user/profile', {test: "hello"}).then(response => {
+        console.log("fetched from db: ", response);
+    })
 
     //Handle new password input
     const handleNewPassword = () => {
@@ -56,7 +50,7 @@ function Profile(props) {
     }
     return (
         <div>
-            Profile<br /><br />
+
             <div>
                 Email: {user.email}
             </div>
@@ -69,7 +63,10 @@ function Profile(props) {
                 <input type="password" {...newPassword} autoComplete="new-password" />
             </div>
             {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
-            <input type="button" value={loading ? 'Loading...' : 'Login'} onClick={handleNewPassword} disabled={loading} /><br />
+            <input type="button" value={loading ? 'Loading...' : 'Submit'} onClick={handleNewPassword} disabled={loading} /><br />
+
+            <ImgUploader />
+
         </div>
     );
 

@@ -83,8 +83,7 @@ var userSchema = new Schema({
         default: Date.now
     },
     image: {
-        data: Buffer,
-        contentType: String
+        type: String
     }
 });
 module.exports = mongoose.model('consumer', consumerSchema);

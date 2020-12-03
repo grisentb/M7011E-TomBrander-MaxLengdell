@@ -6,7 +6,7 @@ import Login from './components/Home/Login';
 import Dashboard from './components/Home/Dashboard';
 import Home from './components/Home/Home';
 import Register from './components/Home/Register';
-import Profile from './components/Home/Profile';
+import Profile from './components/Profile/Profile';
 
 import PrivateRoute from './Utils/Routes/PrivateRoute';
 import PublicRoute from './Utils/Routes/PublicRoute';
