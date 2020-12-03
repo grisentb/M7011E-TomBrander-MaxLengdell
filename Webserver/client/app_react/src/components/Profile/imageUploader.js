@@ -8,7 +8,7 @@ export default class Profile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { image: '', name: '' };
+        this.state = { image: ''};
         this.user = getUser();
         this.onFileChange = this.onFileChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
