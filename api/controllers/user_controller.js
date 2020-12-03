@@ -44,6 +44,17 @@ exports.verifyToken = function (req, res) {
 
     }
 }
+exports.getProfile = function (req, res) {
+    const user = req.query.user;
+    console.log("query", req.query);
+
+    User.findOne({ email: user }).then(user => {
+        const url = user.image;
+        res.json(fs.readFileSync(url));
+    }).catch(err => {
+        console.log(err);
+    })
+}
 
 exports.login = function (req, res) {
 
@@ -128,29 +139,22 @@ exports.uploadImage = function (req, res) {
     var user = req.query.user;
     const url = req.file.path;
     console.log(req.file.path);
-    User.findOneAndUpdate({email: user},
-     {image: req.file.path}).then(res =>{
-         console.log("image uploaded and written to db");
-         //Return ok
-     }).catch(err => {
-         console.log(err);
-     });
+    User.findOneAndUpdate({ email: user },
+        { image: req.file.path }).then(res => {
+            console.log("image uploaded and written to db");
+            //Return ok
+        }).catch(err => {
+            console.log(err);
+        });
 
 }
-exports.getProfile = function (req, res) {
-    console.log(req.body);
-}
+
 exports.getImage = function (req, res) {
 
     console.log(req.body);
     console.log(req.query);
 
-    // User.findOne({email: user}).then(user => {
-    //     const url = user.image;
-    //     res.json(fs.readFileSync(url));
-    // }).catch(err =>{
-    //     console.log(err);
-    // })
+
 }
 
 function registerUser(name, email, house_id, password) {

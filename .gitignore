@@ -4,3 +4,7 @@ Webserver/client/app_react/.eslintcache
 public/images/
 
 api/public/images/
+
+api/public/
+
+.DS_Store

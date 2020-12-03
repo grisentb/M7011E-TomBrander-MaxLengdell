@@ -3,42 +3,67 @@ import ImageUploader from 'react-images-upload';
 import axios from 'axios';
 import { getUser } from '../../Utils/Common';
 
+const validateNewPasswordInput = require('../../validation/new_password_validation');
 
-export default class ImgFetcher extends React.Component {
+export default class ProfileFetcher extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { image: '', name: '' };
+        this.state = { image: null };
         this.user = getUser();
-        this.onFileChange = this.onFileChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-    }
+        this.image = { image: null };
 
-    onSubmit(e){
-        const tempUser = getUser();
-        console.log(tempUser);
-        const formData = new FormData();
-        formData.append('image', this.state.image);
-        axios.post(`http://localhost:4000/user/uploadImg?user=${tempUser.email}`, formData).then(res => {
-            console.log(res);
+    }
+    componentDidMount() {
+        this.user = getUser();
+        let tempUser = typeof (user) == 'string' ? this.user : this.user.email;
+
+        axios.get(`http://localhost:4000/user/profile?user=${tempUser}`, {}).then(data => {
+            console.log("fetched from db: ", data);
+            var base64Flag = 'data:image/jpeg;base64,';
+            var imageStr =
+                this.arrayBufferToBase64(data.data.data);
+
+            this.setState({ image: base64Flag + imageStr });
         })
+    }
+    arrayBufferToBase64(buffer) {
+        var binary = '';
+        var bytes = [].slice.call(new Uint8Array(buffer));
+
+        bytes.forEach((b) => binary += String.fromCharCode(b));
+        return window.btoa(binary);
+
 
     }
-    onFileChange(e) {
-        this.setState({image: e.target.files[0]})
-    }
+    // handleNewPassword(e) {
+    //     console.log(this.state.oldPassword);
+    //     alert(("test:" +  this.state.oldPassword));
+    //     console.log(e.oldPassword);
+
+    //     // const { errors, isValid } = validateNewPasswordInput(e.oldPassword, e.newPassword);
+    //     // if (!isValid) {
+    //     //     // setLoading(false);
+    //     //     // setError(errors);
+    //     // } else {
+    //     //     axios.post('http://localhost:4000/user/newpwd', { email: this.user, oldPassword: e.oldPassword, newPassword: e.newPassword}).then(response => {
+    //     //         console.log("Password changed, login with new password");
+    //     //         // removeUserSession();
+    //     //         // props.history.push('/login');
+    //     //     }).catch(error => {
+    //     //         // setLoading(false);
+    //     //         // setError(error.response.data.error);
+    //     //     });
+
+    //     // }
+    // }
 
     render() {
+        const { image } = this.state
         return (
             <div>
-             <form onSubmit={this.onSubmit}>
-                        <div className="form-group">
-                            <input type="file" onChange={this.onFileChange} />
-                        </div>
-                        <div className="form-group">
-                            <button className="btn btn-primary" type="submit">Upload</button>
-                        </div>
-                    </form>
+                <h4>Profile</h4>
+                <img src={image} />
             </div>
         );
     }
