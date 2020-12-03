@@ -4,5 +4,8 @@ module.exports = function(app){
         .get(prosumer.home)
     app.route('/home/capacity')
         .post(prosumer.updateCapacity)
-
+    app.route('/home/price')
+        .get(prosumer.getPrice)
+    app.route('/home/ratio')
+        .post(prosumer.updateRatio)
 }

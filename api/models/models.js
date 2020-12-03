@@ -10,13 +10,17 @@ var consumerSchema = new Schema({
         required: 'Please enter your house ID',
         unique: true
     },
-    Created_date:{
+    created_date:{
         type:Date,
         default: Date.now
     },
-    Consumption:{
+    consumption:{
         type:Number,
         default: 0.0
+    },
+    prosumer:{
+        type: String,
+        default: 0
     }
 });
 var prosumerSchema = new Schema({
@@ -48,6 +52,10 @@ var prosumerSchema = new Schema({
         default: 0.0
     },
     buffer: {
+        type: Number,
+        default: 0.0
+    },
+    buffer_prod_ratio: {
         type: Number,
         default: 0.0
     }

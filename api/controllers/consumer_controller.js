@@ -10,9 +10,11 @@ exports.listAllClients = function(req, res) {
     });
   }; 
 
-exports.createHousehold = function(req, res) {
-    //Todo
+exports.createHousehold = async function(req, res) {
     var new_House = new Consumer(req.body);
+    let prosumers = await Prosumer.find();
+    let id = prosumers[Math.random(0,len(random) - 1)]
+    new_House._id = id;
     new_House.save(function(err, consumer){
       if(err){
         console.log("something broke during saving");

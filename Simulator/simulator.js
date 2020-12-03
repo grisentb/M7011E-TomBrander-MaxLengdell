@@ -14,32 +14,45 @@ class simulator{
     {
 		let price = -1;
 		//Simulating consumption for every consumer in database
-        //this.updateConsumption(this.consumerCollection, 70, 10);
+        this.updateConsumption(this.consumerCollection, 70, 10);
         this.updateConsumption(this.prosumerCollection, 70, 10);
         //Updating wind and production for the prosumers
         this.updateWind(this.prosumerCollection, 3.6, 0.5);
         this.updateProduction(this.prosumerCollection);
-        
+        this.updateBuffer();
         
 		//Simulating prosumption for every prosumer in database
     }
 
-    // async updateConsumption(Collection, mean, deviation)
-    // {
-    //     let content = await Collection.find();
-    //     content = this.collectionContentToArray(content);
-    //     let i = 0;
-    //     while(i < content.length)
-    //     {
-    //         //console.log(content[i].Consumption);
-    //         let newConsumption = this.gaussian(mean, deviation);
-    //         Collection.findByIdAndUpdate(content[i]._id, {Consumption: newConsumption}, function(err,docs){
-    //             if(err){console.log(err)}
-    //             else{}//console.log("Updated consumer : ", docs);}
-    //         });
-    //         i++;
-    //     }
-    // }
+    async updateBuffer(){
+        let prosumers = await this.prosumerCollection.find();
+        let consumers = await this.consumerCollection.find();
+        //console.log(consumers); 
+        
+        for(let i in prosumers)
+        {
+            let consumerConsumption = 0;
+            for(let j in consumers)
+            {   
+                if(consumers[j].prosumer == prosumers[i]._id)
+                {
+                    consumerConsumption += consumers[j].consumption;
+                }
+            }
+            let netProduction = prosumers[i].production
+            - (prosumers[i].consumption + consumerConsumption)*(1-prosumers[i].buffer_prod_ratio);
+            let newBuffer = prosumers[i].buffer
+            + Math.max(0,netProduction)
+            - Math.min(prosumers[i].buffer,(consumerConsumption*(prosumers[i].buffer_prod_ratio)));
+            if(netProduction < 0 || consumerConsumption*prosumers[i].buffer_prod_ratio > prosumers[i].buffer)
+            {
+                console.log("BLACKOUT net Production = " + netProduction + " Buffer: " + prosumers[i].buffer);
+            }
+             await this.prosumerCollection.updateOne(
+                {_id: prosumers[i]._id}, 
+                {$set: {buffer: newBuffer}});
+        }
+    }
     async updateConsumption(Collection, mean, deviation){
         var gauss = this.gaussian;
         Collection.find().stream()
