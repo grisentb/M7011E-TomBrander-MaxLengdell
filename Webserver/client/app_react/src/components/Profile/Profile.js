@@ -26,17 +26,6 @@ function Profile(props) {
 
     let tempUser = typeof(user)=='string' ? user : user.email;
 
-    
-    // const getProfile = () => {
-    //     console.log("Temp user:", tempUser);
-    //     axios.get(`http://localhost:4000/user/profile?user=${tempUser}`, {}).then(response => {
-    //             console.log("fetched from db: ", response);
-    //             setImage(response);
-    //     })
-    
-    // }
-    // getProfile();
-
     //Handle new password input
     const handleNewPassword = () => {
         const { errors, isValid } = validateNewPasswordInput(oldPassword, newPassword);
