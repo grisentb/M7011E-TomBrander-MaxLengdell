@@ -25,6 +25,7 @@ function Login(props) {
     }
 
     else {
+      //Hash password: 
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
         //setLoading(false);
         setUserSession(response.data.token, response.data.email);
