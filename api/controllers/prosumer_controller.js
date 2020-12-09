@@ -32,7 +32,6 @@ exports.updateCapacity = async function (req, res) {
   await Prosumer.findOneAndUpdate({_id: req.body._id}, {production_capacity: req.body.value});
   res.send(req.body.value);
 }
-
 exports.getPrice = async function(req, res){
   let totalConsum = 0;
   let totalNetProd = 0;

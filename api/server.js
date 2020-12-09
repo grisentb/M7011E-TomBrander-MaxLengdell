@@ -18,10 +18,12 @@ app.use(express.json());
 var routes = require('./routes/consumer_routes');
 var routes_prosumer = require('./routes/prosumer_routes');
 var routes_user = require('./routes/user_routes');
+var routes_manager = require('./routes/manager_routes');
 
 routes(app);
 routes_prosumer(app);
 routes_user(app);
+routes_manager(app);
 
 app.listen(port);
 

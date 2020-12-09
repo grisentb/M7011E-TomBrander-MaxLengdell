@@ -32,6 +32,7 @@ export default class Dashboard extends React.Component {
       let tempUser = typeof(this.user) == 'string' ? this.user : this.user.email;
       
       axios.get('http://localhost:4000/home', {params: {email: tempUser}}).then(resp => {
+        //Updating this.state
         this.setState({prosumer: resp.data, price: newPrice});
       })
     }, this.tickRate);
@@ -75,14 +76,14 @@ export default class Dashboard extends React.Component {
       const {bufferError} = this.state;
       return (
         <div>
-          Welcome {}!<br /><br />
+          Welcome {this.user.name}!<br /><br />
           Email: {this.user.email}<br /><br />
-          Production: {prosumer.production}<br /><br />
-          Consumption: {prosumer.consumption}<br /><br />
+          Wind turbine production: {prosumer.production}<br /><br />
+          Your consumption: {prosumer.consumption}<br /><br />
           Net Production: {prosumer.production - prosumer.consumption} <br/> <br/>
           Capacity: {prosumer.production_capacity} <br /><br />
           Update Capacity: <input type="text" placeholder="New Capacity" onKeyDown={changeCapacity}/> <br /><br />
-          Buffer: {prosumer.buffer}<br /><br />
+          Your buffer: {prosumer.buffer}<br /><br />
           Buffer/Production ratio: {prosumer.buffer_prod_ratio}<br /><br />
           Change Buffer/Production ratio: <input type="text" placeholder="Ratio between 0 and 1" onKeyDown={changeRatio} />{bufferError} <br/><br/>
           Wind: {prosumer.wind}<br /><br />
