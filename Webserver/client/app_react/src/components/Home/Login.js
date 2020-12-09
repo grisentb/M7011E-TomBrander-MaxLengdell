@@ -28,6 +28,7 @@ function Login(props) {
       //Hash password: 
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
         //setLoading(false);
+        console.log("Role: ", response.data.role);
         setUserSession(response.data.token, response.data.email);
         setLoading(false)
         //Check if manager or not

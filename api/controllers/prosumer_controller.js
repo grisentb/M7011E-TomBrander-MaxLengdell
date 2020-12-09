@@ -7,7 +7,7 @@ exports.home = async function (req, res) {
   let email = req.query.email;
   let user = await Users.findOne({email: email});
   let houseID = user.house_id;
-  houseID = houseID.substring(1,houseID.length - 1);
+  //houseID = houseID.substring(1,houseID.length - 1);
   //console.log(houseID);
   let correspondingProsumer = await Prosumer.findOne({_id: houseID});
   //console.log(correspondingProsumer);
@@ -67,4 +67,12 @@ exports.updateRatio = async function(req, res){
     let change = await Prosumer.updateOne({_id: req.body._id}, {$set:{buffer_prod_ratio: req.body.value}});
     res.send(true);
   }
+}
+exports.getRole = async function(house_id){
+  console.log("ID: ", house_id);
+  var role;
+  await Prosumer.findOne({_id: house_id }).then(res => {
+    role = res.role[0];
+  })
+  return role;
 }

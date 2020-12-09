@@ -61,7 +61,7 @@ exports.login = function (req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    User.findOne({ email }).then(user => {
+    User.findOne({ email }).then(async user => {
         //Check if user exists
         if (user == null) {
             console.log("user not found");
@@ -72,6 +72,9 @@ exports.login = function (req, res) {
         else {
             console.log("user found!");
             //Check password
+            //Get prosumer role: 
+            const role = await getRole(user.house_id);
+            console.log("Role from user: ", role);
             bcrypt.compare(password, user.password).then(isMatch => {
                 if (isMatch) {
                     //Correct pwd. Create tokens & all that
@@ -91,7 +94,9 @@ exports.login = function (req, res) {
                             res.json({
                                 success: true,
                                 token: token,
-                                email: email
+                                email: email,
+                                role: role
+
                             });
                         }
                     );
@@ -153,18 +158,25 @@ exports.getImage = function (req, res) {
 
     console.log(req.body);
     console.log(req.query);
+}
 
+async function getRole(house_id){
+    var role = await prosumer_controller.getRole(house_id);
+    await console.log("Role from function: ", role)
+    return role;
 
 }
 
 function registerUser(name, email, house_id, password) {
-
+    const ID = house_id.substr(1,house_id.length-2);
+    console.log("i funktionen: ", ID);
     //Register household and then user
+
     var ret_user;
     const newUser = new User({
         name: name,
         email: email,
-        house_id: house_id,
+        house_id: ID,
         password: password
     });
     console.log("saving");
