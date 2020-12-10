@@ -35,3 +35,18 @@ var mongoose = require('mongoose'),
       let manager = await Prosumer.findOne({Role: 'manager'});
       res.send(manager);
   }
+  exports.registerManager = async function(){
+    var ID;
+    console.log("register manager");
+    const newHouse = new Prosumer({
+      role: 'manager'
+    });
+    await newHouse.save()
+      .then(house => {
+        //console.log(house);
+        ID = JSON.stringify(house._id)
+      })
+      .catch(err => console.log("ERROR CREATING PROSUMER: ", err));
+  
+    return ID;
+  }

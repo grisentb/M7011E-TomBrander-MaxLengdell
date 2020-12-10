@@ -9,11 +9,13 @@ var mongoose = require('mongoose'),
     jwt = require('jsonwebtoken'),
     path = require('path'),
     prosumer_controller = require('./prosumer_controller'),
+    manager_controller = require('./manager_controller');
     multer = require('multer'),
     uuidv4 = require('uuid-v4'),
     fs = require('fs');
 
 exports.verifyToken = function (req, res) {
+    console.log("Checking token");
     var token = req.query.token;
     if (!token) {
         return res.status(400).json({
@@ -74,7 +76,6 @@ exports.login = function (req, res) {
             //Check password
             //Get prosumer role: 
             const role = await getRole(user.house_id);
-            console.log("Role from user: ", role);
             bcrypt.compare(password, user.password).then(isMatch => {
                 if (isMatch) {
                     //Correct pwd. Create tokens & all that
@@ -160,14 +161,12 @@ exports.getImage = function (req, res) {
     console.log(req.query);
 }
 
-async function getRole(house_id){
+async function getRole (house_id){
     var role = await prosumer_controller.getRole(house_id);
-    await console.log("Role from function: ", role)
     return role;
-
 }
 
-function registerUser(name, email, house_id, password) {
+exports.registerUser = function (name, email, house_id, password) {
     const ID = house_id.substr(1,house_id.length-2);
     console.log("i funktionen: ", ID);
     //Register household and then user

@@ -20,7 +20,8 @@ function Login(props) {
     const { errors, isValid } = validateLoginInput(email, password);
 
     if (!isValid) {
-      setLoading(false);
+      console.log("Faulty input");
+      //setLoading(false);
       setError(errors);
     }
 
@@ -29,10 +30,17 @@ function Login(props) {
       axios.post('http://localhost:4000/login', { email: email.value, password: password.value }).then(response => {
         //setLoading(false);
         console.log("Role: ", response.data.role);
+        var role = response.data.role;
         setUserSession(response.data.token, response.data.email);
         setLoading(false)
+        console.log(props);
         //Check if manager or not
-        props.history.push('/dashboard');//, response.data.token);//props.history.push('/profile');
+        if(role == 'manager'){
+          console.log("admin logged in");
+          props.history.push('/manager_dashboard');
+        }else {
+          props.history.push('/dashboard');
+        }
       }).catch(error => {
         setLoading(false);
         setError(error.response.data.error);

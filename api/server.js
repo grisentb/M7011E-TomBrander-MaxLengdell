@@ -6,8 +6,8 @@ cors = require('cors'),
 port = process.env.PORT || 4000,
 schemas = require('./models/models');
 var mongoose = require('mongoose');
-
-
+var user_controller = require('./controllers/user_controller');
+var manager_controller = require('./controllers/manager_controller');
 app.use(cors());
 connectDatabase();
 
@@ -34,5 +34,26 @@ function connectDatabase(){
     mongoose.Promise = global.Promise;
     mongoose.connect('mongodb://localhost/M7011E');
     console.log("Connected");
+    checkManager();
+}
+async function checkManager(){
+    var Prosumer = mongoose.model('prosumer');
+
+    await Prosumer.findOne({role: 'manager'}).then(res => {
+        if(!res){
+            console.log("Manager does not exist");
+            createManager();
+        }else{
+            console.log("Manager does exist");
+        }
+    }).catch(err => {
+        console.log(err);
+    })
+}
+async function createManager(){
+    //Register manager
+    const manager_id = await manager_controller.registerManager();
+    user_controller.registerUser('admin', 'admin@admin.com',manager_id, 'admin');
+    console.log("Manager with credentials: admin, admin was generated");
 }
 module.exports = connectDatabase;

@@ -31,7 +31,7 @@ var prosumerSchema = new Schema({
     role: {
         type: [{
             type: String,
-            enum: ['maintainer','prosumer']
+            enum: ['manager','prosumer']
         }],
         default: ['prosumer']
     },

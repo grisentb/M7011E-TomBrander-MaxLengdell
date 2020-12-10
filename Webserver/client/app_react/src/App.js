@@ -8,6 +8,8 @@ import Home from './components/Home/Home';
 import Register from './components/Home/Register';
 import Profile from './components/Profile/Profile';
 
+import Manager_dashboard from './components/Manager/Manager_Dashboard';
+
 import PrivateRoute from './Utils/Routes/PrivateRoute';
 import PublicRoute from './Utils/Routes/PublicRoute';
 import { getToken, removeUserSession, setUserSession } from './Utils/Common';
@@ -50,6 +52,7 @@ function App() {
               <Route exact path="/" component={Home} />
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/manager_dashboard" component={Manager_dashboard} />
               <PublicRoute path="/register" component={Register} />
               <PrivateRoute path="/profile" component={Profile} />
             </Switch>

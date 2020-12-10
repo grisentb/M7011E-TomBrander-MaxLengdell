@@ -12,6 +12,7 @@ module.exports = function (app) {
             cb(null, file.fieldname + '-' + req.query.user+'.jpg');
         }
     });
+
     var upload = multer({ storage: storage });
     app.route('/user/profile')
         .get(user.getProfile);
