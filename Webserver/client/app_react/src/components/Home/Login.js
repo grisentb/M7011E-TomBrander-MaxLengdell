@@ -31,7 +31,7 @@ function Login(props) {
         //setLoading(false);
         console.log("Role: ", response.data.role);
         var role = response.data.role;
-        setUserSession(response.data.token, response.data.email);
+        setUserSession(response.data.token, response.data.email, response.data.role);
         setLoading(false)
         console.log(props);
         //Check if manager or not

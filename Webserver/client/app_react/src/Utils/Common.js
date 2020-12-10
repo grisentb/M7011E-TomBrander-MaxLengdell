@@ -9,7 +9,9 @@ export const getUser = () => {
   export const getToken = () => {
     return sessionStorage.getItem('token') || null;
   }
-  
+  export const getRole = () => {
+    return sessionStorage.getItem('role') || null;
+  }
   // remove the token and user from the session storage
   export const removeUserSession = () => {
     sessionStorage.removeItem('token');
@@ -17,7 +19,8 @@ export const getUser = () => {
   }
   
   // set the token and user from the session storage
-  export const setUserSession = (token, user) => {
+  export const setUserSession = (token, user, role) => {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem('role', JSON.stringify(role));
   }

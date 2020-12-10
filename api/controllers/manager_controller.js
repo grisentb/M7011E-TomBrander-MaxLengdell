@@ -32,6 +32,7 @@ var mongoose = require('mongoose'),
       res.send(totalProduction);
   }
   exports.manager = async function(req,res) {
+      console.log("Manager is requested");
       let manager = await Prosumer.findOne({Role: 'manager'});
       res.send(manager);
   }

@@ -1,6 +1,6 @@
 import React  from 'react';
 import axios from 'axios';
-import { getUser, removeUserSession } from './../../Utils/Common';
+import { getUser, removeUserSession, getRole } from './../../Utils/Common';
 
 export default class Dashboard extends React.Component {
   constructor(props){
@@ -8,16 +8,25 @@ export default class Dashboard extends React.Component {
     super(props);
     this.state = {prosumer: null, price: 0.0, bufferError: ""};
     this.user = getUser();
-
+    this.role = getRole();
     this.tickRate = 1000;
     this.bufferError = "";
   }
   componentDidUpdate(){
     //console.log("UPDATE");
+    //Check if current user is manager or not
     this.update();
   }
   componentDidMount(){
-    //console.log("MOUNT");
+    console.log("MOUNT");
+    //const role = getRole();
+    this.setState({role: getRole()});
+    console.log(this.role);
+    if(this.role === '"manager"'){
+      console.log("manager identified. Redirecting to manager dashboard");
+      this.props.history.push('/manager_dashboard');
+    }
+
     this.update();
   }
   update(){
