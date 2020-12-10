@@ -9,18 +9,22 @@ var mongoose = require('mongoose'),
     res.send(users);
   }
   exports.totalConsumption = async function(req,res) {
-      let prosumers = await Prosumer.find({Role: 'prosumer'});
+      let prosumers = await Prosumer.find({role: 'prosumer'});
       let consumers = await Consumer.find();
       let totalConsumption = 0.0;
+      //Below this does not work :(
       for(let prosumer in prosumers)
       {
+        console.log(prosumer);
         totalConsumption += prosumer.consumption;
       }
       for(let consumer in consumers)
       {
           totalConsumption += consumer.consumption;
       }
-      res.send(totalConsumption);
+      //************* */
+      console.log("Total consumption: ", totalConsumption);
+      res.send(totalConsumption.toString);
   }
   exports.totalProduction = async function(req,res) {
       let prosumers = await Prosumer.find();
@@ -29,11 +33,12 @@ var mongoose = require('mongoose'),
       {
         totalProduction += prosumer.production;
       }
-      res.send(totalProduction);
+      console.log("Total production: ", totalProduction);
+      res.send(totalProduction.toString);
   }
   exports.manager = async function(req,res) {
-      console.log("Manager is requested");
-      let manager = await Prosumer.findOne({Role: 'manager'});
+      let manager = await Prosumer.findOne({role: 'manager'});
+      console.log("Manager doc: ", manager);
       res.send(manager);
   }
   exports.registerManager = async function(){

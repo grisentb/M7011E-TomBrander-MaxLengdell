@@ -3,10 +3,10 @@ module.exports = function(app){
 
     app.route('/manager/users')
         .get(manager.prosumers)
-    app.route('manager')
+    app.route('/manager')
         .get(manager.manager)
-    app.route('manager/consumption')
+    app.route('/manager/consumption')
         .get(manager.totalConsumption)
-    app.route('manager/production')
+    app.route('/manager/production')
         .get(manager.totalProduction)
 }

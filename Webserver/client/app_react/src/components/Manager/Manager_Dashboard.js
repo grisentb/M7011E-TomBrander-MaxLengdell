@@ -19,6 +19,7 @@ export default class ManagerDashboard extends React.Component {
         this.update();
     }
     update(){
+        console.log("Manager: ", this.state.manager);
         let newPrice = 0.0;
         axios.get('http://localhost:4000/home/price').then(resp => {
             newPrice = resp.data;

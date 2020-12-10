@@ -20,9 +20,9 @@ function Login(props) {
     const { errors, isValid } = validateLoginInput(email, password);
 
     if (!isValid) {
-      console.log("Faulty input");
-      //setLoading(false);
-      setError(errors);
+      alert("Faulty input");
+      setLoading(false);
+      //setError(errors);
     }
 
     else {

@@ -19,10 +19,10 @@ export default class Dashboard extends React.Component {
   }
   componentDidMount(){
     console.log("MOUNT");
-    //const role = getRole();
-    this.setState({role: getRole()});
-    console.log(this.role);
-    if(this.role === '"manager"'){
+    let role = getRole();
+    //this.setState({role: getRole()});
+    console.log(role);
+    if(role === '"manager"'){
       console.log("manager identified. Redirecting to manager dashboard");
       this.props.history.push('/manager_dashboard');
     }
