@@ -3,56 +3,85 @@ var mongoose = require('mongoose'),
   Users = mongoose.model('users'),
   Consumer = mongoose.model('consumer');
 
-  exports.prosumers = async function(req, res) {
-    let users = [];
-    users = await Users.find();
-    res.send(users);
-  }
-  exports.totalConsumption = async function(req,res) {
-      let prosumers = await Prosumer.find({role: 'prosumer'});
-      let consumers = await Consumer.find();
-      let totalConsumption = 0.0;
-      //Below this does not work :(
-      for(let prosumer in prosumers)
+exports.prosumers = async function (req, res) {
+  let users = [];
+  users = await Users.find();
+  //res.send(users);
+  res.send("OK");
+}
+exports.totalConsumption = async function (req, res) {
+  let totalConsumption = 0.0;
+
+  var prosumer_consump = await Prosumer.aggregate(
+    [
       {
-        console.log(prosumer);
-        totalConsumption += prosumer.consumption;
+        $group:
+        {
+          _id: null,
+          total: { $sum: "$consumption" }
+        }
       }
-      for(let consumer in consumers)
+    ]
+  );
+
+  var consumer_consump = await Consumer.aggregate(
+    [
       {
-          totalConsumption += consumer.consumption;
+        $group:
+        {
+          _id: null,
+          total: { $sum: "$consumption" }
+        }
       }
-      //************* */
-      console.log("Total consumption: ", totalConsumption);
-      res.send(totalConsumption.toString);
-  }
-  exports.totalProduction = async function(req,res) {
-      let prosumers = await Prosumer.find();
-      let totalProduction = 0.0;
-      for(let prosumer in prosumers)
-      {
-        totalProduction += prosumer.production;
-      }
-      console.log("Total production: ", totalProduction);
-      res.send(totalProduction.toString);
-  }
-  exports.manager = async function(req,res) {
-      let manager = await Prosumer.findOne({role: 'manager'});
-      console.log("Manager doc: ", manager);
-      res.send(manager);
-  }
-  exports.registerManager = async function(){
-    var ID;
-    console.log("register manager");
-    const newHouse = new Prosumer({
-      role: 'manager'
-    });
-    await newHouse.save()
-      .then(house => {
-        //console.log(house);
-        ID = JSON.stringify(house._id)
-      })
-      .catch(err => console.log("ERROR CREATING PROSUMER: ", err));
+    ]
+  );
   
-    return ID;
+  try {
+    totalConsumption += prosumer_consump[0].total;
+    totalConsumption += consumer[0].total;
+  } catch (error) {
+    console.log(error);
+    console.log("probably no consumers exists");
   }
+
+
+  console.log("Total consumption: ", totalConsumption);
+  res.send(totalConsumption.toString);
+}
+exports.totalProduction = async function (req, res) {
+  let prosumers = await Prosumer.find();
+  var prosumer_consump = await Prosumer.aggregate(
+    [
+      {
+        $group:
+        {
+          _id: null,
+          total: { $sum: "$production" }
+        }
+      }
+    ]
+  );
+  let totalProduction = prosumer_consump[0].total;
+
+  console.log("Total production: ", totalProduction);
+  res.send(totalProduction.toString);
+}
+exports.manager = async function (req, res) {
+  let manager = await Prosumer.findOne({ role: 'manager' });
+  res.send(manager);
+}
+exports.registerManager = async function () {
+  var ID;
+  console.log("register manager");
+  const newHouse = new Prosumer({
+    role: 'manager'
+  });
+  await newHouse.save()
+    .then(house => {
+      //console.log(house);
+      ID = JSON.stringify(house._id)
+    })
+    .catch(err => console.log("ERROR CREATING PROSUMER: ", err));
+
+  return ID;
+}
