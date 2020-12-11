@@ -35,7 +35,7 @@ function Login(props) {
         setLoading(false)
         console.log(props);
         //Check if manager or not
-        if(role == 'manager'){
+        if(role){
           console.log("admin logged in");
           props.history.push('/manager_dashboard');
         }else {

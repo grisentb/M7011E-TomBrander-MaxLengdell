@@ -37,9 +37,9 @@ function connectDatabase(){
     checkManager();
 }
 async function checkManager(){
-    var Prosumer = mongoose.model('prosumer');
+    var Manager = mongoose.model('manager');
 
-    await Prosumer.findOne({role: 'manager'}).then(res => {
+    await Manager.findOne().then(res => {
         if(!res){
             console.log("Manager does not exist");
             createManager();

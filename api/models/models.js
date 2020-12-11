@@ -28,13 +28,6 @@ var prosumerSchema = new Schema({
         type:Date,
         default: Date.now
     },
-    role: {
-        type: [{
-            type: String,
-            enum: ['manager','prosumer']
-        }],
-        default: ['prosumer']
-    },
     consumption:{
         type:Number,
         default: 0.0
@@ -61,14 +54,6 @@ var prosumerSchema = new Schema({
     }
 },{id: false});
 var managerSchema = new Schema({
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
     production: {
         type: Number,
         default: 0.0
@@ -115,4 +100,5 @@ var userSchema = new Schema({
 });
 module.exports = mongoose.model('consumer', consumerSchema);
 module.exports = mongoose.model('prosumer', prosumerSchema);
+module.exports = mongoose.model('manager', managerSchema);
 module.exports = mongoose.model('users', userSchema);

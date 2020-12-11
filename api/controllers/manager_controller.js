@@ -1,7 +1,9 @@
 var mongoose = require('mongoose'),
   Prosumer = mongoose.model('prosumer'),
   Users = mongoose.model('users'),
-  Consumer = mongoose.model('consumer');
+  Consumer = mongoose.model('consumer'),
+  Manager = mongoose.model('manager');
+
 
 exports.prosumers = async function (req, res) {
   let users = [];
@@ -73,15 +75,23 @@ exports.manager = async function (req, res) {
 exports.registerManager = async function () {
   var ID;
   console.log("register manager");
-  const newHouse = new Prosumer({
-    role: 'manager'
-  });
+  const newHouse = new Manager();
   await newHouse.save()
     .then(house => {
-      //console.log(house);
+      console.log("Manager: ", house);
       ID = JSON.stringify(house._id)
     })
-    .catch(err => console.log("ERROR CREATING PROSUMER: ", err));
+    .catch(err => console.log("ERROR CREATING MANAGER: ", err));
 
   return ID;
+}
+exports.findManager = async function(house_id){
+  console.log("ID: ", house_id);
+  var role;
+  await Manager.findOne({_id: house_id }).then(res => {
+    if(res){
+      return true;
+    }
+    return false;
+  })
 }

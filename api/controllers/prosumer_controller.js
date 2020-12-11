@@ -68,11 +68,4 @@ exports.updateRatio = async function(req, res){
     res.send(true);
   }
 }
-exports.getRole = async function(house_id){
-  console.log("ID: ", house_id);
-  var role;
-  await Prosumer.findOne({_id: house_id }).then(res => {
-    role = res.role[0];
-  })
-  return role;
-}
+
