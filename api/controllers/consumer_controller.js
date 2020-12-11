@@ -10,11 +10,29 @@ exports.listAllClients = function(req, res) {
     });
   }; 
 
+exports.blackouts = async function(req,res) {
+  var prosumerId = req.query._id;
+  var netProduction = req.query.prod;
+  var consumers = await Consumer.find({prosumer: query_id});
+
+  var blackouts = []
+  for(var consumer in consumers)
+  {
+    netProd -= consumer.consumption;
+    if(netProduction < 0)
+    {
+      blackouts.push(consumer);
+    }
+  }
+  res.send(blackouts);
+}
 exports.createHousehold = async function(req, res) {
+    var prosumer = req.query._id;
     var new_House = new Consumer(req.body);
     let prosumers = await Prosumer.find();
     let id = prosumers[Math.random(0,len(random) - 1)]
     new_House._id = id;
+    new_House.prosumer = prosumer;
     new_House.save(function(err, consumer){
       if(err){
         console.log("something broke during saving");

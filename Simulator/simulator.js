@@ -6,9 +6,13 @@ class simulator{
         this.mongoose = require('mongoose');
         this.consumerCollection = this.mongoose.model('consumer');
         this.prosumerCollection = this.mongoose.model('prosumer');
+        this.managerCollection = this.mongoose.model('manager');
         //this.connection = require('./databaseConnection');
         this.avgWind = 3.6;
         this.avgPrice = 1.5;
+
+        this.coalProduction = 0.0;
+        this.coalPowerPlantTimeDelay = 30000;
     }
     runSim()
     {
@@ -20,6 +24,7 @@ class simulator{
         this.updateWind(this.prosumerCollection, 3.6, 0.5);
         this.updateProduction(this.prosumerCollection);
         this.updateBuffer();
+        this.updateManager();
         
 		//Simulating prosumption for every prosumer in database
     }
@@ -70,19 +75,6 @@ class simulator{
 
     async updateWind(Collection, mean, deviation)
     {
-        // let content = await Collection.find();
-        // content = this.collectionContentToArray(content);
-        // let i = 0;
-        // while(i < content.length)
-        // {
-        //     console.log(content[i].Wind);
-        //     let newWind = this.gaussian(mean, deviation);
-        //     Collection.findByIdAndUpdate(content[i]._id, {wind: newWind}, function(err,docs){
-        //         if(err){console.log(err)}
-        //         else{}//console.log("Updated consumer : ", docs);}
-        //     });
-        //     i++;
-        // }
         var gauss = this.gaussian;
         Collection.find().stream()
             .on('data', function(doc){
@@ -129,7 +121,18 @@ class simulator{
 
             });
     }
-
+    async updateManager() {
+        var manager = await this.managerCollection.findOne();
+        var production = manager.production;
+        if(production != this.coalProduction)
+        {
+            console.log("UPDATING MANAGER!!!");
+            setTimeout(() => {
+                this.coalProduction = production;
+                this.managerCollection.findOneAndUpdate({}, {production: production});
+            }, this.coalPowerPlantTimeDelay)
+        }
+    }
     //Helper methods
     calculateProduction(wind, prosumerCapacity)
     {
