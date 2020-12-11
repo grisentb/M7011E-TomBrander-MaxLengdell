@@ -38,7 +38,6 @@ export default class ManagerDashboard extends React.Component {
         })
         setTimeout(() => {
             axios.get('http://localhost:4000/manager/users').then(resp => {
-                console.log(resp.data)
                 this.setState({manager: newManager, users: "användare", price: newPrice, totalConsumption: consumption, totalProduction: production});
             }).catch(err => {
                 console.log(err);

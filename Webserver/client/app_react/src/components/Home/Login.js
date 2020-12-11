@@ -33,12 +33,12 @@ function Login(props) {
         var role = response.data.role;
         setUserSession(response.data.token, response.data.email, response.data.role);
         setLoading(false)
-        console.log(props);
+        console.log(role);
         //Check if manager or not
-        if(role){
+        if(role===true){
           console.log("admin logged in");
           props.history.push('/manager_dashboard');
-        }else {
+        }else{
           props.history.push('/dashboard');
         }
       }).catch(error => {

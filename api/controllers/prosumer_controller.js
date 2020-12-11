@@ -19,9 +19,9 @@ exports.registerProsumer = async function () {
   console.log("register house");
   const newHouse = new Prosumer();
   await newHouse.save()
-    .then(house => {
+    .then(async house => {
       //console.log(house);
-      ID = JSON.stringify(house._id)
+      ID = await JSON.stringify(house._id)
     })
     .catch(err => console.log("ERROR CREATING PROSUMER: ", err));
 

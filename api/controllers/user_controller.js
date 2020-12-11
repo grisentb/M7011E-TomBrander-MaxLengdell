@@ -126,7 +126,7 @@ exports.register = function (req, res) {
         } else {
             //Register a house
             prosumer_controller.registerProsumer().then(house_id => {
-                registerUser(req.body.name, req.body.email, house_id, req.body.password);
+                exports.registerUser(req.body.name, req.body.email, house_id, req.body.password);
                 res.json("OK");
             })
 
@@ -163,10 +163,11 @@ exports.getImage = function (req, res) {
 
 async function getRole (house_id){
     var role = await manager_controller.findManager(house_id);
+    console.log("Role of current user is: ", role);
     return role;
 }
 
-exports.registerUser = function (name, email, house_id, password) {
+exports.registerUser = function registerUser(name, email, house_id, password) {
     const ID = house_id.substr(1,house_id.length-2);
     console.log("i funktionen: ", ID);
     //Register household and then user

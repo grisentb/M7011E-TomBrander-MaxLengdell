@@ -69,7 +69,7 @@ exports.totalProduction = async function (req, res) {
   res.json(totalProduction.toString);
 }
 exports.manager = async function (req, res) {
-  let manager = await Prosumer.findOne({ role: 'manager' });
+  let manager = await Manager.findOne();
   res.json(manager);
 }
 exports.registerManager = async function () {
@@ -87,11 +87,15 @@ exports.registerManager = async function () {
 }
 exports.findManager = async function(house_id){
   console.log("ID: ", house_id);
-  var role;
-  await Manager.findOne({_id: house_id }).then(res => {
+  var ret = await Manager.findOne({_id: house_id }).then(res => {
+    console.log(res);
     if(res){
+      console.log("true");
+
       return true;
     }
+    console.log("false");
     return false;
   })
+  return ret;
 }
