@@ -1,14 +1,13 @@
 import React  from 'react';
 import axios from 'axios';
-import { getUser, removeUserSession, getRole } from './../../Utils/Common';
+import { getUser, removeUserSession} from './../../Utils/Common';
 
 export default class Dashboard extends React.Component {
   constructor(props){
     //console.log("CONSTRUCTOR");
     super(props);
-    this.state = {prosumer: null, price: 0.0, bufferError: ""};
+    this.state = {prosumer: null, price: 0.0, bufferError: "", blackouts: []};
     this.user = getUser();
-    this.role = getRole();
     this.tickRate = 1000;
     this.bufferError = "";
   }
@@ -18,31 +17,28 @@ export default class Dashboard extends React.Component {
     this.update();
   }
   componentDidMount(){
-    console.log("MOUNT");
-    let role = getRole();
-    //this.setState({role: getRole()});
-    console.log(role);
-    if(role === '"manager"'){
-      console.log("manager identified. Redirecting to manager dashboard");
-      this.props.history.push('/manager_dashboard');
-    }
-
+    //console.log("MOUNT");
     this.update();
   }
   update(){
-    let newPrice = 0.0
+    let newPrice = 0.0;
     //Get current Price
     axios.get('http://localhost:4000/home/price').then(resp => {
       newPrice = resp.data;
     });
     this.user = getUser();
+    //Get blackout houses
+    let currentBlackouts = [];
+    axios.get('http://localhost:4000/consumer/blackout').then(resp => {
+      currentBlackouts = resp.data;
+    })
     setTimeout(() => {
       //console.log(this.user);
       let tempUser = typeof(this.user) == 'string' ? this.user : this.user.email;
       
       axios.get('http://localhost:4000/home', {params: {email: tempUser}}).then(resp => {
         //Updating this.state
-        this.setState({prosumer: resp.data, price: newPrice});
+        this.setState({prosumer: resp.data, price: newPrice, blackouts: currentBlackouts});
       })
     }, this.tickRate);
   }
@@ -73,6 +69,10 @@ export default class Dashboard extends React.Component {
         });
       }
     }
+    //Create new household using this prosumers electricity
+    const newHouse = async e => {
+      await axios.post('http://localhost:4000/consumer/consumption', {_id: this.state.prosumer._id});
+    }
     // handle click event of logout button
     const handleLogout = () => {
       removeUserSession();
@@ -83,6 +83,7 @@ export default class Dashboard extends React.Component {
       const {prosumer} = this.state;
       const {price} = this.state;
       const {bufferError} = this.state;
+      const {blackouts} = this.state;
       return (
         <div>
           Welcome {this.user.name}!<br /><br />
@@ -97,6 +98,9 @@ export default class Dashboard extends React.Component {
           Change Buffer/Production ratio: <input type="text" placeholder="Ratio between 0 and 1" onKeyDown={changeRatio} />{bufferError} <br/><br/>
           Wind: {prosumer.wind}<br /><br />
           Current electrical price : {price} <br/><br/>
+          Blackout households: {blackouts}
+          <br/> <br/>
+          <input type="submit" onClick={newHouse} value="Create new household" />
           <input type="button" onClick={handleLogout} value="Logout" />
         </div>
       );
