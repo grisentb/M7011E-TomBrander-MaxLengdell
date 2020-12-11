@@ -20,7 +20,7 @@ exports.registerProsumer = async function () {
   const newHouse = new Prosumer();
   await newHouse.save()
     .then(async house => {
-      //console.log(house);
+      //console.log(house + "###########################");
       ID = await JSON.stringify(house._id)
     })
     .catch(err => console.log("ERROR CREATING PROSUMER: ", err));
@@ -68,4 +68,11 @@ exports.updateRatio = async function(req, res){
     res.send(true);
   }
 }
-
+exports.getRole = async function(house_id){
+  console.log("ID: " + house_id);
+  var role;
+  await Prosumer.findOne({_id: house_id}).then(res => {
+    role = res.role[0];
+  })
+  return role;
+}

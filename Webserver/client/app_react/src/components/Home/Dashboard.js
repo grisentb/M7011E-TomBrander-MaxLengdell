@@ -1,6 +1,6 @@
 import React  from 'react';
 import axios from 'axios';
-import { getUser, removeUserSession} from './../../Utils/Common';
+import { getUser, removeUserSession, getRole} from './../../Utils/Common';
 
 export default class Dashboard extends React.Component {
   constructor(props){
@@ -8,6 +8,7 @@ export default class Dashboard extends React.Component {
     super(props);
     this.state = {prosumer: null, price: 0.0, bufferError: "", blackouts: []};
     this.user = getUser();
+    this.role = getRole();
     this.tickRate = 1000;
     this.bufferError = "";
   }
@@ -35,6 +36,7 @@ export default class Dashboard extends React.Component {
       newPrice = resp.data;
     });
     this.user = getUser();
+    console.log("HERRRO");
     //Get blackout houses
     let currentBlackouts = [];
     axios.get('http://localhost:4000/consumer/blackout').then(resp => {
@@ -108,7 +110,7 @@ export default class Dashboard extends React.Component {
           Current electrical price : {price} <br/><br/>
           Blackout households: {blackouts}
           <br/> <br/>
-          <input type="submit" onClick={newHouse} value="Create new household" />
+          <input type="submit" onClick={newHouse} value="Create new household" /> <br/><br/>
           <input type="button" onClick={handleLogout} value="Logout" />
         </div>
       );

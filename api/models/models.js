@@ -52,7 +52,7 @@ var prosumerSchema = new Schema({
         type: Number,
         default: 0.0
     }
-},{id: false});
+});//,{id: false});
 var managerSchema = new Schema({
     production: {
         type: Number,

@@ -126,6 +126,7 @@ exports.register = function (req, res) {
         } else {
             //Register a house
             prosumer_controller.registerProsumer().then(house_id => {
+                //console.log(house_id + " !!!!!!!!!!!!!!!");
                 exports.registerUser(req.body.name, req.body.email, house_id, req.body.password);
                 res.json("OK");
             })
@@ -168,6 +169,7 @@ async function getRole (house_id){
 }
 
 exports.registerUser = function registerUser(name, email, house_id, password) {
+    console.log(house_id);
     const ID = house_id.substr(1,house_id.length-2);
     console.log("i funktionen: ", ID);
     //Register household and then user
