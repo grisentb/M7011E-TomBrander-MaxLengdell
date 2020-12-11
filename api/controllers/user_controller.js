@@ -75,7 +75,7 @@ exports.login = function (req, res) {
             console.log("user found!");
             //Check password
             //Get prosumer role: 
-            const role = await getRole(user.house_id);
+            const manager = await getRole(user.house_id);
             bcrypt.compare(password, user.password).then(isMatch => {
                 if (isMatch) {
                     //Correct pwd. Create tokens & all that
@@ -96,7 +96,7 @@ exports.login = function (req, res) {
                                 success: true,
                                 token: token,
                                 email: email,
-                                role: role
+                                role: manager
 
                             });
                         }
@@ -162,7 +162,7 @@ exports.getImage = function (req, res) {
 }
 
 async function getRole (house_id){
-    var role = await prosumer_controller.getRole(house_id);
+    var role = await manager_controller.findManager(house_id);
     return role;
 }
 

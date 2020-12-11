@@ -39,7 +39,7 @@ function connectDatabase(){
 async function checkManager(){
     var Manager = mongoose.model('manager');
 
-    await Manager.findOne({role: 'manager'}).then(res => {
+    await Manager.findOne().then(res => {
         if(!res){
             console.log("Manager does not exist");
             createManager();

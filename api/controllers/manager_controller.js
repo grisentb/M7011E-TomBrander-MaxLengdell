@@ -85,3 +85,13 @@ exports.registerManager = async function () {
 
   return ID;
 }
+exports.findManager = async function(house_id){
+  console.log("ID: ", house_id);
+  var role;
+  await Manager.findOne({_id: house_id }).then(res => {
+    if(res){
+      return true;
+    }
+    return false;
+  })
+}
