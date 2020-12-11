@@ -60,6 +60,33 @@ var prosumerSchema = new Schema({
         default: 0.0
     }
 },{id: false});
+var managerSchema = new Schema({
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    production: {
+        type: Number,
+        default: 0.0
+    },
+    status: {
+        type: String,
+        default: 'stopped'
+    },
+    buffer: {
+        type: Number,
+        default: 0.0
+    },
+    buffer_to_prod: {
+        tpye: Number,
+        default: 0.0
+    }
+
+})
 var userSchema = new Schema({
     name: {
         type: String,
