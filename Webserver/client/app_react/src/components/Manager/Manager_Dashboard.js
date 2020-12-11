@@ -19,7 +19,7 @@ export default class ManagerDashboard extends React.Component {
         this.update();
     }
     update(){
-        console.log("Manager: ", this.state.manager);
+        //console.log("Manager: ", this.state.manager);
         let newPrice = 0.0;
         axios.get('http://localhost:4000/home/price').then(resp => {
             newPrice = resp.data;
@@ -37,8 +37,11 @@ export default class ManagerDashboard extends React.Component {
             production = resp.data;
         })
         setTimeout(() => {
-            axios.get('http://localost:4000/manager/users').then(resp => {
-                this.setState({manager: newManager, users: resp.data, price: newPrice, totalConsumption: consumption, totalProduction: production});
+            axios.get('http://localhost:4000/manager/users').then(resp => {
+                console.log(resp.data)
+                this.setState({manager: newManager, users: "användare", price: newPrice, totalConsumption: consumption, totalProduction: production});
+            }).catch(err => {
+                console.log(err);
             });
         }, this.tickRate);
     }

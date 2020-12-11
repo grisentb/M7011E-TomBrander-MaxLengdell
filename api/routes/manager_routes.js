@@ -9,4 +9,5 @@ module.exports = function(app){
         .get(manager.totalConsumption)
     app.route('/manager/production')
         .get(manager.totalProduction)
+
 }

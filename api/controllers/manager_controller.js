@@ -7,7 +7,7 @@ exports.prosumers = async function (req, res) {
   let users = [];
   users = await Users.find();
   //res.send(users);
-  res.send("OK");
+  res.json(users);
 }
 exports.totalConsumption = async function (req, res) {
   let totalConsumption = 0.0;
@@ -40,13 +40,13 @@ exports.totalConsumption = async function (req, res) {
     totalConsumption += prosumer_consump[0].total;
     totalConsumption += consumer[0].total;
   } catch (error) {
-    console.log(error);
-    console.log("probably no consumers exists");
+    //console.log(error);
+    //console.log("probably no consumers exists");
   }
 
 
-  console.log("Total consumption: ", totalConsumption);
-  res.send(totalConsumption.toString);
+  //console.log("Total consumption: ", totalConsumption);
+  res.json(totalConsumption);
 }
 exports.totalProduction = async function (req, res) {
   let prosumers = await Prosumer.find();
@@ -63,12 +63,12 @@ exports.totalProduction = async function (req, res) {
   );
   let totalProduction = prosumer_consump[0].total;
 
-  console.log("Total production: ", totalProduction);
-  res.send(totalProduction.toString);
+  //console.log("Total production: ", totalProduction);
+  res.json(totalProduction.toString);
 }
 exports.manager = async function (req, res) {
   let manager = await Prosumer.findOne({ role: 'manager' });
-  res.send(manager);
+  res.json(manager);
 }
 exports.registerManager = async function () {
   var ID;
