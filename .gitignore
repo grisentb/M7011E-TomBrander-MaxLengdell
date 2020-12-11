@@ -3,7 +3,7 @@ config/keys.js
 Webserver/client/app_react/.eslintcache
 public/images/
 
-api/public/images/*
+
 
 
 .DS_Store
