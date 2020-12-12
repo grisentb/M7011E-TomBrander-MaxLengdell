@@ -31,21 +31,22 @@ export default class Dashboard extends React.Component {
   }
   update(){
     let newPrice = 0.0;
-    //Get current Price
-    axios.get('http://localhost:4000/home/price').then(resp => {
-      newPrice = resp.data;
-    });
-    this.user = getUser();
-    console.log("HERRRO");
-    //Get blackout houses
     let currentBlackouts = [];
-    axios.get('http://localhost:4000/consumer/blackout').then(resp => {
-      currentBlackouts = resp.data;
-    })
+    this.user = getUser();
+    if(this.state.prosumer){
+      //Get current Price
+      axios.get('http://localhost:4000/home/price').then(resp => {
+        newPrice = resp.data;
+      });
+      var netProd = this.state.prosumer.production - this.state.prosumer.consumption;
+      //Get blackout houses
+      axios.get('http://localhost:4000/consumer/blackout', {params: {_id: this.state.prosumer._id, netProd: netProd}}).then(resp => {
+        currentBlackouts = resp.data;
+      })
+    }
     setTimeout(() => {
       //console.log(this.user);
       let tempUser = typeof(this.user) == 'string' ? this.user : this.user.email;
-      
       axios.get('http://localhost:4000/home', {params: {email: tempUser}}).then(resp => {
         //Updating this.state
         this.setState({prosumer: resp.data, price: newPrice, blackouts: currentBlackouts});
@@ -82,6 +83,7 @@ export default class Dashboard extends React.Component {
     //Create new household using this prosumers electricity
     const newHouse = async e => {
       await axios.post('http://localhost:4000/consumer/consumption', {_id: this.state.prosumer._id});
+      console.log("CREATED NEW HOUSEHOLD");
     }
     // handle click event of logout button
     const handleLogout = () => {

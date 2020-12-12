@@ -10,29 +10,34 @@ exports.listAllClients = function(req, res) {
     });
   }; 
 
-exports.blackouts = async function(req,res) {
+exports.blackouts = async function(req, res) {
   var prosumerId = req.query._id;
-  var netProduction = req.query.prod;
+  var netProduction = req.query.netProd;
   var consumers = await Consumer.find({prosumer: prosumerId});
-
-  var blackouts = []
-  for(var consumer in consumers)
+  var blackouts = [];
+  for(var i in consumers)
   {
-    netProd -= consumer.consumption;
+    netProduction -= consumers[i].consumption;
     if(netProduction < 0)
     {
-      blackouts.push(consumer);
+      Consumer.findOneAndUpdate({_id: consumers[i]._id}, {blackout: true});
+      blackouts.push(consumers[i].ID);
+    }else{
+      Consumer.findOneAndUpdate({_id: consumers[i]._id}, {blackout: false});
     }
   }
   res.send(blackouts);
 }
 exports.createHousehold = async function(req, res) {
-    var prosumer = req.query._id;
-    var new_House = new Consumer(req.body);
+    var prosumer = req.body._id;
+    let ID = await Consumer.countDocuments();
+    ID += 1;
+    console.log("CREATING WITH ID: " + ID + " and prosumer: " + prosumer);
+    var new_House = new Consumer({ID: ID, prosumer: prosumer});
     new_House.prosumer = prosumer;
     new_House.save(function(err, consumer){
       if(err){
-        console.log("something broke during saving");
+        console.log("something broke during saving " + err);
         res.send(err);
       res.json(consumer);
       }

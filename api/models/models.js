@@ -20,8 +20,13 @@ var consumerSchema = new Schema({
     },
     prosumer:{
         type: String,
-        default: 0
+        required: 'Need prosumerId'
+    },
+    blackout:{
+        type: Boolean,
+        default: false
     }
+
 });
 var prosumerSchema = new Schema({
     created_date:{
