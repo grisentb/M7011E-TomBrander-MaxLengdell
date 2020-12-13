@@ -12,15 +12,6 @@ export default class ManagerDashboard extends React.Component {
         this.user = getUser();
 
         this.tickRate = 1000;
-
-        this.data = [
-            {
-                name: "maximus", email: "max@max.com"
-            },
-            {
-                name: "tomizlav", email: "tom@tom.com"
-            }
-        ];
     }
 
     componentDidMount(){
@@ -51,13 +42,13 @@ export default class ManagerDashboard extends React.Component {
             axios.get('http://localhost:4000/manager/users').then(resp => {
                 //console.log("RESP: ", resp.data);
                 //console.log(this.data);
-                this.data = resp.data
-                this.setState({manager: newManager, users: "Användare", price: newPrice, totalConsumption: consumption, totalProduction: production});
+                this.setState({manager: newManager, users: resp.data, price: newPrice, totalConsumption: consumption, totalProduction: production});
             }).catch(err => {
                 console.log(err);
             });
         }, this.tickRate);
-    }
+    }//                   
+
 
     render(){
         const handleLogout = () =>{
@@ -67,7 +58,7 @@ export default class ManagerDashboard extends React.Component {
         }
         if(this.state.manager){
             const {manager} = this.state;
-            //const {users} = this.state;
+            const {users} = this.state;
             const {price} = this.state;
             const {totalConsumption} = this.state;
             const {totalProduction} = this.state;
@@ -85,7 +76,7 @@ export default class ManagerDashboard extends React.Component {
                     Current Price: {price} <br/><br/>
                     <input type="button" onClick={handleLogout} value="Logout" />
                 <div>
-                    <ListHousesManager data={this.data}/>
+                <ListHousesManager data={users}/>sl
                 </div>
                 </div>
             );

@@ -79,7 +79,7 @@ class simulator{
         Collection.find().stream()
             .on('data', function(doc){
                 let newWind = gauss(mean, deviation);
-
+                newWind = Math.round(newWind*100)/100;
                 Collection.findByIdAndUpdate(doc._id, {wind: newWind}, function(err, result){
                     if(err){
                         console.log("Error in update: ",err);
@@ -112,7 +112,7 @@ class simulator{
                 let wind = doc.wind;
                 let capacity = doc.production_capacity;
                 let production = productionFunc(wind, capacity);
-
+                production = Math.round(production*100)/100;
                 Collection.findByIdAndUpdate(doc._id, {production: production}, function(err, result){
                     if(err){
                         console.log("Error in update: ",err);
