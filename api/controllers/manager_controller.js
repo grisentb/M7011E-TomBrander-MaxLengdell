@@ -6,10 +6,25 @@ var mongoose = require('mongoose'),
 
 
 exports.prosumers = async function (req, res) {
+  //Find all users and send their data + prosumption info
   let users = [];
-  users = await Users.find();
+  users = await Prosumer.find();
   //res.send(users);
   res.json(users);
+
+  // await Users.find().stream()
+  //   .on('data', async function (doc) {
+  //     await Prosumer.findById(doc.house_id).then(async res => {
+  //       const prosumerData = res;
+  //       console.log("res from db; ",res);
+  //       await users.push(prosumerData);
+  //     }).catch(err => {
+  //       console.log("error getting prosumer data for manager: ", err);
+  //     })
+  //   })
+  // console.log("total returned: ", users);
+
+  //res.json(users);
 }
 exports.totalConsumption = async function (req, res) {
   let totalConsumption = 0.0;
@@ -37,7 +52,7 @@ exports.totalConsumption = async function (req, res) {
       }
     ]
   );
-  
+
   try {
     totalConsumption += prosumer_consump[0].total;
     totalConsumption += consumer[0].total;
@@ -85,11 +100,11 @@ exports.registerManager = async function () {
 
   return ID;
 }
-exports.findManager = async function(house_id){
+exports.findManager = async function (house_id) {
   console.log("ID: ", house_id);
-  var ret = await Manager.findOne({_id: house_id }).then(res => {
+  var ret = await Manager.findOne({ _id: house_id }).then(res => {
     console.log(res);
-    if(res){
+    if (res) {
       console.log("true");
 
       return true;

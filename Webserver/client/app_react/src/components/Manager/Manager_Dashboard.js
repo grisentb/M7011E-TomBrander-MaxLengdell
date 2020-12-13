@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import {getUser, removeUserSession} from './../../Utils/Common';
 
+import ListHousesManager from './HouseListManager';
+
 export default class ManagerDashboard extends React.Component {
     constructor(props)
     {
@@ -10,6 +12,15 @@ export default class ManagerDashboard extends React.Component {
         this.user = getUser();
 
         this.tickRate = 1000;
+
+        this.data = [
+            {
+                name: "maximus", email: "max@max.com"
+            },
+            {
+                name: "tomizlav", email: "tom@tom.com"
+            }
+        ];
     }
 
     componentDidMount(){
@@ -38,7 +49,10 @@ export default class ManagerDashboard extends React.Component {
         })
         setTimeout(() => {
             axios.get('http://localhost:4000/manager/users').then(resp => {
-                this.setState({manager: newManager, users: "användare", price: newPrice, totalConsumption: consumption, totalProduction: production});
+                //console.log("RESP: ", resp.data);
+                //console.log(this.data);
+                this.data = resp.data
+                this.setState({manager: newManager, users: "Användare", price: newPrice, totalConsumption: consumption, totalProduction: production});
             }).catch(err => {
                 console.log(err);
             });
@@ -53,7 +67,7 @@ export default class ManagerDashboard extends React.Component {
         }
         if(this.state.manager){
             const {manager} = this.state;
-            const {users} = this.state;
+            //const {users} = this.state;
             const {price} = this.state;
             const {totalConsumption} = this.state;
             const {totalProduction} = this.state;
@@ -69,8 +83,10 @@ export default class ManagerDashboard extends React.Component {
                     Total production: {totalProduction}<br/><br/>
                     Total net production: {totalProduction - totalConsumption}<br/><br/>
                     Current Price: {price} <br/><br/>
-                    Prosumers: {users}<br/><br/>
                     <input type="button" onClick={handleLogout} value="Logout" />
+                <div>
+                    <ListHousesManager data={this.data}/>
+                </div>
                 </div>
             );
         }else
