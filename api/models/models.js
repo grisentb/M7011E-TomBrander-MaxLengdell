@@ -56,6 +56,10 @@ var prosumerSchema = new Schema({
     buffer_prod_ratio: {
         type: Number,
         default: 0.0
+    },
+    logged_in: {
+        type: Date,
+        default: Date.now
     }
 });//,{id: false});
 var managerSchema = new Schema({

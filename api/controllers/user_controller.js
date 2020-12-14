@@ -73,6 +73,8 @@ exports.login = function (req, res) {
         }
         else {
             console.log("user found!");
+            //Set prosumer logged in date tu current
+            prosumer_controller.setLoggedIn(user.house_id);
             //Check password
             //Get prosumer role: 
             const manager = await getRole(user.house_id);

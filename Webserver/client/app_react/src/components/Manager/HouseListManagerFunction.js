@@ -35,6 +35,10 @@ export default function TableUser(props) {
             field: "buffer_prod_ratio"
         },
         {
+            title: "Last logged in",
+            field: "logged_in"
+        },
+        {
             title: "Creation date",
             field: "created_date"
         },
