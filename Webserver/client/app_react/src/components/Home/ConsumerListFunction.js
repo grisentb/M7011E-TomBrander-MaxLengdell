@@ -11,28 +11,12 @@ export default function TableUser(props) {
             field: "_id"
         },
         {
-            title: "Production",
-            field: "production"
-        },
-        {
-            title: "Production capacity",
-            field: "production_capacity"
-        },
-        {
             title: "Consumption",
             field: "consumption"
         },
         {
-            title: "Wind",
-            field: "wind"
-        },
-        {
-            title: "Buffer",
-            field: "buffer"
-        },
-        {
-            title: "Buffer ratio",
-            field: "buffer_prod_ratio"
+            title: "Blackout",
+            field: "blackout"
         },
         {
             title: "Creation date",
@@ -41,6 +25,7 @@ export default function TableUser(props) {
 
 
     ]
+    const prosumerColumns = [];
 
     const [data, setData] = useState([]);
 

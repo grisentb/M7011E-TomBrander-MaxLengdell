@@ -10,5 +10,7 @@ module.exports = function(app){
         .put(consumer.updateConsumption)
     app.route('/consumer/blackout')
         .get(consumer.blackouts)
+    app.route('/consumer/prosumer')
+        .get(consumer.getConsumerPerProsumer)
 
 }

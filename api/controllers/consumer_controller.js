@@ -61,3 +61,11 @@ exports.updateConsumption = function(req, res) {
         res.json(consumer);
       });
 }
+exports.getConsumerPerProsumer = function(req, res) {
+    const belongsToProsumer = req.query._id;
+    Consumer.find({prosumer: belongsToProsumer}).then(resp => {
+      res.json(resp);
+    }).catch(err => {
+      console.log(err);
+    })
+}

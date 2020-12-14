@@ -1,12 +1,14 @@
 import React  from 'react';
 import axios from 'axios';
 import { getUser, removeUserSession, getRole} from './../../Utils/Common';
+import ListConsumerFunction from './ConsumerListFunction';
+
 
 export default class Dashboard extends React.Component {
   constructor(props){
     //console.log("CONSTRUCTOR");
     super(props);
-    this.state = {prosumer: null, price: 0.0, bufferError: "", blackouts: []};
+    this.state = {prosumer: null, price: 0.0, bufferError: "", blackouts: [], consumers: []};
     this.user = getUser();
     this.role = getRole();
     this.tickRate = 1000;
@@ -33,6 +35,7 @@ export default class Dashboard extends React.Component {
     let newPrice = 0.0;
     let currentBlackouts = [];
     this.user = getUser();
+    let consumers = [];
     if(this.state.prosumer){
       //Get current Price
       axios.get('http://localhost:4000/home/price').then(resp => {
@@ -43,13 +46,18 @@ export default class Dashboard extends React.Component {
       axios.get('http://localhost:4000/consumer/blackout', {params: {_id: this.state.prosumer._id, netProd: netProd}}).then(resp => {
         currentBlackouts = resp.data;
       })
+    
+      axios.get('http://localhost:4000/consumer/prosumer', {params: {_id: this.state.prosumer._id}}).then(resp => {
+        consumers = resp.data;
+        //console.log("RESPONSE: ",resp);
+      })
     }
     setTimeout(() => {
       //console.log(this.user);
       let tempUser = typeof(this.user) == 'string' ? this.user : this.user.email;
       axios.get('http://localhost:4000/home', {params: {email: tempUser}}).then(resp => {
         //Updating this.state
-        this.setState({prosumer: resp.data, price: newPrice, blackouts: currentBlackouts});
+        this.setState({prosumer: resp.data, price: newPrice, blackouts: currentBlackouts, consumers: consumers });
       })
     }, this.tickRate);
   }
@@ -96,6 +104,7 @@ export default class Dashboard extends React.Component {
       const {price} = this.state;
       const {bufferError} = this.state;
       const {blackouts} = this.state;
+      const {consumers} = this.state;
       return (
         <div>
           Welcome {this.user.name}!<br /><br />
@@ -111,6 +120,9 @@ export default class Dashboard extends React.Component {
           Wind: {prosumer.wind}<br /><br />
           Current electrical price : {price} <br/><br/>
           Blackout households: {blackouts}
+          <div>
+            <ListConsumerFunction data={consumers} />
+          </div>
           <br/> <br/>
           <input type="submit" onClick={newHouse} value="Create new household" /> <br/><br/>
           <input type="button" onClick={handleLogout} value="Logout" />
