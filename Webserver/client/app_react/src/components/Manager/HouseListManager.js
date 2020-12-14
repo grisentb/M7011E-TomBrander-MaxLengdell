@@ -1,11 +1,8 @@
-import React from "react";
-import { render } from "react-dom";
+import React, { useRef } from "react";
+import reactDom, { render } from "react-dom";
 import axios from 'axios';
 
 import MaterialTable from "material-table";
-
-
-
 
 export default class ListHousesManager extends React.Component {
     constructor(props) {
@@ -62,8 +59,9 @@ export default class ListHousesManager extends React.Component {
         this.update();
     }
     componentDidUpdate() {
-        this.update();
+        //this.update();
     }
+
     update() {
         // let users = null;
         // setTimeout(() => {
@@ -82,26 +80,38 @@ export default class ListHousesManager extends React.Component {
         // }).catch(err => {
         //     console.log(err);
         // });
-        //this.setState({users: this.props.data});
+        this.setState({users: this.props.data});
         this.data = this.props.data;
         this.count += 1;
         //console.log(this.state.users);
+        console.log(this);
 
     }
     render() {
         const { data } = this.state;
         console.log("Render");
+        tableRef = useRef();
         return (
             <div>
                 <button onClick={this.update}>
                     Click Me To Get API Data
         </button>
-                <MaterialTable title="Households" data={this.data} columns={this.columns} />
-                {this.count}
+                <MaterialTable title="Households" data={query => 
+                new Promise((resolve, reject) => {
+                    axios.get('http://localhost:4000/manager/users')
+//                    .then(response => response.json())
+                    .then(result => {
+                        resolve({
+                            data: result.data
+                        })
+                    });
+                })
+                } columns={this.columns} />
+
             </div>
         );
 
     }
 }
 
-//render(<App />, document.getElementById("root"));
+
