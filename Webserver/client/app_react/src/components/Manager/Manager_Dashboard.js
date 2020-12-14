@@ -11,7 +11,7 @@ export default class ManagerDashboard extends React.Component {
         this.state = {manager: null, users: [], price: 0.0, totalProduction: 0.0, totalConsumption: 0.0, blackouts: 0};
         this.user = getUser();
 
-        this.tickRate = 1000;
+        this.tickRate = 5000;
     }
 
     componentDidMount(){
@@ -76,7 +76,7 @@ export default class ManagerDashboard extends React.Component {
                     Current Price: {price} <br/><br/>
                     <input type="button" onClick={handleLogout} value="Logout" />
                 <div>
-                <ListHousesManager data={users}/>sl
+                     <ListHousesManager data={users}/>
                 </div>
                 </div>
             );

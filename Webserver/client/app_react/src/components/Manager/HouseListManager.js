@@ -11,7 +11,7 @@ export default class ListHousesManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            users: []
         };
         this.columns = [
             {
@@ -51,32 +51,56 @@ export default class ListHousesManager extends React.Component {
         ]
         this.tickRate = 1000;
         this.data = [];
+        this.arr = [{
+            _id: this.int
+        }];
+        this.count = 0;
 
+        this.update = this.update.bind(this);
     }
     componentDidMount() {
         this.update();
     }
     componentDidUpdate() {
-        console.log(this.props.data);
         this.update();
     }
     update() {
         // let users = null;
         // setTimeout(() => {
-        //     this.setState({ data: this.props.data });
+        //     //this.data = this.props.data;
+        //     const temp = this.state.int + 1;
+        //     this.setState({int: temp});
+        //     // console.log(this.state.int);
+        //     console.log("test");
+
         // }, this.tickRate);
-        console.log(this.props.data);
+        // axios.get('http://localhost:4000/manager/users').then(resp => {
+        //     console.log("RESP: ", resp.data);
+        //     //console.log(this.data);
+        //     this.setState({ users: resp.data });
+
+        // }).catch(err => {
+        //     console.log(err);
+        // });
+        //this.setState({users: this.props.data});
         this.data = this.props.data;
+        this.count += 1;
+        //console.log(this.state.users);
+
     }
     render() {
-            const { data } = this.state;
-            return (
-                <div>
-                    <MaterialTable title="Employees" data={this.data} columns={this.columns} />
-    
-                </div>
-            );
-        
+        const { data } = this.state;
+        console.log("Render");
+        return (
+            <div>
+                <button onClick={this.update}>
+                    Click Me To Get API Data
+        </button>
+                <MaterialTable title="Households" data={this.data} columns={this.columns} />
+                {this.count}
+            </div>
+        );
+
     }
 }
 
