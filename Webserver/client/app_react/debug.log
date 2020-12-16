@@ -2,3 +2,4 @@
 [1130/100018.269:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\tompa\AppData\Local\Google\Chrome\User Data\Crashpad\reports\817a99f8-12d1-4667-93d4-2170242672b0.dmp: Det går inte att komma åt filen eftersom denanvänds av en annan process. (0x20)
 [1201/182440.551:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)
 [1202/112538.037:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)
+[1216/154152.108:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)

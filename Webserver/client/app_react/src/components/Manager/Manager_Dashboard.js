@@ -9,7 +9,7 @@ import ListHouseFunctionManager from './HouseListManagerFunction';
 export default class ManagerDashboard extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { manager: null, users: [], price: 0.0, totalProduction: 0.0, totalConsumption: 0.0, blackouts: 0 };
+        this.state = { manager: null, users: [], price: 0.0, totalProduction: 0.0, totalConsumption: 0.0, blackouts: 0};
         this.user = getUser();
 
         this.tickRate = 1000;
@@ -58,21 +58,37 @@ export default class ManagerDashboard extends React.Component {
             this.props.history.push('/login');
             this.setState({ manager: null });
         }
+        const changeRatio = async e => {
+            if(e.key === 'Enter'){
+              console.log("Updating ratio");
+              let value = Math.max(0.0, e.target.value);
+              value = Math.min(1.0, e.target.value);
+              axios.post('http://localhost:4000/manager/buffer', {_id: this.state.manager._id, value: value});
+              e.target.value = null;
+            }
+        }
+        const changeStatus = async e => {
+            console.log("CHANGE STATUS!");
+            let id = this.state.manager._id;
+            axios.post('http://localhost:4000/manager/production', {_id: id});
+        }
         if (this.state.manager) {
             const { manager } = this.state;
             const { users } = this.state;
             const { price } = this.state;
             const { totalConsumption } = this.state;
             const { totalProduction } = this.state;
+            var statusButtonValue = manager.status == "stopped" ? "start" : "stop";
 
             return (
                 <div>
                     Welcome Manager! <br /><br />
                     Coal powerplant production {manager.production} <br /><br />
-                    Coal powerplant status: {} <br /><br />
+                    Coal powerplant status: {manager.status} <br /><br />
+                    <input type="button" onClick={changeStatus} value={statusButtonValue}/><br /><br />
                     Your buffer: {manager.buffer} <br /><br />
-                    Buffer/production ratio: {manager.buffer_prod_ratio} <br /><br />
-                    Change buffer/production ratio:
+                    Buffer/production ratio: {manager.buffer_to_prod} <br /><br />
+                    Change buffer/production ratio: <input type="text" placeholder="Ratio between 1 and 0" onKeyDown={changeRatio} /> <br/> <br/>
                     Total consumption: {totalConsumption}<br /><br />
                     Total production: {totalProduction}<br /><br />
                     Total net production: {totalProduction - totalConsumption}<br /><br />

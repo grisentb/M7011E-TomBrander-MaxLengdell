@@ -114,3 +114,23 @@ exports.findManager = async function (house_id) {
   })
   return ret;
 }
+exports.bufferRatio = async function(req, res){
+  console.log(req.body);
+  id = req.body._id;
+  bpr = req.body.value;
+  await Manager.findOneAndUpdate({_id: id}, {buffer_to_prod: bpr});
+  res.send(true)
+}
+exports.setProductionStatus = async function (req,res){
+  id = req.body._id;
+  var data;
+  manager = await Manager.findOne({_id: id});
+  if(manager.status == "stopped"){
+    data = "starting"
+  }else {
+    data = "stopped"
+  }
+  console.log(data);
+  await Manager.findOneAndUpdate({_id: id}, {status: data});
+  res.send(true);
+}

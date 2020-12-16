@@ -11,8 +11,9 @@ class simulator{
         this.avgWind = 3.6;
         this.avgPrice = 1.5;
 
-        this.coalProduction = 0.0;
-        this.coalPowerPlantTimeDelay = 30000;
+        this.coalProduction = 1000000.0;
+        this.coalPowerPlantTimeDelay = 10000;
+        this.coalPowerChangeingState = false;
     }
     runSim()
     {
@@ -24,7 +25,9 @@ class simulator{
         this.updateWind(this.prosumerCollection, 3.6, 0.5);
         this.updateProduction(this.prosumerCollection);
         this.updateBuffer();
-        this.updateManager();
+        //Managers updates
+        this.updateManagerPowerplant();
+        this.updateManagerBuffer();
         
 		//Simulating prosumption for every prosumer in database
     }
@@ -72,7 +75,6 @@ class simulator{
 
             });
     }
-
     async updateWind(Collection, mean, deviation)
     {
         var gauss = this.gaussian;
@@ -120,17 +122,40 @@ class simulator{
 
             });
     }
-    async updateManager() {
+    async updateManagerPowerplant() {
+        //Update Coal powerplant status and production
         var manager = await this.managerCollection.findOne();
-        var production = manager.production;
-        if(production != this.coalProduction)
-        {
-            console.log("UPDATING MANAGER!!!");
-            setTimeout(() => {
-                this.coalProduction = production;
-                this.managerCollection.findOneAndUpdate({}, {production: production});
+        if(manager.status == 'starting' && !this.coalPowerChangeingState){
+            this.coalPowerChangeingState = true;
+            setTimeout(()=> {
+                if(manager.status == 'starting'){
+                    this.managerCollection.findOneAndUpdate({_id:manager._id}, {production: this.coalProduction, status: "Running"}).then(resp => {
+                        console.log("PRODUCING NOW FROM COAL");
+                        this.coalPowerChangeingState = false;
+                });
+            }
             }, this.coalPowerPlantTimeDelay)
+        }else if(manager.status == 'stopped'){
+            this.managerCollection.findOneAndUpdate({_id: manager._id}, {production: 0}).then(resp => {
+                console.log("Coal powerplant stopped");
+            })
         }
+    }
+    async updateManagerBuffer() {
+        var prosumers = await this.prosumerCollection.find();
+        var consumers = await this.consumerCollection.find();
+        var manager = await this.managerCollection.findOne();
+
+        var totalNet = 0;
+        for(let i in prosumers){
+            totalNet += prosumers[i].production - prosumers[i].consumption;
+        }
+        for(let i in consumers){
+            totalNet -= consumers[i].consumption;
+        }
+        var buffer = manager.buffer + totalNet;
+        buffer = Math.max(0, buffer);
+        await this.managerCollection.findOneAndUpdate({_id: manager._id}, {buffer: buffer});
     }
     //Helper methods
     calculateProduction(wind, prosumerCapacity)

@@ -8,6 +8,9 @@ module.exports = function(app){
     app.route('/manager/consumption')
         .get(manager.totalConsumption)
     app.route('/manager/production')
+        .post(manager.setProductionStatus)
         .get(manager.totalProduction)
+    app.route('/manager/buffer')
+        .post(manager.bufferRatio)
 
 }

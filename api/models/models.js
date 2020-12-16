@@ -76,7 +76,7 @@ var managerSchema = new Schema({
         default: 0.0
     },
     buffer_to_prod: {
-        tpye: Number,
+        type: Number,
         default: 0.0
     }
 
