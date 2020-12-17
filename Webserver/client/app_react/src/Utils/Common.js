@@ -16,11 +16,16 @@ export const getUser = () => {
   export const removeUserSession = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('role');
   }
   
   // set the token and user from the session storage
   export const setUserSession = (token, user, role) => {
+
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('user', JSON.stringify(user));
-    sessionStorage.setItem('role', JSON.stringify(role));
+    if(typeof role !== 'undefined'){
+
+      sessionStorage.setItem('role', JSON.stringify(role));
+    }
   }

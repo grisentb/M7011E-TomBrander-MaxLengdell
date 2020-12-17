@@ -1,13 +1,34 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { getToken } from './../Common';
+import ManagerDashboard from '../../components/Manager/Manager_Dashboard';
+
+import { getToken , getRole} from './../Common';
 
 // handle the private routes
 function PrivateRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={(props) => getToken() ? <Component {...props} /> : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
+        render= { (props) => {
+        const token = getToken();
+        const role = getRole();
+        console.log("Routes:", role);
+
+        console.log(props.location);
+        if(token === null){
+          console.log("go to login");
+          return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+ 
+        }else if(role === 'true' && props.location.pathname == "/dashboard"){
+          console.log("push to manager dashboard");
+          return <ManagerDashboard {...props} />
+        }
+        else{
+          console.log("go to your site");
+          return (<Component {...props} />)
+        }
+      }}
+      //render={(props) => getToken() ? (<Component {...props} />) : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
     />
   )
 }

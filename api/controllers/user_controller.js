@@ -91,7 +91,7 @@ exports.login = function (req, res) {
                         payload,
                         keys.secretOrKey,
                         {
-                            expiresIn: 1800 //30 minutes
+                            expiresIn: 3600 //30 minutes
                         },
                         (err, token) => {
                             res.json({

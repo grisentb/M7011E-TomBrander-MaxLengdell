@@ -32,9 +32,10 @@ exports.verifyManager = async function (req, res) {
   let email = req.query.email;
   console.log("VERIFY MANAGER:", email)
   Users.find({email: email}).then(resp => {
-
-    Manager.find({_id: resp.house_id}).then(managerResp => {
-
+    console.log("resp:", resp[0]);
+    console.log("User house_ID", resp.house_id);
+    Manager.find({_id: resp[0].house_id}).then(managerResp => {
+      console.log("Manager response: ", managerResp);
       if(managerResp.length > 0){
         res.json('true')
       }else{
