@@ -18,7 +18,7 @@ export default class ProfileFetcher extends React.Component {
         console.log("get image");
         this.user = getUser();
         let tempUser = typeof (user) == 'string' ? this.user : this.user.email;
-
+        console.log(tempUser);
         axios.get(`http://localhost:4000/user/profile?user=${tempUser}`, {}).then(data => {
             //console.log("fetched from db: ", data);
             var base64Flag = 'data:image/jpeg;base64,';

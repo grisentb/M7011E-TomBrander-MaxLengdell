@@ -1,3 +1,5 @@
+const { readSavedModelProto } = require('@tensorflow/tfjs-node/dist/saved_model');
+
 var mongoose = require('mongoose'),
   Prosumer = mongoose.model('prosumer'),
   Users = mongoose.model('users'),
@@ -27,15 +29,20 @@ exports.prosumers = async function (req, res) {
   //res.json(users);
 }
 exports.verifyManager = async function (req, res) {
-  const email = req.query.email;
-  console.log("VERIFY MANAGER: ", email)
-  Manager.find({email: email}).then(resp => {
-    console.log(resp.length);
-    if(resp.length > 0){
-      res.json("true");
-    }else{
-      res.json(status(401));
-    }
+  let email = req.query.email;
+  console.log("VERIFY MANAGER:", email)
+  Users.find({email: email}).then(resp => {
+
+    Manager.find({_id: resp.house_id}).then(managerResp => {
+
+      if(managerResp.length > 0){
+        res.json('true')
+      }else{
+        res.json('false')
+      }
+    }).catch(err => {
+      console.log(err);
+    })
   })
 
 }

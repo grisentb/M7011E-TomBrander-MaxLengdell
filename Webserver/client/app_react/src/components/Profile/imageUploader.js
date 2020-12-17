@@ -15,8 +15,8 @@ export default class Profile extends React.Component {
 
     }
 
-    onSubmit(e){
-        const tempUser = getUser();
+    async onSubmit(e){
+        const tempUser = await getUser();
         console.log(tempUser);
         const formData = new FormData();
         formData.append('image', this.state.image);
