@@ -31,6 +31,7 @@ function Login(props) {
         //setLoading(false);
         console.log("Role: ", response.data.role);
         var role = response.data.role;
+        console.log("Role from the api: ", role);
         setUserSession(response.data.token, response.data.email, response.data.role);
         setLoading(false)
         console.log(role);

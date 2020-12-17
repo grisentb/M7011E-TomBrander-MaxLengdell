@@ -24,22 +24,25 @@ export default class Dashboard extends React.Component {
   }
   componentDidMount(){
     console.log("MOUNT");
-    this.getUserRole().then(role =>{
-      console.log(role);
-      if(role==='true'){
+    this.getUserRole().then(resp => {
+      console.log("ROLE FROM THEN: ",resp);
+      if(resp==='true'){
         console.log("manager identified. Redirecting to manager dashboard");
         this.props.history.push('/manager_dashboard');
       }
     })
-    
-    
-
+   
     this.update();
   }
   async getUserRole(){
-    const role = await getRole();
-    console.log("role awaited: ", role);
-    return role;
+    const user = await getUser();
+    console.log("User awaited: ", user.email);
+    let managerBoolean = await axios.get('http://localhost:4000/manager/verify', {params: {email: user.email}}).then(resp => {
+        console.log("Manager?", resp.data);
+        return resp.data;
+      });
+    console.log("Manbool: ", managerBoolean);
+    return managerBoolean;
   }
   update(){
     let newPrice = 0.0;

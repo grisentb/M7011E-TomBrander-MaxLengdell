@@ -26,6 +26,19 @@ exports.prosumers = async function (req, res) {
 
   //res.json(users);
 }
+exports.verifyManager = async function (req, res) {
+  const email = req.query.email;
+  console.log("VERIFY MANAGER: ", email)
+  Manager.find({email: email}).then(resp => {
+    console.log(resp.length);
+    if(resp.length > 0){
+      res.json("true");
+    }else{
+      res.json(status(401));
+    }
+  })
+
+}
 exports.totalConsumption = async function (req, res) {
   let totalConsumption = 0.0;
 

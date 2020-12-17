@@ -12,5 +12,7 @@ module.exports = function(app){
         .get(manager.totalProduction)
     app.route('/manager/buffer')
         .post(manager.bufferRatio)
+    app.route('/manager/verify')
+        .get(manager.verifyManager)
 
 }
