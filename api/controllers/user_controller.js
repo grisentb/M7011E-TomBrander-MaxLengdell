@@ -54,7 +54,8 @@ exports.getProfile = function (req, res) {
         const url = user.image;
         res.json(fs.readFileSync(url));
     }).catch(err => {
-        console.log(err);
+        res.json("Image was not found")
+        console.log("Image was not found");
     })
 }
 

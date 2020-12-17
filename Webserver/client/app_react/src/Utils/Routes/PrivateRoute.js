@@ -12,9 +12,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         render= { (props) => {
         const token = getToken();
         const role = getRole();
-        console.log("Routes:", role);
 
-        console.log(props.location);
         if(token === null){
           console.log("go to login");
           return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
