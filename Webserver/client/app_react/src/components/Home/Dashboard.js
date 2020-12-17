@@ -13,23 +13,33 @@ export default class Dashboard extends React.Component {
     this.role = getRole();
     this.tickRate = 1000;
     this.bufferError = "";
+    //console.log("Role from prop: ", this.props.location.state.role);
   }
   componentDidUpdate(){
     //console.log("UPDATE");
     //Check if current user is manager or not
     this.update();
+    //console.log("Role from prop: ", this.props.location.state.role);
+
   }
   componentDidMount(){
     console.log("MOUNT");
-    let role = getRole();
-    //this.setState({role: getRole()});
-    console.log(role);
-    if(role==='true'){
-      console.log("manager identified. Redirecting to manager dashboard");
-      this.props.history.push('/manager_dashboard');
-    }
+    this.getUserRole().then(role =>{
+      console.log(role);
+      if(role==='true'){
+        console.log("manager identified. Redirecting to manager dashboard");
+        this.props.history.push('/manager_dashboard');
+      }
+    })
+    
+    
 
     this.update();
+  }
+  async getUserRole(){
+    const role = await getRole();
+    console.log("role awaited: ", role);
+    return role;
   }
   update(){
     let newPrice = 0.0;
