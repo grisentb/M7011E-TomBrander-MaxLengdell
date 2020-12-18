@@ -1,0 +1,10 @@
+[{
+    "_id": 1,
+    "created_date": 2020,
+    "consumption": 0.0,
+    "role": "prosumer",
+    "production": 200,
+    "production_capacity": 50,
+    "wind": 7,
+    "buffer": 1000
+}]

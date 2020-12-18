@@ -1,53 +1,167 @@
+const { Collection } = require('mongoose');
+
 class simulator{
     constructor()
     {
         this.mongoose = require('mongoose');
         this.consumerCollection = this.mongoose.model('consumer');
         this.prosumerCollection = this.mongoose.model('prosumer');
+        this.managerCollection = this.mongoose.model('manager');
         //this.connection = require('./databaseConnection');
         this.avgWind = 3.6;
         this.avgPrice = 1.5;
+
+        this.coalProduction = 1000000.0;
+        this.coalPowerPlantTimeDelay = 10000;
+        this.coalPowerChangeingState = false;
     }
     runSim()
     {
-        let tick = 1000; // 1 second
-        let wind = this.gaussian(3.6,1);
-        let consumption = this.gaussian(70,1);
-        //prosumtion = ...
 		let price = -1;
-		//console.log("1");
-
 		//Simulating consumption for every consumer in database
-		this.updateCollection(this.consumerCollection, this.gaussian, 70, 1, 'Consumption');
+        this.updateConsumption(this.consumerCollection, 70, 10);
+        this.updateConsumption(this.prosumerCollection, 70, 10);
+        //Updating wind and production for the prosumers
+        this.updateWind(this.prosumerCollection, 3.6, 0.5);
+        this.updateProduction(this.prosumerCollection);
+        this.updateBuffer();
+        //Managers updates
+        this.updateManagerPowerplant();
+        this.updateManagerBuffer();
+        
 		//Simulating prosumption for every prosumer in database
     }
 
-    updateCollection(Collection, gaussianFunction,median, deviation, variableToChange)
-    {
-		//console.log(updateData);
-		Collection.find().lean().exec(function (err, res) {
-			if(err){
-				console.log(err);
-			} else {
-				//console.log(gaussianFunction(median,deviation).toString());
-				var stringify_res = JSON.stringify(res);
-				var parsed_res = JSON.parse(stringify_res);
-				let i = 0;
-				while(i<parsed_res.length)
-				{
-					//console.log(parsed_res[i].Consumption);
-					Collection.findByIdAndUpdate(parsed_res[i]._id, {Consumption: gaussianFunction(median, deviation)}, function(err,docs){
-						if(err){console.log(err)}
-						else{}//console.log("Updated consumer : ", docs);}
-					});
-					//console.log("******************************");
-					i++;
-				}
+    async updateBuffer(){
+        let prosumers = await this.prosumerCollection.find();
+        let consumers = await this.consumerCollection.find();
+        //console.log(consumers); 
+        
+        for(let i in prosumers)
+        {
+            let consumerConsumption = 0;
+            for(let j in consumers)
+            {   
+                if(consumers[j].prosumer == prosumers[i]._id)
+                {
+                    consumerConsumption += consumers[j].consumption;
+                }
+            }
+            let netProduction = prosumers[i].production
+            - (prosumers[i].consumption + consumerConsumption)*(1-prosumers[i].buffer_prod_ratio);
+            let newBuffer = prosumers[i].buffer
+            + Math.max(0,netProduction)
+            - Math.min(prosumers[i].buffer,(consumerConsumption*(prosumers[i].buffer_prod_ratio)));
+            if(netProduction < 0 || consumerConsumption*prosumers[i].buffer_prod_ratio > prosumers[i].buffer)
+            {
+                console.log("BLACKOUT net Production = " + netProduction + " Buffer: " + prosumers[i].buffer);
+            }
+             await this.prosumerCollection.updateOne(
+                {_id: prosumers[i]._id}, 
+                {$set: {buffer: newBuffer}});
+        }
+    }
+    async updateConsumption(Collection, mean, deviation){
+        var gauss = this.gaussian;
+        Collection.find().stream()
+            .on('data', function(doc){
+                let newConsumption = gauss(mean, deviation);
 
-			}
-		});
-		//setInterval(this.test(Collection, updateData), tick);
-	}
+                Collection.findByIdAndUpdate(doc._id, {consumption: newConsumption}, function(err, result){
+                    if(err){
+                        console.log("Error in update: ",err);
+                    }
+                })
+
+            });
+    }
+    async updateWind(Collection, mean, deviation)
+    {
+        var gauss = this.gaussian;
+        Collection.find().stream()
+            .on('data', function(doc){
+                let newWind = gauss(mean, deviation);
+                Collection.findByIdAndUpdate(doc._id, {wind: newWind}, function(err, result){
+                    if(err){
+                        console.log("Error in update: ",err);
+                    }
+                })
+
+            });
+    }
+
+    async updateProduction(Collection)
+    {
+        // let content = await Collection.find();
+        // content = this.collectionContentToArray(content);
+        // let i = 0;
+        // while(i<content.length)
+        // {
+        //     let wind = content[i].wind;
+        //     let capacity = content[i].capacity;
+        //     let production = this.calculateProduction(wind, capacity);
+        //     Collection.findByIdAndUpdate(content[i]._id, {production: production},  function(err,docs){
+        //         if(err){console.log(err)}
+        //         else{}//console.log("Updated consumer : ", docs);}
+        //     });
+
+        //     i++;
+        // }
+        var productionFunc = this.calculateProduction;
+        Collection.find().stream()
+            .on('data', function(doc){
+                let wind = doc.wind;
+                let capacity = doc.production_capacity;
+                let production = productionFunc(wind, capacity);
+
+                Collection.findByIdAndUpdate(doc._id, {production: production}, function(err, result){
+                    if(err){
+                        console.log("Error in update: ",err);
+                    }
+                })
+
+            });
+    }
+    async updateManagerPowerplant() {
+        //Update Coal powerplant status and production
+        var manager = await this.managerCollection.findOne();
+        if(manager.status == 'starting' && !this.coalPowerChangeingState){
+            this.coalPowerChangeingState = true;
+            setTimeout(()=> {
+                if(manager.status == 'starting'){
+                    this.managerCollection.findOneAndUpdate({_id:manager._id}, {production: this.coalProduction, status: "Running"}).then(resp => {
+                        console.log("PRODUCING NOW FROM COAL");
+                        this.coalPowerChangeingState = false;
+                });
+            }
+            }, this.coalPowerPlantTimeDelay)
+        }else if(manager.status == 'stopped'){
+            this.managerCollection.findOneAndUpdate({_id: manager._id}, {production: 0}).then(resp => {
+                console.log("Coal powerplant stopped");
+            })
+        }
+    }
+    async updateManagerBuffer() {
+        var prosumers = await this.prosumerCollection.find();
+        var consumers = await this.consumerCollection.find();
+        var manager = await this.managerCollection.findOne();
+
+        var totalNet = 0;
+        for(let i in prosumers){
+            totalNet += prosumers[i].production - prosumers[i].consumption;
+        }
+        for(let i in consumers){
+            totalNet -= consumers[i].consumption;
+        }
+        var buffer = manager.buffer + totalNet;
+        buffer = Math.max(0, buffer);
+        await this.managerCollection.findOneAndUpdate({_id: manager._id}, {buffer: buffer});
+    }
+    //Helper methods
+    calculateProduction(wind, prosumerCapacity)
+    {
+        return wind*prosumerCapacity;
+    }
     calcBlackout(totalConsumption, currentConsumption, production){
         /**
          * Should enable blackout for individual house holds. 
@@ -95,6 +209,12 @@ class simulator{
 
         return price;
     }
+    collectionContentToArray(content)
+    {
+        content = JSON.stringify(content);
+        content = JSON.parse(content);
+        return content;
+    }
     gaussian(mean, stdev) {
         var y2;
         var use_last = false;
@@ -118,8 +238,10 @@ class simulator{
         }
 
         var retval = mean + stdev * y1;
+        retval = Math.round(retval*100)/100;
         if (retval > 0)
             return retval;
+        
         return -retval;
     }
 }
