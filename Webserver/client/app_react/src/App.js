@@ -8,6 +8,7 @@ import Home from './components/Home/Home';
 import Register from './components/Home/Register';
 import Profile from './components/Profile/Profile';
 
+import Manager_profile from './components/Manager/ManagerProfile';
 import Manager_dashboard from './components/Manager/Manager_Dashboard';
 
 import PrivateRoute from './Utils/Routes/PrivateRoute';
@@ -56,6 +57,7 @@ function App() {
               <PrivateRoute path="/manager_dashboard" component={Manager_dashboard} />
               <PublicRoute path="/register" component={Register} />
               <PrivateRoute path="/profile" component={Profile} />
+              <PrivateRoute path="/manager_profile" component={Manager_profile} />
             </Switch>
           </div>
         </div>

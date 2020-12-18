@@ -28,6 +28,12 @@ exports.prosumers = async function (req, res) {
 
   //res.json(users);
 }
+exports.getUsers = async function(req, res) {
+  Users.find().then(resp => {
+    console.log(resp);
+    res.json(resp);
+  })
+}
 exports.verifyManager = async function (req, res) {
   let email = req.query.email;
   console.log("VERIFY MANAGER:", email)

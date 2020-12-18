@@ -2,38 +2,50 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import { getUser, removeUserSession } from '../../Utils/Common';
-import ImgUploader from './imageUploader';
-import ProfileFetcher from './readImage';
+import ImgUploader from './../Profile/imageUploader';
+import ProfileFetcher from './../Profile/readImage';
+import ProfileUserLoader from './ManagerUsers';
+
+
 const validateNewPasswordInput = require('../../validation/new_password_validation');
 
-function Profile(props) {
 
-    const user = getUser();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [image, setImage] = useState(null);
+export default class ManagerProfile extends React.Component {
+    constructor(props) {
+        super(props);
 
-    let tempUser = typeof(user)=='string' ? user : user.email;
+        this.state = { users: null, user: getUser(), loading: false };
 
-    return (
-        <div>   
-            <ProfileFetcher />
-            <ImgUploader />
-
-        </div>
-    );
-
-}
-const useFormInput = initialValue => {
-    const [value, setValue] = useState(initialValue);
-
-    const handleChange = e => {
-        setValue(e.target.value);
+        this.tickRate = 2000;
+        console.log("Entering profile");
     }
-    return {
-        value,
-        onChange: handleChange
+    componentDidMount() {
+        this.update();
+    }
+    componentDidUpdate() {
+        this.update();
+    }
+
+    update() {
+        setTimeout(() => {
+
+            axios.get('http://localhost:4000/manager/profile/getuser').then(response => {
+                this.setState({ users: response });
+            })
+
+        }, this.tickRate);
+    }
+    render() {
+
+        if (this.state.users) {
+            return (
+                <div>
+                    <h2>Manager Profile</h2>
+                    <ProfileUserLoader data={this.state.users} />
+                </div>
+            )
+        }else{
+            return <div>Loading manager profile!</div>
+        }
     }
 }
-
-export default Profile;

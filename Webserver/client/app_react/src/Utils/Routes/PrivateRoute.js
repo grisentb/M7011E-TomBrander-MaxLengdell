@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import ManagerDashboard from '../../components/Manager/Manager_Dashboard';
+import ManagerProfile from '../../components/Manager/ManagerProfile';
 
 import { getToken , getRole} from './../Common';
 
@@ -20,6 +21,10 @@ function PrivateRoute({ component: Component, ...rest }) {
         }else if(role === 'true' && props.location.pathname == "/dashboard"){
           console.log("push to manager dashboard");
           return <ManagerDashboard {...props} />
+        }
+        else if(role === 'true' && props.location.pathname == "/profile"){
+          console.log("push to profile");
+          return <ManagerProfile {...props} />
         }
         else{
           console.log("go to your site");
