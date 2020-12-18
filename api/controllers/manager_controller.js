@@ -1,4 +1,4 @@
-const { readSavedModelProto } = require('@tensorflow/tfjs-node/dist/saved_model');
+
 
 var mongoose = require('mongoose'),
   Prosumer = mongoose.model('prosumer'),
