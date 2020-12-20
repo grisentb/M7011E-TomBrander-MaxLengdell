@@ -8,7 +8,7 @@ import Home from './components/Home/Home';
 import Register from './components/Home/Register';
 import Profile from './components/Profile/Profile';
 
-import Manager_profile from './components/Manager/ManagerProfile';
+import Manager_profile from './components/Manager/Profile/ManagerProfile';
 import Manager_dashboard from './components/Manager/Manager_Dashboard';
 
 import PrivateRoute from './Utils/Routes/PrivateRoute';

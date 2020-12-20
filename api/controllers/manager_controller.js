@@ -28,9 +28,21 @@ exports.prosumers = async function (req, res) {
 
   //res.json(users);
 }
+exports.deleteUser = async function(req,res){
+  const user = req.body.user;
+  const house_id = req.body.house_id;
+  console.log(user +  " : " + house_id)
+  Users.deleteOne({email: user}, function(err) {
+    if(err) console.log(err);
+  }).then(resp => {
+    Prosumer.deleteOne({_id: house_id});
+    res.status(200);
+    console.log("Deleted user and household");
+  })
+}
 exports.getUsers = async function(req, res) {
-  Users.find().then(resp => {
-    console.log(resp);
+  Users.find({"email": {"$ne": "admin@admin.com"}}).then(resp => {
+    //console.log(resp);
     res.json(resp);
   })
 }

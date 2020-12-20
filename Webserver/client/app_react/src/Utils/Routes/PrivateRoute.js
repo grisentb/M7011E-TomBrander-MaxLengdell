@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import ManagerDashboard from '../../components/Manager/Manager_Dashboard';
-import ManagerProfile from '../../components/Manager/ManagerProfile';
+import ManagerProfile from '../../components/Manager/Profile/ManagerProfile';
 
 import { getToken , getRole} from './../Common';
 

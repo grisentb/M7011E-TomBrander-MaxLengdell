@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { getUser, removeUserSession } from '../../Utils/Common';
-import ImgUploader from './../Profile/imageUploader';
-import ProfileFetcher from './../Profile/readImage';
+import { getUser, removeUserSession } from '../../../Utils/Common';
+import ImgUploader from '../../Profile/imageUploader';
+import ProfileFetcher from '../../Profile/readImage';
 import ProfileUserLoader from './ManagerUsers';
 
 
-const validateNewPasswordInput = require('../../validation/new_password_validation');
+const validateNewPasswordInput = require('../../../validation/new_password_validation');
 
 
 export default class ManagerProfile extends React.Component {

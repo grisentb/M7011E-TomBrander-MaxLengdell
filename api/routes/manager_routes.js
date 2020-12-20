@@ -16,5 +16,7 @@ module.exports = function(app){
         .get(manager.verifyManager)
     app.route('/manager/profile/getuser')
         .get(manager.getUsers)
+    app.route('/manager/profile/delete')
+        .delete(manager.deleteUser)
 
 }
