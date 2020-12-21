@@ -143,10 +143,9 @@ exports.getUser = function (req, res) {
     //User.findOne({email: req.body.email})
 }
 exports.updatePassword = function (req, res) {
-    console.log("Body", req.body.data.newPwd);
+
     const email = req.body.data.user;
     var newPwd = req.body.data.newPwd;
-    console.log(email, newPwd);
 
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newPwd, salt, (err, hash) => {
