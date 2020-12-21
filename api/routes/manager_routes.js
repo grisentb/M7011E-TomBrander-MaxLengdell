@@ -19,4 +19,5 @@ module.exports = function(app){
     app.route('/manager/profile/delete')
         .delete(manager.deleteUser)
 
+
 }

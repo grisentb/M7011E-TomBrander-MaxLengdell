@@ -19,8 +19,9 @@ export default function ProfileUsers(props) {
     var pwd = useFormInput('');
 
     function editUser(user, house_id) {
-        console.log("input: " + user + " Value " + house_id);
-        
+        console.log("input: " + user + " Value " + pwd.value);
+        axios.post('http://localhost:4000/user/newpwd', { data: { user: user, newPwd: pwd.value} }).then(response => {
+    });
 
     }
     function deleteUser(user, house_id) {

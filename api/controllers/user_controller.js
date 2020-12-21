@@ -1,4 +1,5 @@
 const { fstat } = require('fs');
+//const { default: ProfileUsers } = require('../../Webserver/client/app_react/src/components/Manager/Profile/ManagerUsers');
 
 var mongoose = require('mongoose'),
     User = mongoose.model('users'),
@@ -142,7 +143,23 @@ exports.getUser = function (req, res) {
     //User.findOne({email: req.body.email})
 }
 exports.updatePassword = function (req, res) {
-    console.log("Body", req.body);
+    console.log("Body", req.body.data.newPwd);
+    const email = req.body.data.user;
+    var newPwd = req.body.data.newPwd;
+    console.log(email, newPwd);
+
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newPwd, salt, (err, hash) => {
+            if(err) throw err;
+            newPwd = hash;
+            User.findOneAndUpdate({email: email}, {password: newPwd}).then(resp => {
+                //res.json("OK");
+                console.log("OK");
+            }).catch(err => {
+                console.log(err);
+            })
+        })
+    })
 }
 exports.uploadImage = function (req, res) {
     //TODO:
