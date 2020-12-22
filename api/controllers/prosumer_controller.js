@@ -79,7 +79,7 @@ exports.getRole = async function(house_id){
 exports.setLoggedIn = function(house_id){
   console.log("logged in: ", house_id);
 
-  Prosumer.findByIdAndUpdate({_id: house_id}, {logged_in: (Date())}).then(resp => {
+  Users.findByIdAndUpdate({house_id: house_id}, {logged_in: (Date())}).then(resp => {
     console.log(resp);
   }).catch(err =>{
     console.log(err);

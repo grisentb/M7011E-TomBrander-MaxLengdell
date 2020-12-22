@@ -49,7 +49,7 @@ export default function ProfileUsers(props) {
                             </TableCell>
                             <TableCell>{n.name}</TableCell>
                             <TableCell>{n.email}</TableCell>
-                            <TableCell>{n.lastLoggedIn}</TableCell>
+                            <TableCell>Last logged in: {n.logged_in}</TableCell>
                         </TableRow>
 
                     )
