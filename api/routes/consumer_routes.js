@@ -8,8 +8,6 @@ module.exports = function(app){
         .get(consumer.getConsumption)
     app.route('/consumer/consumption/:house_id/:consumption')
         .put(consumer.updateConsumption)
-    app.route('/consumer/blackout')
-        .get(consumer.blackouts)
     app.route('/consumer/prosumer')
         .get(consumer.getConsumerPerProsumer)
 

@@ -21,6 +21,10 @@ var consumerSchema = new Schema({
     prosumer:{
         type: String,
         default: 0
+    },
+    blackout:{
+        type: Boolean,
+        default: false
     }
 });
 var prosumerSchema = new Schema({

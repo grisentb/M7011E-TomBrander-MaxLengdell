@@ -21,46 +21,18 @@ class simulator{
 		//Simulating consumption for every consumer in database
         this.updateConsumption(this.consumerCollection, 70, 10);
         this.updateConsumption(this.prosumerCollection, 70, 10);
-        //Updating wind and production for the prosumers
+        //Updating wind, buffer and production for the prosumers
         this.updateWind(this.prosumerCollection, 3.6, 0.5);
         this.updateProduction(this.prosumerCollection);
-        this.updateBuffer();
+
         //Managers updates
         this.updateManagerPowerplant();
-        this.updateManagerBuffer();
+        
+        this.updatePowerNetwork();
         
 		//Simulating prosumption for every prosumer in database
     }
-
-    async updateBuffer(){
-        let prosumers = await this.prosumerCollection.find();
-        let consumers = await this.consumerCollection.find();
-        //console.log(consumers); 
-        
-        for(let i in prosumers)
-        {
-            let consumerConsumption = 0;
-            for(let j in consumers)
-            {   
-                if(consumers[j].prosumer == prosumers[i]._id)
-                {
-                    consumerConsumption += consumers[j].consumption;
-                }
-            }
-            let netProduction = prosumers[i].production
-            - (prosumers[i].consumption + consumerConsumption)*(1-prosumers[i].buffer_prod_ratio);
-            let newBuffer = prosumers[i].buffer
-            + Math.max(0,netProduction)
-            - Math.min(prosumers[i].buffer,(consumerConsumption*(prosumers[i].buffer_prod_ratio)));
-            if(netProduction < 0 || consumerConsumption*prosumers[i].buffer_prod_ratio > prosumers[i].buffer)
-            {
-                console.log("BLACKOUT net Production = " + netProduction + " Buffer: " + prosumers[i].buffer);
-            }
-             await this.prosumerCollection.updateOne(
-                {_id: prosumers[i]._id}, 
-                {$set: {buffer: newBuffer}});
-        }
-    }
+//Gaussian simulations
     async updateConsumption(Collection, mean, deviation){
         var gauss = this.gaussian;
         Collection.find().stream()
@@ -89,24 +61,9 @@ class simulator{
 
             });
     }
-
+//Prosumer updates
     async updateProduction(Collection)
     {
-        // let content = await Collection.find();
-        // content = this.collectionContentToArray(content);
-        // let i = 0;
-        // while(i<content.length)
-        // {
-        //     let wind = content[i].wind;
-        //     let capacity = content[i].capacity;
-        //     let production = this.calculateProduction(wind, capacity);
-        //     Collection.findByIdAndUpdate(content[i]._id, {production: production},  function(err,docs){
-        //         if(err){console.log(err)}
-        //         else{}//console.log("Updated consumer : ", docs);}
-        //     });
-
-        //     i++;
-        // }
         var productionFunc = this.calculateProduction;
         Collection.find().stream()
             .on('data', function(doc){
@@ -122,6 +79,34 @@ class simulator{
 
             });
     }
+    async updateProsumerBuffer(){
+        let prosumers = await this.prosumerCollection.find();
+        let consumers = await this.consumerCollection.find();
+        //console.log(consumers); 
+        
+        for(let i in prosumers)
+        {
+            let consumerConsumption = 0;
+            for(let j in consumers)
+            {   
+                if(consumers[j].prosumer == prosumers[i]._id)
+                {
+                    consumerConsumption += consumers[j].consumption;
+                }
+            }
+            let netProduction = prosumers[i].production
+            - (prosumers[i].consumption + consumerConsumption)*(1-prosumers[i].buffer_prod_ratio);
+            let newBuffer = prosumers[i].buffer
+            + Math.max(0,netProduction)
+            - Math.min(prosumers[i].buffer,(consumerConsumption*(prosumers[i].buffer_prod_ratio)));
+     
+             await this.prosumerCollection.updateOne(
+                {_id: prosumers[i]._id}, 
+                {$set: {buffer: newBuffer}});
+        }
+    }
+
+//Manager updates
     async updateManagerPowerplant() {
         //Update Coal powerplant status and production
         var manager = await this.managerCollection.findOne();
@@ -137,7 +122,6 @@ class simulator{
             }, this.coalPowerPlantTimeDelay)
         }else if(manager.status == 'stopped'){
             this.managerCollection.findOneAndUpdate({_id: manager._id}, {production: 0}).then(resp => {
-                console.log("Coal powerplant stopped");
             })
         }
     }
@@ -146,22 +130,86 @@ class simulator{
         var consumers = await this.consumerCollection.find();
         var manager = await this.managerCollection.findOne();
 
-        var totalNet = 0;
+        var totalNet = manager.production;
         for(let i in prosumers){
             totalNet += prosumers[i].production - prosumers[i].consumption;
         }
         for(let i in consumers){
             totalNet -= consumers[i].consumption;
         }
-        var buffer = manager.buffer + totalNet;
-        buffer = Math.max(0, buffer);
-        await this.managerCollection.findOneAndUpdate({_id: manager._id}, {buffer: buffer});
+        console.log(totalNet);
+        var newBuffer = manager.buffer + totalNet;
+        newBuffer = Math.max(0, newBuffer);
+        await this.managerCollection.updateOne({_id: manager._id}, {buffer: newBuffer}).catch(err => {console.log("Error saving manager buffer")});
     }
-    //Helper methods
+
+    async updatePowerNetwork(){
+        let consumers = await this.consumerCollection.find();
+        let prosumers = await this.prosumerCollection.find();
+        let manager = await this.managerCollection.findOne();
+        
+        let managerProduction = manager.production;
+        let managerBuffer = manager.buffer;
+        let managerRatio = manager.buffer_to_prod;
+        for(let i in prosumers){
+            let prosumerBuffer = prosumers[i].buffer;
+            let prosumerRatio = prosumers[i].buffer_prod_ratio;
+            let prosumerProduction = prosumers[i].production;
+            let prosumerConsumers = [];
+            //Calculations for every prosumer
+            //Total consumption for prosumer and it's consumers
+            let totalProsumerConsumption = prosumers[i].consumption;
+            for(let j in consumers){
+                if(consumers[j].prosumer == prosumers[i]._id){
+                    totalProsumerConsumption += consumers[j].consumption;
+                    prosumerConsumers.push(consumers[j]);
+                }
+            }
+            //Variable if prosumer need power
+            let prosumerNetPower = 0;
+            //Prosumers buffer and production values updated
+            let prosumersBufferConsumption = prosumerRatio*totalProsumerConsumption;
+            prosumerBuffer -= prosumersBufferConsumption;
+            let prosumersProductionConsumption = (1-prosumerRatio)*totalProsumerConsumption;
+            prosumerProduction -= prosumersProductionConsumption;
+            prosumerBuffer += Math.max(0, prosumerProduction);
+            //Does prosumer need energy from manager or not?
+            //Prosumer need more power
+            if(prosumerBuffer <= 0 || prosumerProduction < 0){ 
+                //Prosumer can't make use of battery
+                prosumerRatio = 0;
+                //How much do I need
+                prosumerNetPower = prosumerBuffer < 0 ? prosumerNetPower + prosumerBuffer : prosumerNetPower;
+                prosumerNetPower = prosumerProduction < 0 ? prosumerNetPower + prosumerProduction : prosumerNetPower;
+
+                let prosumerManagerBufferNeed = managerRatio*prosumerNetPower;
+                let prosumerManagerProductionNeed = (1-managerRatio)*prosumerNetPower;
+
+                managerProduction += prosumerManagerProductionNeed;
+                managerBuffer += prosumerManagerBufferNeed;
+            }
+            //Check for blackouts
+            for(let j in consumers){
+                //console.log("PROSUMER NET: " + prosumerNetPower.toString());
+                if((managerBuffer < 0 || managerProduction < 0) && prosumerNetPower < 0){
+                    prosumerNetPower += consumers[j].consumption;
+                    await this.consumerCollection.updateOne({_id: consumers[j]._id}, {blackout: true});
+                }else{
+                    await this.consumerCollection.updateOne({_id: consumers[j]._id}, {blackout: false});
+                }
+            }
+            //Update prosumer in database
+            await this.prosumerCollection.updateOne({_id: prosumers[i]._id}, {buffer: prosumerBuffer, buffer_prod_ratio: prosumerRatio});
+        }
+        //update manager in database
+        await this.managerCollection.updateOne({_id: manager._id}, {buffer: managerBuffer});
+    }
+    //Helper method
     calculateProduction(wind, prosumerCapacity)
     {
         return wind*prosumerCapacity;
     }
+    //Calculate consumer blackouts
     calcBlackout(totalConsumption, currentConsumption, production){
         /**
          * Should enable blackout for individual house holds. 
@@ -209,12 +257,7 @@ class simulator{
 
         return price;
     }
-    collectionContentToArray(content)
-    {
-        content = JSON.stringify(content);
-        content = JSON.parse(content);
-        return content;
-    }
+    //Gaussian function
     gaussian(mean, stdev) {
         var y2;
         var use_last = false;

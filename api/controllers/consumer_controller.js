@@ -10,24 +10,6 @@ exports.listAllClients = function(req, res) {
     });
   }; 
 
-exports.blackouts = async function(req, res) {
-  var prosumerId = req.query._id;
-  var netProduction = req.query.netProd;
-  var consumers = await Consumer.find({prosumer: prosumerId});
-  var blackouts = [];
-  for(var i in consumers)
-  {
-    netProduction -= consumers[i].consumption;
-    if(netProduction < 0)
-    {
-      Consumer.findOneAndUpdate({_id: consumers[i]._id}, {blackout: true});
-      blackouts.push(consumers[i].ID);
-    }else{
-      Consumer.findOneAndUpdate({_id: consumers[i]._id}, {blackout: false});
-    }
-  }
-  res.send(blackouts);
-}
 exports.createHousehold = async function(req, res) {
     var prosumer = req.body._id;
     let ID = await Consumer.countDocuments();
