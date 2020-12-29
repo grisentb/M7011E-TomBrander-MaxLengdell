@@ -20,12 +20,13 @@ var consumerSchema = new Schema({
     },
     prosumer:{
         type: String,
-        default: 0
+        required: 'Need prosumerId'
     },
     blackout:{
         type: Boolean,
         default: false
     }
+
 });
 var prosumerSchema = new Schema({
     created_date:{
@@ -55,8 +56,12 @@ var prosumerSchema = new Schema({
     buffer_prod_ratio: {
         type: Number,
         default: 0.0
+    },
+    blocked: {
+        type: Boolean,
+        default: false
     }
-});//,{id: false});
+});
 var managerSchema = new Schema({
     production: {
         type: Number,
@@ -74,8 +79,7 @@ var managerSchema = new Schema({
         type: Number,
         default: 0.0
     }
-
-})
+});
 var userSchema = new Schema({
     name: {
         type: String,
@@ -100,6 +104,10 @@ var userSchema = new Schema({
     },
     image: {
         type: String
+    },
+    logged_in: {
+        type: Date,
+        default: Date.now
     }
 });
 module.exports = mongoose.model('consumer', consumerSchema);

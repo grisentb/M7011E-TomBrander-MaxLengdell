@@ -18,6 +18,8 @@ module.exports = function(app){
         .get(manager.getUsers)
     app.route('/manager/profile/delete')
         .delete(manager.deleteUser)
+    app.route('/manager/blockuser')
+        .post(manager.blockUser)
 
 
 }

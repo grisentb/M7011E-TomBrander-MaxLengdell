@@ -7,6 +7,22 @@ var mongoose = require('mongoose'),
   Manager = mongoose.model('manager');
 
 
+
+exports.blockUser = async function (req, res) {
+  const user = req.body.data.user;
+  const house_id = req.body.data.house_id;
+  console.log(user, house_id);
+
+  Prosumer.findByIdAndUpdate({_id: house_id}, {blocked: true, production: 0}).then(resp => {
+    console.log(resp);
+    setTimeout(function(){
+      Prosumer.findByIdAndUpdate({_id: house_id}, {blocked: false}).then(res => {
+        console.log("prosumer can now sell");
+      });
+    },5000);
+  })
+
+}
 exports.prosumers = async function (req, res) {
   //Find all users and send their data + prosumption info
   let users = [];

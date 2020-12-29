@@ -56,8 +56,12 @@ var prosumerSchema = new Schema({
     buffer_prod_ratio: {
         type: Number,
         default: 0.0
+    },
+    blocked: {
+        type: Boolean,
+        default: false
     }
-});//,{id: false});
+});
 var managerSchema = new Schema({
     production: {
         type: Number,
@@ -75,8 +79,7 @@ var managerSchema = new Schema({
         type: Number,
         default: 0.0
     }
-
-})
+});
 var userSchema = new Schema({
     name: {
         type: String,

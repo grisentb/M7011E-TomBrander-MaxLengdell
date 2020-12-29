@@ -4,6 +4,7 @@ import axios from 'axios';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import LockIcon from '@material-ui/icons/Lock';
+import BlockIcon from '@material-ui/icons/Block';
 import Modal from "./Modal";
 import "./css/styles.css";
 import Popup from './ProfilePwdPopup';
@@ -20,14 +21,20 @@ export default function ProfileUsers(props) {
 
     function editUser(user, house_id) {
         console.log("input: " + user + " Value " + pwd.value);
-        axios.post('http://localhost:4000/user/newpwd', { data: { user: user, newPwd: pwd.value} }).then(response => {
-    });
+        axios.post('http://localhost:4000/user/newpwd', { data: { user: user, newPwd: pwd.value } }).then(response => {
+        });
 
     }
     function deleteUser(user, house_id) {
-        
+
         console.log("delete", user, " : ", house_id);
         axios.delete('http://localhost:4000/manager/profile/delete', { data: { user: user, house_id: house_id } }).then(response => {
+            console.log(response);
+        })
+    }
+    function blockUser(user, house_id) {
+        console.log("Blocking ", user, "with house_id: ", house_id);
+        axios.post('http://localhost:4000/manager/blockuser', { data: {user: user, house_id: house_id}}).then(response => {
             console.log(response);
         })
     }
@@ -49,7 +56,12 @@ export default function ProfileUsers(props) {
                             </TableCell>
                             <TableCell>{n.name}</TableCell>
                             <TableCell>{n.email}</TableCell>
+
                             <TableCell>Last logged in: {n.logged_in}</TableCell>
+                            <IconButton onClick={() => { blockUser(n.email, n.house_id) }}>
+                                Block user for 5 seconds
+                                    <BlockIcon color="secondary" />
+                            </IconButton>
                         </TableRow>
 
                     )
@@ -61,13 +73,12 @@ export default function ProfileUsers(props) {
 
 const useFormInput = initialValue => {
     const [value, setValue] = useState(initialValue);
-  
+
     const handleChange = e => {
-      setValue(e.target.value);
+        setValue(e.target.value);
     }
     return {
-      value,
-      onChange: handleChange
+        value,
+        onChange: handleChange
     }
-  }
-  
+}
