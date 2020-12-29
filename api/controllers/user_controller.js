@@ -47,6 +47,21 @@ exports.verifyToken = function (req, res) {
 
     }
 }
+// exports.localTokenVerification = function(token){
+//     console.log("Verifying local session");
+//     jwt.verify(token, keys.secretOrKey, function (err, user) {
+//         if (err) {
+//             res.status(401).json({
+//                 error: true,
+//                 message: "Incorrect token"
+//             });
+//         } else {
+//             return res.json({ token: token, user: user })
+//         }
+
+
+//     });
+// }
 exports.getProfile = function (req, res) {
     const user = req.query.user;
     console.log("query", req.query);
