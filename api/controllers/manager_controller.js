@@ -136,7 +136,7 @@ exports.totalProduction = async function (req, res) {
   let totalProduction = prosumer_consump[0].total;
 
   //console.log("Total production: ", totalProduction);
-  res.json(totalProduction.toString);
+  res.json(totalProduction);
 }
 exports.manager = async function (req, res) {
   let manager = await Manager.findOne();
