@@ -14,5 +14,7 @@ module.exports = function(app){
         .post(manager.bufferRatio)
     app.route('/manager/verify')
         .get(manager.verifyManager)
+    app.route('/manager/setPrice')
+        .post(manager.setManagerPrice)
 
 }

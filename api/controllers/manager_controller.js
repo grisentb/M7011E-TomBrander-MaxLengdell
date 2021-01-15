@@ -6,7 +6,12 @@ var mongoose = require('mongoose'),
   Consumer = mongoose.model('consumer'),
   Manager = mongoose.model('manager');
 
+exports.setManagerPrice = async function (req, res) {
+  //console.log(req);
+  newPrice = req.body.manager_price;
+  let manager = await Manager.findOneAndUpdate({},{manager_price: newPrice});
 
+}
 exports.prosumers = async function (req, res) {
   //Find all users and send their data + prosumption info
   let users = [];
@@ -145,6 +150,7 @@ exports.bufferRatio = async function(req, res){
 exports.setProductionStatus = async function (req,res){
   id = req.body._id;
   var data;
+  console.log("CHANGEING STATUS");
   manager = await Manager.findOne({_id: id});
   if(manager.status == "stopped"){
     data = "starting"

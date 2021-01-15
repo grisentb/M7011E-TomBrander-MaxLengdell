@@ -67,6 +67,13 @@ export default class ManagerDashboard extends React.Component {
               e.target.value = null;
             }
         }
+        const changePrice = async e => {
+            if(e.key == 'Enter'){
+                console.log("Updating price");
+                axios.post('http://localhost:4000/manager/setPrice', {manager_price: e.target.value});
+                e.target.value = null;
+            }
+        }
         const changeStatus = async e => {
             console.log("CHANGE STATUS!");
             let id = this.state.manager._id;
@@ -93,6 +100,7 @@ export default class ManagerDashboard extends React.Component {
                     Total production: {totalProduction}<br /><br />
                     Total net production: {totalProduction - totalConsumption}<br /><br />
                     Current Price: {price} <br /><br />
+                    Set Price: <input type="text" placeholder="0 for dynamic pricing" onKeyDown={changePrice} /> <br/><br/>
                     <input type="button" onClick={handleLogout} value="Logout" />
                     <div>
                         <ListHouseFunctionManager data={users} />

@@ -73,6 +73,10 @@ var managerSchema = new Schema({
     buffer_to_prod: {
         type: Number,
         default: 0.0
+    },
+    manager_price: {
+        type: Number,
+        default: 0.0
     }
 
 })

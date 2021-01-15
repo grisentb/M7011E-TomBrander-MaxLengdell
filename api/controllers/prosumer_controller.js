@@ -1,6 +1,9 @@
+const { calcConsumerPrice } = require('../../Simulator/simulator');
+
 var mongoose = require('mongoose'),
   Prosumer = mongoose.model('prosumer'),
   Users = mongoose.model('users'),
+  Managers = mongoose.model('manager'),
   Consumer = mongoose.model('consumer');
 
 exports.home = async function (req, res) {
@@ -38,25 +41,37 @@ exports.getPrice = async function(req, res){
   let totalBuffer = 0;
   let price = 0;
 
+  let manager = await Managers.findOne();
+  if(manager.manager_price != 0){
+    price = manager.manager_price;
+    res.send(price.toString());
+    return;
+  }
   let consumers = await Consumer.find();
   for(let i in consumers)
   {
     totalConsum += consumers[i].consumption;
   }
-  let prosumers = await Prosumer.find();
 
+  let prosumers = await Prosumer.find();
   for(let i in prosumers)
   {
     totalNetProd += prosumers[i].production - prosumers[i].consumption;
     totalBuffer += prosumers[i].buffer;
   }
-  if(totalNetProd < 100)
-  {
-    price = 3;
-  }
-  else{price = 1.5;}
+
+  price = calcPrice(totalConsum, totalNetProd, totalBuffer)
 
   res.send(price.toString());
+}
+function calcPrice(totalConsum, totalNetProd, totalBuffer){
+  if(totalConsum > totalNetProd+(0.1*totalBuffer)){
+    return 4.5
+  }else if(totalConsum > totalNetProd){
+    return 3.0
+  }else{
+    return 1.5
+  }
 }
 exports.updateRatio = async function(req, res){
   let prosumer = await Prosumer.findOne({_id: req.body._id});
