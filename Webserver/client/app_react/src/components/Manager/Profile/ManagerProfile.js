@@ -29,7 +29,7 @@ export default class ManagerProfile extends React.Component {
     update() {
         setTimeout(() => {
 
-            axios.get('http://localhost:4000/manager/profile/getuser').then(response => {
+            axios.get('http://130.240.200.39:4000/manager/profile/getuser').then(response => {
                 this.setState({ users: response });
             })
 

@@ -20,7 +20,7 @@ export default class Profile extends React.Component {
         console.log(tempUser);
         const formData = new FormData();
         formData.append('image', this.state.image);
-        axios.post(`http://localhost:4000/user/uploadImg?user=${tempUser.email}`, formData).then(res => {
+        axios.post(`http://130.240.200.39:4000/user/uploadImg?user=${tempUser.email}`, formData).then(res => {
             console.log(res);
         })
 

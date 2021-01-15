@@ -34,12 +34,12 @@ export default class Dashboard extends React.Component {
     let consumers = [];
     if (this.state.prosumer) {
       //Get current Price
-      axios.get('http://localhost:4000/home/price').then(resp => {
+      axios.get('http://130.240.200.39:4000/home/price').then(resp => {
         newPrice = resp.data;
       });
       var netProd = this.state.prosumer.production - this.state.prosumer.consumption;
 
-      axios.get('http://localhost:4000/consumer/prosumer', { params: { _id: this.state.prosumer._id } }).then(resp => {
+      axios.get('http://130.240.200.39:4000/consumer/prosumer', { params: { _id: this.state.prosumer._id } }).then(resp => {
         consumers = resp.data;
         //console.log("RESPONSE: ",resp);
       })
@@ -47,7 +47,7 @@ export default class Dashboard extends React.Component {
     setTimeout(() => {
       //console.log(this.user);
       let tempUser = typeof (this.user) == 'string' ? this.user : this.user.email;
-      axios.get('http://localhost:4000/home', { params: { email: tempUser } }).then(resp => {
+      axios.get('http://130.240.200.39:4000/home', { params: { email: tempUser } }).then(resp => {
         //Updating this.state
         this.setState({ prosumer: resp.data, price: newPrice, blackouts: currentBlackouts, consumers: consumers });
       })
@@ -61,7 +61,7 @@ export default class Dashboard extends React.Component {
         console.log("Updating ratio");
         let value = Math.max(0.0, e.target.value);
         value = Math.min(1.0, e.target.value);
-        axios.post('http://localhost:4000/home/ratio', { _id: this.state.prosumer._id, value: value }).then(resp => {
+        axios.post('http://130.240.200.39:4000/home/ratio', { _id: this.state.prosumer._id, value: value }).then(resp => {
           if (resp.data === false) {
             this.setState({ bufferError: "Buffer is empty, ratio is therefore 0.0" });
           } else {
@@ -75,14 +75,14 @@ export default class Dashboard extends React.Component {
     const changeCapacity = async e => {
       if (e.key === 'Enter') {
         console.log("Updating capacity");
-        axios.post('http://localhost:4000/home/capacity', { _id: this.state.prosumer._id, value: e.target.value }).then(resp => {
+        axios.post('http://130.240.200.39:4000/home/capacity', { _id: this.state.prosumer._id, value: e.target.value }).then(resp => {
           e.target.value = null;
         });
       }
     }
     //Create new household using this prosumers electricity
     const newHouse = async e => {
-      await axios.post('http://localhost:4000/consumer/consumption', { _id: this.state.prosumer._id });
+      await axios.post('http://130.240.200.39:4000/consumer/consumption', { _id: this.state.prosumer._id });
       console.log("CREATED NEW HOUSEHOLD");
     }
     // handle click event of logout button
@@ -90,7 +90,7 @@ export default class Dashboard extends React.Component {
       removeUserSession();
       this.props.history.push('/login');
       this.setState({ prosumer: null, price: 0.0 });
-      axios.post('http://localhost:4000/logout',{user: this.user}).then(resp => {
+      axios.post('http://130.240.200.39:4000/logout',{user: this.user}).then(resp => {
         console.log("Log out succesful.");
       })
     }
