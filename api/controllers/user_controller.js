@@ -84,8 +84,7 @@ exports.login = function (req, res) {
         //Check if user exists
         if (user == null) {
             console.log("user not found");
-            //console.log(res.status(404).json({ emailnotfound: "Email not found" }));
-            //res.send(res.status(404).json({ emailnotfound: "Email not found" }));
+
             res.status(404).send({ error: "incorrect email" });
         }
         else {
@@ -111,6 +110,10 @@ exports.login = function (req, res) {
                             expiresIn: 3600 //30 minutes
                         },
                         (err, token) => {
+                            //User logged in succesfully. 
+                            User.findOneAndUpdate({ email: email }, { logged_in_bool: "true" }).then(resp => {
+                                //console.log(resp);
+                            })
                             res.json({
                                 success: true,
                                 token: token,
@@ -129,7 +132,13 @@ exports.login = function (req, res) {
     });
 
 }
-
+exports.logout = function (req, res) {
+    const email = req.body.user;
+    console.log(email);
+    User.findOneAndUpdate({ email: email }, { logged_in_bool: "false" }).then(resp => {
+        //console.log(resp);
+    })
+}
 exports.register = function (req, res) {
     /**
      * Check if user exists, if he does -> return
@@ -164,9 +173,9 @@ exports.updatePassword = function (req, res) {
 
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newPwd, salt, (err, hash) => {
-            if(err) throw err;
+            if (err) throw err;
             newPwd = hash;
-            User.findOneAndUpdate({email: email}, {password: newPwd}).then(resp => {
+            User.findOneAndUpdate({ email: email }, { password: newPwd }).then(resp => {
                 //res.json("OK");
                 console.log("OK");
             }).catch(err => {
@@ -196,7 +205,7 @@ exports.getImage = function (req, res) {
     console.log(req.query);
 }
 
-async function getRole (house_id){
+async function getRole(house_id) {
     var role = await manager_controller.findManager(house_id);
     console.log("Role of current user is: ", role);
     return role;
@@ -204,7 +213,7 @@ async function getRole (house_id){
 
 exports.registerUser = function registerUser(name, email, house_id, password) {
     console.log(house_id);
-    const ID = house_id.substr(1,house_id.length-2);
+    const ID = house_id.substr(1, house_id.length - 2);
     console.log("i funktionen: ", ID);
     //Register household and then user
 

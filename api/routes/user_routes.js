@@ -28,6 +28,8 @@ module.exports = function (app) {
         .post(user.updatePassword);
     app.route('/user/uploadImg?')
         .post(upload.single('image'), user.uploadImage);
+    app.route('/logout')
+        .post(user.logout)
 
 
 }

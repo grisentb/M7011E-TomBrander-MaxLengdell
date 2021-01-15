@@ -31,6 +31,7 @@ export default class ManagerProfile extends React.Component {
 
             axios.get('http://localhost:4000/manager/profile/getuser').then(response => {
                 this.setState({ users: response });
+                console.log(response);
             })
 
         }, this.tickRate);

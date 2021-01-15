@@ -108,6 +108,10 @@ var userSchema = new Schema({
     logged_in: {
         type: Date,
         default: Date.now
+    },
+    logged_in_bool: {
+        type: String,
+        default: "false"
     }
 });
 module.exports = mongoose.model('consumer', consumerSchema);

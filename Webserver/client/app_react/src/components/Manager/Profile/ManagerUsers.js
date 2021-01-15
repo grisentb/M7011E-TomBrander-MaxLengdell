@@ -56,7 +56,7 @@ export default function ProfileUsers(props) {
                             </TableCell>
                             <TableCell>{n.name}</TableCell>
                             <TableCell>{n.email}</TableCell>
-
+                            <TableCell>Logged in: {n.logged_in_bool}</TableCell>
                             <TableCell>Last logged in: {n.logged_in}</TableCell>
                             <IconButton onClick={() => { blockUser(n.email, n.house_id) }}>
                                 Block user for 5 seconds

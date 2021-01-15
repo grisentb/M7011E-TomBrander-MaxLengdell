@@ -26,27 +26,8 @@ export default class Dashboard extends React.Component {
 
     this.update();
   }
-  // async getUserRole() {
-  //   const user = await getUser();
-  //   console.log("User awaited: ", user.email);
-  //   let managerBoolean = await axios.get('http://localhost:4000/manager/verify', { params: { email: user.email } }).then(resp => {
-  //     return resp.data;
-  //   });
-  //   return managerBoolean;
-  // }
   update() {
-    // console.log(getRole());
-    // if (getRole() === 'true') {
-    //   console.log("manager identified. Redirecting to manager dashboard");
-    //   this.props.history.push('/manager_dashboard');
-    // }
-    // this.getUserRole().then(resp => {
-    //   console.log("ROLE FROM THEN: ",resp);
-    //   if(resp==='true'){
-    //     console.log("manager identified. Redirecting to manager dashboard");
-    //     this.props.history.push('/manager_dashboard');
-    //   }
-    // })
+
     let newPrice = 0.0;
     let currentBlackouts = [];
     this.user = getUser();
@@ -113,6 +94,9 @@ export default class Dashboard extends React.Component {
       removeUserSession();
       this.props.history.push('/login');
       this.setState({ prosumer: null, price: 0.0 });
+      axios.post('http://localhost:4000/logout',{user: this.user}).then(resp => {
+        console.log("Log out succesful.");
+      })
     }
     if (this.state.prosumer) {
       const { prosumer } = this.state;
