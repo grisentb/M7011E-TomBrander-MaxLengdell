@@ -38,10 +38,6 @@ export default class Dashboard extends React.Component {
         newPrice = resp.data;
       });
       var netProd = this.state.prosumer.production - this.state.prosumer.consumption;
-      //Get blackout houses
-      axios.get('http://localhost:4000/consumer/blackout', { params: { _id: this.state.prosumer._id, netProd: netProd } }).then(resp => {
-        currentBlackouts = resp.data;
-      })
 
       axios.get('http://localhost:4000/consumer/prosumer', { params: { _id: this.state.prosumer._id } }).then(resp => {
         consumers = resp.data;
