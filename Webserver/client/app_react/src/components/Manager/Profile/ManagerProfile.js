@@ -42,6 +42,8 @@ export default class ManagerProfile extends React.Component {
                 <div>
                     <h2>Manager Profile</h2>
                     <ProfileUserLoader data={this.state.users} />
+                    <ProfileFetcher />
+                    <ImgUploader />
                 </div>
             )
         }else{

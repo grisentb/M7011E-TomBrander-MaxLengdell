@@ -68,9 +68,11 @@ exports.getProfile = function (req, res) {
 
     User.findOne({ email: user }).then(user => {
         const url = user.image;
+        console.log(url);
         res.json(fs.readFileSync(url));
     }).catch(err => {
         res.json("Image was not found")
+        console.log(err);
         console.log("Image was not found");
     })
 }

@@ -9,6 +9,7 @@ module.exports = function (app) {
             cb(null, __dirname + './../public/images/')
         },
         filename: function (req, file, cb) {
+            //console.log("query user: ", req.query.user);
             cb(null, file.fieldname + '-' + req.query.user+'.jpg');
         }
     });

@@ -33,8 +33,8 @@ function Profile(props) {
             setLoading(false);
             setError(errors);
         } else {
-            //axios.post('http://130.240.200.39:4000/user/newpwd', { email: user.value, oldPassword: oldPassword.value, newPassword: newPassword.value }).then(response => {
-            axios.get('http://130.240.200.39:4000/user/profile', {test: "hello"}).then(response => {
+            axios.post('http://130.240.200.39:4000/user/newpwd', { email: user.value, oldPassword: oldPassword.value, newPassword: newPassword.value }).then(response => {
+            //axios.get('http://130.240.200.39:4000/user/profile', {test: "hello"}).then(response => {
 
                 console.log("Password changed, login with new password");
                 removeUserSession();

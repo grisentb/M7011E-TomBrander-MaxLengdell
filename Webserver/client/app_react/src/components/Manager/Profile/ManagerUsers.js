@@ -19,11 +19,15 @@ export default function ProfileUsers(props) {
     var [input, setInput] = useState("");
     var pwd = useFormInput('');
 
-    function editUser(user, house_id) {
-        console.log("input: " + user + " Value " + pwd.value);
-        axios.post('http://130.240.200.39:4000/user/newpwd', { data: { user: user, newPwd: pwd.value } }).then(response => {
-        });
+    function editUser(user, house_id, e) {
+        // var pwd = newPassword
 
+        if (e.key === "Enter") {
+            console.log("Password changed");
+            axios.post('http://130.240.200.39:4000/user/newpwd', { data: { user: user, newPwd: e.target.value } }).then(response => {
+                e.target.value = null;
+            });
+        }
     }
     function deleteUser(user, house_id) {
 
@@ -34,25 +38,30 @@ export default function ProfileUsers(props) {
     }
     function blockUser(user, house_id) {
         console.log("Blocking ", user, "with house_id: ", house_id);
-        axios.post('http://130.240.200.39:4000/manager/blockuser', { data: {user: user, house_id: house_id}}).then(response => {
+        axios.post('http://130.240.200.39:4000/manager/blockuser', { data: { user: user, house_id: house_id } }).then(response => {
             console.log(response);
         })
     }
+    /**                                <IconButton onClick={() => { editUser(n.email, n.house_id) }}>
+                                    <LockIcon color="secondary" />
+                                </IconButton> */
 
     return (
         <div>
             <TableBody>
                 {users.map(n => {
+
                     return (
                         <TableRow key={n.id}>
                             <TableCell component="th" scope="row">
                                 <IconButton onClick={() => { deleteUser(n.email, n.house_id) }}>
                                     <DeleteIcon color="secondary" />
                                 </IconButton>
-                                <TextField type="text" {...pwd} label="new password" autoComplete="new-password" />
-                                <IconButton onClick={() => { editUser(n.email, n.house_id) }}>
-                                    <LockIcon color="secondary" />
-                                </IconButton>
+                                <TextField onKeyDown={(e) => editUser(n.email, n.house_id, e)}
+                                    type="text"
+                                    label="new password"
+                                    autoComplete="new-password" />
+
                             </TableCell>
                             <TableCell>{n.name}</TableCell>
                             <TableCell>{n.email}</TableCell>
