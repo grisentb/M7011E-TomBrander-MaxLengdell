@@ -19,7 +19,7 @@ export default class ProfileFetcher extends React.Component {
         this.user = getUser();
         let tempUser = typeof (this.user) == 'string' ? this.user : this.user.email;
         console.log("User to fetch image from", tempUser);
-        axios.get(`http://130.240.200.39:4000/user/profile?user=${tempUser}`, {}).then(data => {
+        axios.get(`https://130.240.200.39:4000/user/profile?user=${tempUser}`, {}).then(data => {
             //console.log("fetched from db: ", data);
             var base64Flag = 'data:image/jpeg;base64,';
             var imageStr =
@@ -47,7 +47,7 @@ export default class ProfileFetcher extends React.Component {
     //     //     // setLoading(false);
     //     //     // setError(errors);
     //     // } else {
-    //     //     axios.post('http://130.240.200.39:4000/user/newpwd', { email: this.user, oldPassword: e.oldPassword, newPassword: e.newPassword}).then(response => {
+    //     //     axios.post('https://130.240.200.39:4000/user/newpwd', { email: this.user, oldPassword: e.oldPassword, newPassword: e.newPassword}).then(response => {
     //     //         console.log("Password changed, login with new password");
     //     //         // removeUserSession();
     //     //         // props.history.push('/login');

@@ -1,5 +1,7 @@
 var express = require('express'), 
+http = require('http'),
 https = require('https'),
+fs = require ('fs'),
 session = require('express-session'),
 uuid = require('uuid'),
 app = express(), 
@@ -25,7 +27,34 @@ routes_prosumer(app);
 routes_user(app);
 routes_manager(app);
 
-app.listen(port);
+var privateKey = fs.readFileSync('keys/server.key', 'utf8')
+var certificate = fs.readFileSync('keys/server.cert', 'utf8')
+
+//app.listen(port);
+var credentials = {key: privateKey, cert: certificate};
+
+app.use(function(req, res, next) {
+    // if(req.secure){
+    //     next();
+    // }else {
+    //     console.log(req.headers.host + " ---- " +  req.url);
+    //     res.redirect('https://' + req.headers.host + req.url, 4500)
+    // }
+})
+
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+
+app.get('*', function(req, res) {
+    console.log("redirect");
+    res.redirect('https://' + req.headers.host + req.url);
+})
+
+//httpServer.listen(4000)
+httpsServer.listen(4000)
+
 
 
 console.log('restful api server started on: ' + port);

@@ -27,7 +27,7 @@ function Login(props) {
 
     else {
       //Hash password: 
-      axios.post('http://130.240.200.39:4000/login', { email: email.value, password: password.value }).then(response => {
+      axios.post('https://130.240.200.39:4000/login', { email: email.value, password: password.value }).then(response => {
         //setLoading(false);
         console.log("Role: ", response.data.role);
         var role = response.data.role;

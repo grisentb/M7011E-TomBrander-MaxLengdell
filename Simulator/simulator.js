@@ -146,6 +146,8 @@ class simulator {
 
         let managerProduction = manager.production;
         let managerBuffer = manager.buffer;
+        //Inital increase from the production
+        managerBuffer += managerProduction;
         let managerRatio = manager.buffer_to_prod;
         for (let i in prosumers) {
             let prosumerBuffer = prosumers[i].buffer;
@@ -187,11 +189,14 @@ class simulator {
             //Check for blackouts
             for (let j in consumers) {
                 //console.log("PROSUMER NET: " + prosumerNetPower.toString());
-                if ((managerBuffer < 0 || managerProduction < 0) && prosumerNetPower < 0) {
-                    prosumerNetPower += consumers[j].consumption;
-                    await this.consumerCollection.updateOne({ _id: consumers[j]._id }, { blackout: true });
-                } else {
-                    await this.consumerCollection.updateOne({ _id: consumers[j]._id }, { blackout: false });
+                if(consumers[j].prosumer == prosumers[i]._id){
+                    //console.log("CHECKING FOR BLACKOUTS: ManagerBuffer: " + managerBuffer.toString() + " ManagerProduction: " + managerProduction.toString() + " and prosumerNetPower: " + prosumerNetPower.toString());
+                    if ((managerBuffer < 0 || managerProduction < 0) && prosumerNetPower < 0) {
+                        prosumerNetPower += consumers[j].consumption;
+                        await this.consumerCollection.updateOne({ _id: consumers[j]._id }, { blackout: true });
+                    } else {
+                        await this.consumerCollection.updateOne({ _id: consumers[j]._id }, { blackout: false });
+                    }
                 }
             }
             //Update prosumer in database

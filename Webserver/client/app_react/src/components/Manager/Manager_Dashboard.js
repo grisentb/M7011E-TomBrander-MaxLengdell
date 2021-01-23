@@ -24,23 +24,23 @@ export default class ManagerDashboard extends React.Component {
     update() {
         //console.log("Manager: ", this.state.manager);
         let newPrice = 0.0;
-        axios.get('http://130.240.200.39:4000/home/price').then(resp => {
+        axios.get('https://130.240.200.39:4000/home/price').then(resp => {
             newPrice = resp.data;
         });
         let newManager = null;
-        axios.get('http://130.240.200.39:4000/manager').then(resp => {
+        axios.get('https://130.240.200.39:4000/manager').then(resp => {
             newManager = resp.data;
         });
         let consumption = 0.0;
-        axios.get('http://130.240.200.39:4000/manager/consumption').then(resp => {
+        axios.get('https://130.240.200.39:4000/manager/consumption').then(resp => {
             consumption = resp.data;
         });
         let production = 0.0;
-        axios.get('http://130.240.200.39:4000/manager/production').then(resp => {
+        axios.get('https://130.240.200.39:4000/manager/production').then(resp => {
             production = resp.data;
         })
         setTimeout(() => {
-            axios.get('http://130.240.200.39:4000/manager/users').then(resp => {
+            axios.get('https://130.240.200.39:4000/manager/users').then(resp => {
                 //console.log("RESP: ", resp.data);
                 //console.log(this.data);
                 this.setState({ manager: newManager, users: resp.data, price: newPrice, totalConsumption: consumption, totalProduction: production });
@@ -63,21 +63,21 @@ export default class ManagerDashboard extends React.Component {
               console.log("Updating ratio");
               let value = Math.max(0.0, e.target.value);
               value = Math.min(1.0, e.target.value);
-              axios.post('http://130.240.200.39:4000/manager/buffer', {_id: this.state.manager._id, value: value});
+              axios.post('https://130.240.200.39:4000/manager/buffer', {_id: this.state.manager._id, value: value});
               e.target.value = null;
             }
         }
         const changePrice = async e => {
             if(e.key == 'Enter'){
                 console.log("Updating price");
-                axios.post('http://130.240.200.39:4000/manager/setPrice', {manager_price: e.target.value});
+                axios.post('https://130.240.200.39:4000/manager/setPrice', {manager_price: e.target.value});
                 e.target.value = null;
             }
         }
         const changeStatus = async e => {
             console.log("CHANGE STATUS!");
             let id = this.state.manager._id;
-            axios.post('http://130.240.200.39:4000/manager/production', {_id: id});
+            axios.post('https://130.240.200.39:4000/manager/production', {_id: id});
         }
         if (this.state.manager) {
             const { manager } = this.state;

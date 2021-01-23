@@ -24,7 +24,7 @@ function Register(props) {
             setError(errors);
         }
         else {
-            axios.post('http://130.240.200.39:4000/register', { name: name.value, email: email.value, password: password.value, password2: password2.value })
+            axios.post('https://130.240.200.39:4000/register', { name: name.value, email: email.value, password: password.value, password2: password2.value })
                 .then(response => {
                     setLoading(false);
                     console.log("register response: ", response.data);

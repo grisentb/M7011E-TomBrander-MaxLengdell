@@ -24,7 +24,7 @@ export default function ProfileUsers(props) {
 
         if (e.key === "Enter") {
             console.log("Password changed");
-            axios.post('http://130.240.200.39:4000/user/newpwd', { data: { user: user, newPwd: e.target.value } }).then(response => {
+            axios.post('https://130.240.200.39:4000/user/newpwd', { data: { user: user, newPwd: e.target.value } }).then(response => {
                 e.target.value = null;
             });
         }
@@ -32,13 +32,13 @@ export default function ProfileUsers(props) {
     function deleteUser(user, house_id) {
 
         console.log("delete", user, " : ", house_id);
-        axios.delete('http://130.240.200.39:4000/manager/profile/delete', { data: { user: user, house_id: house_id } }).then(response => {
+        axios.delete('https://130.240.200.39:4000/manager/profile/delete', { data: { user: user, house_id: house_id } }).then(response => {
             console.log(response);
         })
     }
     function blockUser(user, house_id) {
         console.log("Blocking ", user, "with house_id: ", house_id);
-        axios.post('http://130.240.200.39:4000/manager/blockuser', { data: { user: user, house_id: house_id } }).then(response => {
+        axios.post('https://130.240.200.39:4000/manager/blockuser', { data: { user: user, house_id: house_id } }).then(response => {
             console.log(response);
         })
     }
