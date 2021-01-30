@@ -60,7 +60,10 @@ var prosumerSchema = new Schema({
     blocked: {
         type: Boolean,
         default: false
-    }
+    },logged_in: {
+        type: Date,
+        default: Date("2000-01-01")
+    },
 });
 var managerSchema = new Schema({
     production: {

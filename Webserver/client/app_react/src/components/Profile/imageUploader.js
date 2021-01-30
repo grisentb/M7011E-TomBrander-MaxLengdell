@@ -16,11 +16,13 @@ export default class Profile extends React.Component {
     }
 
     async onSubmit(e){
-        const tempUser = await getUser();
-        console.log(tempUser);
+        
         const formData = new FormData();
         formData.append('image', this.state.image);
-        axios.post(`https://130.240.200.39:4000/user/uploadImg?user=${tempUser.email}`, formData).then(res => {
+        let tempUser = typeof (this.user) == 'string' ? this.user : this.user.email;
+        console.log("User to upload: ", tempUser);
+
+        axios.post(`https://130.240.200.39:4000/user/uploadImg?user=${tempUser}`, formData).then(res => {
             console.log(res);
         })
 

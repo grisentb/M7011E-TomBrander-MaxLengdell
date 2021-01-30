@@ -15,7 +15,6 @@ export default class ProfileFetcher extends React.Component {
 
     }
     componentDidMount() {
-        console.log("get image");
         this.user = getUser();
         let tempUser = typeof (this.user) == 'string' ? this.user : this.user.email;
         console.log("User to fetch image from", tempUser);

@@ -21,7 +21,7 @@ export const getUser = () => {
   
   // set the token and user from the session storage
   export const setUserSession = (token, user, role) => {
-
+    console.log("Setting user to: ", user);
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('user', JSON.stringify(user));
     if(typeof role !== 'undefined'){
