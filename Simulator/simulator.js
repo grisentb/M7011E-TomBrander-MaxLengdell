@@ -28,7 +28,26 @@ class simulator {
 
         this.updatePowerNetwork();
 
+        this.check_consumer_blackout();
         //Simulating prosumption for every prosumer in database
+    }
+    async check_consumer_blackout() {
+        var consumer = this.consumerCollection;
+        var prosumer = this.prosumerCollection;
+        prosumer.find().stream()
+            .on('data', function (doc) {
+                var blackouts = false;
+                //console.log("Blacked out house hold: ", doc._id);
+                consumer.find({ prosumer: doc._id }).stream()
+                    .on('data', function (cons) {
+                        if(cons.blackout===true){
+                            blackouts = true
+                        }
+                    })
+
+                prosumer.findOneAndUpdate({_id: doc._id}, {has_blackouts: blackouts});
+            });
+
     }
     //Gaussian simulations
     async updateConsumption(Collection, mean, deviation) {
@@ -189,7 +208,7 @@ class simulator {
             //Check for blackouts
             for (let j in consumers) {
                 //console.log("PROSUMER NET: " + prosumerNetPower.toString());
-                if(consumers[j].prosumer == prosumers[i]._id){
+                if (consumers[j].prosumer == prosumers[i]._id) {
                     //console.log("CHECKING FOR BLACKOUTS: ManagerBuffer: " + managerBuffer.toString() + " ManagerProduction: " + managerProduction.toString() + " and prosumerNetPower: " + prosumerNetPower.toString());
                     if ((managerBuffer < 0 || managerProduction < 0) && prosumerNetPower < 0) {
                         prosumerNetPower += consumers[j].consumption;

@@ -113,7 +113,7 @@ export default class Dashboard extends React.Component {
           Buffer/Production ratio: {prosumer.buffer_prod_ratio}<br /><br />
           Change Buffer/Production ratio: <input type="text" placeholder="Ratio between 0 and 1" onKeyDown={changeRatio} />{bufferError} <br /><br />
           Wind: {prosumer.wind}<br /><br />
-          Current electrical price : {price} <br /><br />
+          Current electrical price : {price} kr  <br /><br />
           Blackout households: {blackouts}
           <div>
             <ListConsumerFunction data={consumers} />

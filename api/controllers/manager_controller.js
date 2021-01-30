@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
   Manager = mongoose.model('manager');
 
 exports.setManagerPrice = async function (req, res) {
-  //console.log(req);
+  //console.log(req.body.manager_price);
   newPrice = req.body.manager_price;
   let manager = await Manager.findOneAndUpdate({},{manager_price: newPrice});
 }

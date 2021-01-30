@@ -60,10 +60,15 @@ var prosumerSchema = new Schema({
     blocked: {
         type: Boolean,
         default: false
-    },logged_in: {
+    },
+    logged_in: {
         type: Date,
         default: Date("2000-01-01")
     },
+    has_blackouts: {
+        type: String,
+        default: "False"
+    }
 });
 var managerSchema = new Schema({
     production: {

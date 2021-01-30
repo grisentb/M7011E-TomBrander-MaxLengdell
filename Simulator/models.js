@@ -60,6 +60,14 @@ var prosumerSchema = new Schema({
     blocked: {
         type: Boolean,
         default: false
+    },
+    logged_in: {
+        type: Date,
+        default: Date("2000-01-01")
+    },
+    has_blackouts: {
+        type: String,
+        default: "False"
     }
 });
 var managerSchema = new Schema({
@@ -112,6 +120,10 @@ var userSchema = new Schema({
     logged_in: {
         type: Date,
         default: Date.now
+    },
+    logged_in_bool: {
+        type: String,
+        default: "false"
     }
 });
 module.exports = mongoose.model('consumer', consumerSchema);

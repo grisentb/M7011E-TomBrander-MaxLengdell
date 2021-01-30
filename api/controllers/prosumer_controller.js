@@ -65,6 +65,7 @@ exports.getPrice = async function(req, res){
   res.send(price.toString());
 }
 function calcPrice(totalConsum, totalNetProd, totalBuffer){
+  
   if(totalConsum > totalNetProd+(0.1*totalBuffer)){
     return 4.5
   }else if(totalConsum > totalNetProd){

@@ -27,6 +27,10 @@ export default function TableUser(props) {
             field: "wind"
         },
         {
+            title: "Has blackouts",
+            field: "has_blackouts"
+        },
+        {
             title: "Buffer",
             field: "buffer"
         },
