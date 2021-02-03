@@ -244,44 +244,45 @@ class simulator {
         }
         return false;
     }
-    calcConsumerPrice(wind, currentConsumption) {
-        /**
-         * High wind will decerease the price. 
-         * High consumption will increase the price. 
-         * 
-         * 0<wind≤1.5 = 3kr
-         * 1.5<wind≤3.6 = 2kr
-         * 3.6<wind<5 = 1.5kr
-         * 5<wind = 0.5 kr
-         * 
-         * 
-         */
-        let price;
-        if (wind < 1.5) {
-            price = 3;
-        }
-        else if (wind < this.avgPrice && wind >= 1.5) {
-            price = 2;
-        }
-        else if (wind < 5 && wind >= this.avgPrice) {
-            price = 1.5;
-        } else {
-            price = 0.5;
-        }
+    // calcConsumerPrice(wind, currentConsumption) {
+    //     //This function is not used anymore
+    //     /**
+    //      * High wind will decerease the price. 
+    //      * High consumption will increase the price. 
+    //      * 
+    //      * 0<wind≤1.5 = 3kr
+    //      * 1.5<wind≤3.6 = 2kr
+    //      * 3.6<wind<5 = 1.5kr
+    //      * 5<wind = 0.5 kr
+    //      * 
+    //      * 
+    //      */
+    //     let price;
+    //     if (wind < 1.5) {
+    //         price = 3;
+    //     }
+    //     else if (wind < this.avgPrice && wind >= 1.5) {
+    //         price = 2;
+    //     }
+    //     else if (wind < 5 && wind >= this.avgPrice) {
+    //         price = 1.5;
+    //     } else {
+    //         price = 0.5;
+    //     }
 
-        if (currentConsumption < 50)
-            price = price * 0.7;
-        else if (currentConsumption < 60 && currentConsumption >= 50)
-            price = price * 0.8;
-        else if (currentConsumption < 70 && currentConsumption >= 60)
-            price = price * 0.95;
-        else if (currentConsumption < 80 && currentConsumption >= 70)
-            price = price * 1.05;
-        else
-            price = price * 1.30;
+    //     if (currentConsumption < 50)
+    //         price = price * 0.7;
+    //     else if (currentConsumption < 60 && currentConsumption >= 50)
+    //         price = price * 0.8;
+    //     else if (currentConsumption < 70 && currentConsumption >= 60)
+    //         price = price * 0.95;
+    //     else if (currentConsumption < 80 && currentConsumption >= 70)
+    //         price = price * 1.05;
+    //     else
+    //         price = price * 1.30;
 
-        return price;
-    }
+    //     return price;
+    // }
     //Gaussian function
     gaussian(mean, stdev) {
         var y2;
