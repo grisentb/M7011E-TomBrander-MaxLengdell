@@ -9,7 +9,7 @@ import ListHouseFunctionManager from './HouseListManagerFunction';
 export default class ManagerDashboard extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { manager: null, users: [], price: 0.0, totalProduction: 0.0, totalConsumption: 0.0, blackouts: 0};
+        this.state = { manager: null, users: [], price: 0.0, fixed_price: 0, totalProduction: 0.0, totalConsumption: 0.0, blackouts: 0};
         this.user = getUser();
 
         this.tickRate = 1000;
@@ -24,8 +24,10 @@ export default class ManagerDashboard extends React.Component {
     update() {
         //console.log("Manager: ", this.state.manager);
         let newPrice = 0.0;
+        let fixed_price = 0;
         axios.get('https://130.240.200.39:4000/home/price').then(resp => {
-            newPrice = resp.data;
+            newPrice = resp.data[0];
+            fixed_price = resp.data[1];
         });
         let newManager = null;
         axios.get('https://130.240.200.39:4000/manager').then(resp => {
@@ -43,7 +45,7 @@ export default class ManagerDashboard extends React.Component {
             axios.get('https://130.240.200.39:4000/manager/users').then(resp => {
                 //console.log("RESP: ", resp.data);
                 //console.log(this.data);
-                this.setState({ manager: newManager, users: resp.data, price: newPrice, totalConsumption: consumption, totalProduction: production });
+                this.setState({ manager: newManager, users: resp.data, price: newPrice, fixed_price: fixed_price, totalConsumption: consumption, totalProduction: production });
             }).catch(err => {
                 console.log(err);
             });
@@ -85,8 +87,12 @@ export default class ManagerDashboard extends React.Component {
             const { price } = this.state;
             const { totalConsumption } = this.state;
             const { totalProduction } = this.state;
+            const {fixed_price} = this.state
             var statusButtonValue = manager.status == "stopped" ? "start" : "stop";
-
+            let price_message = "The price was dynamically set by supply and demand";
+            if(fixed_price){
+              price_message = "The price was set by the manager"
+            }
             return (
                 <div>
                     Welcome Manager! <br /><br />
@@ -100,6 +106,7 @@ export default class ManagerDashboard extends React.Component {
                     Total production: {totalProduction}<br /><br />
                     Total net production: {totalProduction - totalConsumption}<br /><br />
                     Current Price: {price} kr<br /><br />
+                    {price_message} <br /><br/>
                     Set Price: <input type="text" placeholder="0 for dynamic pricing" onKeyDown={changePrice} /> <br/><br/>
                     <input type="button" onClick={handleLogout} value="Logout" />
                     <div>

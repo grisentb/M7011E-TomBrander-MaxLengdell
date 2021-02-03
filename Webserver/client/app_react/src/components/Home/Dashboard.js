@@ -103,6 +103,10 @@ export default class Dashboard extends React.Component {
       const { blackouts } = this.state;
       const { consumers } = this.state;
       const { fixed_price } = this.state;
+      let price_message = "The price was dynamically set by supply and demand";
+      if(fixed_price){
+        price_message = "The price was set by the manager"
+      }
       return (
         <div>
           Welcome {this.user.name}!<br /><br />
@@ -117,8 +121,8 @@ export default class Dashboard extends React.Component {
           Change Buffer/Production ratio: <input type="text" placeholder="Ratio between 0 and 1" onKeyDown={changeRatio} />{bufferError} <br /><br />
           Wind: {prosumer.wind}<br /><br />
           Current electrical price : {price} kr  <br /><br />
-          Fixed price is: {fixed_price} <br /> <br />
-          Blackout households: {blackouts}
+          {price_message} <br /> <br />
+          Consumer households: {blackouts}
           <div>
             <ListConsumerFunction data={consumers} />
           </div>
