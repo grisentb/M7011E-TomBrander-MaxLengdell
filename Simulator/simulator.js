@@ -34,18 +34,24 @@ class simulator {
     async check_consumer_blackout() {
         var consumer = this.consumerCollection;
         var prosumer = this.prosumerCollection;
-        prosumer.find().stream()
-            .on('data', function (doc) {
-                var blackouts = false;
-                //console.log("Blacked out house hold: ", doc._id);
-                consumer.find({ prosumer: doc._id }).stream()
-                    .on('data', function (cons) {
-                        if(cons.blackout===true){
-                            blackouts = true
+        await prosumer.find().stream()
+            .on('data', async function (doc) {
+                var blackouts = "false";
+                //console.log("Blacked out house hold: ", typeof(doc._id));
+                await consumer.find({ prosumer: doc._id.toString() }).stream()
+                    .on('data', await function (cons) {
+
+                        if (cons.blackout === true) {
+                            blackouts = "true";
                         }
+                        prosumer.findOneAndUpdate({ _id: doc._id }, { has_blackouts: blackouts }, function (err, res) {
+                            if (err) {
+                                //console.log(err);
+                            }
+        
+                        });
                     })
 
-                prosumer.findOneAndUpdate({_id: doc._id}, {has_blackouts: blackouts});
             });
 
     }

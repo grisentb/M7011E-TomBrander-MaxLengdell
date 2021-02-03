@@ -40,11 +40,13 @@ exports.getPrice = async function(req, res){
   let totalNetProd = 0;
   let totalBuffer = 0;
   let price = 0;
-
+  let price_list = [];
   let manager = await Managers.findOne();
   if(manager.manager_price != 0){
     price = manager.manager_price;
-    res.send(price.toString());
+    price_list[0] = price;
+    price_list[1] = 1;
+    res.send(price_list);
     return;
   }
   let consumers = await Consumer.find();
@@ -61,8 +63,9 @@ exports.getPrice = async function(req, res){
   }
 
   price = calcPrice(totalConsum, totalNetProd, totalBuffer)
-
-  res.send(price.toString());
+  price_list[0] = price;
+  price_list[1] = 0;
+  res.send(price_list);
 }
 function calcPrice(totalConsum, totalNetProd, totalBuffer){
   

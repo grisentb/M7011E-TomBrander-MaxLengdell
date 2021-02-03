@@ -8,7 +8,7 @@ export default class Dashboard extends React.Component {
   constructor(props) {
     //console.log("CONSTRUCTOR");
     super(props);
-    this.state = { prosumer: null, price: 0.0, bufferError: "", blackouts: [], consumers: [] };
+    this.state = { prosumer: null, price: 0.0, fixed_price: 0, bufferError: "", blackouts: [], consumers: [] };
     this.user = getUser();
     this.role = getRole();
     this.tickRate = 1000;
@@ -32,10 +32,12 @@ export default class Dashboard extends React.Component {
     let currentBlackouts = [];
     this.user = getUser();
     let consumers = [];
+    let fixed_price = 0;
     if (this.state.prosumer) {
       //Get current Price
       axios.get('https://130.240.200.39:4000/home/price').then(resp => {
-        newPrice = resp.data;
+        newPrice = resp.data[0];
+        fixed_price = resp.data[1];
       });
       var netProd = this.state.prosumer.production - this.state.prosumer.consumption;
 
@@ -49,7 +51,7 @@ export default class Dashboard extends React.Component {
       let tempUser = typeof (this.user) == 'string' ? this.user : this.user.email;
       axios.get('https://130.240.200.39:4000/home', { params: { email: tempUser } }).then(resp => {
         //Updating this.state
-        this.setState({ prosumer: resp.data, price: newPrice, blackouts: currentBlackouts, consumers: consumers });
+        this.setState({ prosumer: resp.data, price: newPrice, fixed_price: fixed_price,blackouts: currentBlackouts, consumers: consumers });
       })
     }, this.tickRate);
   }
@@ -100,6 +102,7 @@ export default class Dashboard extends React.Component {
       const { bufferError } = this.state;
       const { blackouts } = this.state;
       const { consumers } = this.state;
+      const { fixed_price } = this.state;
       return (
         <div>
           Welcome {this.user.name}!<br /><br />
@@ -114,6 +117,7 @@ export default class Dashboard extends React.Component {
           Change Buffer/Production ratio: <input type="text" placeholder="Ratio between 0 and 1" onKeyDown={changeRatio} />{bufferError} <br /><br />
           Wind: {prosumer.wind}<br /><br />
           Current electrical price : {price} kr  <br /><br />
+          Fixed price is: {fixed_price} <br /> <br />
           Blackout households: {blackouts}
           <div>
             <ListConsumerFunction data={consumers} />
